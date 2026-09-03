@@ -1,0 +1,1840 @@
+/* 1. IMPORT FONTS (Wajib di baris paling atas) */
+/*@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');*/
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:wght@700&display=swap');
+/* 2. RESET GLOBAL */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #8faabe; /* Warna soft blue-gray */
+  color: #2c3e50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 3. PAGE 1: HERO SECTION */
+.hero-section {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  height: 100vh;
+  margin: 0 auto;
+  background: url('assets/hero-bg.jpeg') center/cover no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  overflow: hidden;
+  color: #ffffff;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(
+    180deg, 
+    rgba(0, 0, 0, 0.35) 0%, 
+    rgba(0, 0, 0, 0.1) 50%, 
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 50px 20px 40px 20px;
+}
+
+/* Typography Page 1 (Atas) */
+.subtitle {
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 3px;
+  font-size: 0.75rem;
+  font-weight: 400;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.couple-names {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.8rem;
+  font-weight: 500;
+  line-height: 1.1;
+  margin-bottom: 10px;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+.date {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 2px;
+  font-weight: 300;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Container Tamu & Tombol (Bawah) */
+.guest-action-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.guest-label {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 1.3;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.guest-name {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Tombol Buka Undangan */
+.btn-open {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #1f3a52; /* Warna Navy */
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.btn-open:active {
+  transform: scale(0.95);
+  background-color: #152737;
+}
+
+/* 4. UTILITAS UMUM & KARTU CONTENT */
+.card-container {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 30px 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  width: 100%;
+}
+
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #1f3a52;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  margin-top: 15px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Profile Mempelai */
+.profile img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  margin: 15px 0;
+}
+
+/* Grid Galeri Foto */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.gallery-grid img {
+  width: 100%;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+/* SECTION MEMPELAI (PAGE 2) */
+/* PAGE 2: OPENING SECTION (COVER DALAM) */
+.opening-section {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh; /* Agar tinggi memenuhi 1 layar penuh */
+  margin: 0 auto;
+  background: url('assets/opening-bg.jpeg') center/cover no-repeat; /* Sesuaikan nama file gambarmu di sini */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  text-align: center;
+  overflow: hidden;
+  color: #ffffff;
+}
+
+.opening-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(
+    180deg, 
+    rgba(0, 0, 0, 0.1) 0%, 
+    rgba(0, 0, 0, 0.2) 60%, 
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  z-index: 1;
+}
+
+.opening-content {
+  position: relative;
+  z-index: 2;
+  padding: 0 20px 60px 20px;
+}
+
+.mempelai-section {
+  padding: 50px 20px;
+  width: 100%;
+  max-width: 480px;
+}
+
+.bismillah-wrapper {
+  text-align: center;
+  width: 100%;
+  margin-top: 5px;
+  margin-bottom: 12px;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.bismillah-img {
+  width: 100% !important;
+  max-width: 170px !important; /* Ukuran dibatasi agar rapi di dalam kartu */
+  height: auto !important;
+  display: block !important;
+  margin: 0 auto !important;
+  object-fit: contain;
+}
+.salam {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.intro-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: #555;
+  margin-bottom: 25px;
+}
+
+.profile-card {
+  margin: 20px 0;
+}
+
+.profile-img-wrapper img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #8faabe;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.profile-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 10px 0 4px 0;
+  color: #1f3a52;
+}
+
+.parents-info {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+.divider-and {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #8faabe;
+  margin: 10px 0;
+}
+
+/* PAGE 3: COUNTDOWN & INTRO SECTION */
+.countdown-section {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  margin: 0 auto;
+  background: #8faabe url('assets/04.jpeg') center/cover no-repeat; /* Gambar Bunga Soft Blue */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 60px 25px;
+  color: #ffffff;
+}
+
+.countdown-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(143, 170, 190, 0.4); /* Overlay biru soft transparan */
+  z-index: 1;
+}
+
+.countdown-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title-we-are {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 1;
+  margin-bottom: 4px;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.subtitle-getting-married {
+  font-family: 'Great Vibes', cursive;
+  font-size: 2.4rem;
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: 15px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.leaf-divider {
+  margin-bottom: 25px;
+  opacity: 0.9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.leaf-divider::before,
+.leaf-divider::after {
+  content: '';
+  display: block;
+  width: 50px;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.6);
+  margin: 0 10px;
+}
+
+.invitation-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  font-weight: 400;
+  margin-bottom: 35px;
+  color: rgba(255, 255, 255, 0.95);
+  max-width: 360px;
+}
+
+/* Grid Timer Countdown */
+.timer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  width: 100%;
+  max-width: 360px;
+  margin-bottom: 30px;
+}
+
+.timer-box {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  padding: 12px 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.timer-box span {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.timer-box p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  margin-top: 4px;
+  opacity: 0.85;
+}
+
+/* Tombol Save The Date */
+.btn-save-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #1f3a52;
+  color: #ffffff;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.btn-save-date:active {
+  transform: scale(0.96);
+  background-color: #152737;
+}
+
+/* PAGE 4: BRIDE & GROOM SECTION */
+.mempelai-section {
+  width: 100%;
+  max-width: 480px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 30px 15px;
+  background-color: #8faabe;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mempelai-card {
+  background: #fbfbfb url('assets/paper-texture.png') repeat; /* Opsional bercorak kertas */
+  border-radius: 20px;
+  padding: 35px 20px;
+  width: 100%;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.bismillah {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  color: #1f3a52;
+  margin-bottom: 5px;
+}
+
+.section-title-bride {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1f3a52;
+  margin-bottom: 5px;
+}
+
+/* Layout Baris Mempelai */
+.profile-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.profile-details {
+  flex: 1;
+  text-align: left;
+}
+
+.profile-details.align-right {
+  text-align: right;
+}
+
+/* Bingkai Capsul / Oval Stadiun */
+.profile-capsule-img {
+  width: 130px;
+  height: 240px;
+  flex-shrink: 0;
+  border-radius: 65px; /* Oval atas bawah */
+  border: 1px solid #1f3a52;
+  padding: 3px;
+  overflow: hidden;
+}
+
+.profile-capsule-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 60px;
+}
+
+/* Decor Garis & Label */
+.label-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.label-wrapper.right {
+  justify-content: flex-end;
+}
+
+.label-role {
+  font-family: 'Great Vibes', cursive;
+  font-size: 1.8rem;
+  color: #555555;
+  line-height: 1;
+}
+
+.line-decor {
+  flex: 1;
+  height: 1px;
+  background-color: #aaa;
+  max-width: 40px;
+}
+
+.person-fullname {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f3a52;
+  line-height: 1.2;
+  margin-bottom: 10px;
+}
+
+.parents-detail {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.72rem;
+  color: #555555;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+/* Tombol Bulat Instagram */
+.btn-ig {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: #1f3a52;
+  color: #ffffff;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.btn-ig:active {
+  transform: scale(0.9);
+}
+
+/* Divider Ampersand (&) */
+.ampersand-divider {
+  position: relative;
+  margin: 25px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ampersand-divider::before,
+.ampersand-divider::after {
+  content: '';
+  height: 1px;
+  width: 35%;
+  background-color: #1f3a52;
+  opacity: 0.4;
+}
+
+.ampersand-divider span {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f3a52;
+  padding: 0 15px;
+}
+
+/* ==========================================
+   PERBATASAN & PAGE 5 WEDDING EVENT
+   ========================================== */
+
+/* Diamond Divider Bagian Bawah Page 4 */
+.diamond-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+  margin-bottom: 0px !important;
+  color: #1f3a52;
+}
+
+.diamond-divider::before,
+.diamond-divider::after {
+  content: '';
+  height: 1px;
+  width: 55px;
+  background-color: #1f3a52;
+  opacity: 0.4;
+}
+
+/* Kerapatan Section Sebelum Page 5 */
+section:has(+ #wedding-event) {
+  padding-bottom: 5px !important;
+  margin-bottom: 0 !important;
+  min-height: auto !important;
+}
+
+/* Container utama Page 5 */
+.event-section {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 12px 18px 35px 18px !important;
+  min-height: auto;
+  /* Latar belakang soft cyan-blue dengan bayangan latar lembut */
+  background: linear-gradient(rgba(152, 180, 196, 0.45), rgba(152, 180, 196, 0.45)), 
+              url('assets/05.jpeg') center/cover no-repeat;
+  background-color: #9cb4c2;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.event-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Icon Cincin */
+.rings-icon-wrapper {
+  margin-top: 5px;
+  margin-bottom: 2px;
+  display: flex;
+  justify-content: center;
+}
+
+.rings-svg {
+  display: block;
+}
+
+/* ==========================================
+   WEDDING & EVENT SECTION (FIXED & MERGED)
+   ========================================== */
+
+/* Container Utama Section Event */
+.wedding-event-section,
+.event-section {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 50px 20px !important;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  
+  /* Latar belakang Foto dengan Overlay Biru Soft Transparan */
+  background: 
+    linear-gradient(
+      rgba(150, 180, 195, 0.75), 
+      rgba(150, 180, 195, 0.75)
+    ),
+    url('assets/event-bg.jpeg') center/cover no-repeat;
+  
+  color: #ffffff;
+}
+
+/* Judul Main Header "Wedding Event" */
+.title-wedding {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #ffffff !important;
+  line-height: 0.95;
+  margin: 0;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.subtitle-event {
+  font-family: 'Great Vibes', cursive;
+  font-size: 2.3rem;
+  color: #ffffff !important;
+  margin-top: -2px;
+  margin-bottom: 24px;
+  line-height: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* Glassmorphism Card (Kartu Transparan Akad & Resepsi) */
+.event-section .event-card,
+.wedding-event-section .event-card {
+  background: rgba(255, 255, 255, 0.22) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.45) !important;
+  border-radius: 20px !important;
+  padding: 24px 18px 26px 18px !important;
+  width: 100% !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06) !important;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
+/* Header Kartu: Lines + AKAD NIKAH / RESEPSI */
+.card-title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #ffffff !important;
+  margin: 0;
+  text-transform: uppercase;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.card-title-wrapper .line-decor {
+  height: 1px;
+  width: 32px;
+  background-color: rgba(255, 255, 255, 0.75);
+}
+
+/* Informasi Tanggal & Jam */
+.event-date {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  text-transform: uppercase;
+}
+
+.event-time {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  margin-bottom: 16px;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  text-transform: uppercase;
+}
+
+/* Pin & Lokasi */
+.location-pin-icon {
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.location-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.location-address {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.72rem;
+  line-height: 1.6;
+  opacity: 0.95;
+  margin-bottom: 20px;
+  color: #ffffff !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+  padding: 0 10px;
+}
+
+/* Tombol Google Maps (Putih Bersih) */
+.btn-gmaps,
+.wedding-event-section .btn-maps {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background-color: #ffffff !important;
+  color: #1f3a52 !important;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 9px 22px;
+  border-radius: 6px;
+  text-decoration: none !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: none;
+}
+
+.btn-gmaps:active,
+.wedding-event-section .btn-maps:active {
+  transform: scale(0.96);
+}
+
+/* Pembatas & Blok Elemen */
+.event-step-block {
+  padding: 6px 0;
+}
+
+.event-divider-line {
+  height: 1px;
+  width: 75%;
+  margin: 20px auto;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent);
+}
+
+.location-bottom-block {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ==========================================
+   PAGE 6: QUOTE AR-RUM 21
+   ========================================== */
+
+/* Kerapatan dengan Section 5 */
+section:has(+ #quote-section) {
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.quote-section {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 10px 20px 20px 20px !important;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Pembatas Daun Atas Presisi */
+.leaf-divider-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.leaf-divider-top .line-decor {
+  height: 1px;
+  width: 45px;
+  background-color: #1f3a52;
+  opacity: 0.35;
+}
+
+/* Kartu Putih Bersih Sesuai Contoh Gambar */
+.quote-card {
+  background: #ffffff !important;
+  border-radius: 12px;
+  padding: 30px 22px !important;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.quote-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: #2c3e50;
+  margin: 0 0 18px 0;
+  font-weight: 500;
+}
+
+.quote-source {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1f3a52;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+/* ==========================================
+   PAGE 7: LOVE STORY SECTION
+   ========================================== */
+
+.love-story-section {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 30px 20px 40px 20px !important;
+  background-color: #ffffff !important; /* Latar Belakang Putih Clean */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Judul Header */
+.title-love {
+  font-family: 'Cinzel', 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1f3a52;
+  letter-spacing: 3px;
+  margin: 0 0 -5px 0;
+  text-transform: uppercase;
+}
+
+.subtitle-story {
+  font-family: 'Sacramento', 'Great Vibes', cursive;
+  font-size: 2.4rem;
+  color: #1f3a52;
+  margin: 0 0 15px 0;
+  font-weight: 400;
+}
+
+/* Pembatas Daun Utamanya */
+.leaf-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.leaf-divider .line-decor {
+  height: 1px;
+  width: 45px;
+  background-color: #1f3a52;
+  opacity: 0.35;
+}
+
+/* Foto Utama & Frame Inner Border */
+.story-featured-wrapper {
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: 25px;
+}
+
+.story-featured-frame {
+  position: relative;
+  width: 100%;
+  padding: 8px;
+  background: #f8f9fa; /* Warna kontras tipis agar frame foto tetap timbul */
+  border-radius: 4px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+.story-featured-frame::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.story-featured-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 2px;
+  object-fit: cover;
+}
+
+/* Timeline Cerita */
+.story-timeline {
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
+}
+
+.story-item {
+  text-align: center;
+}
+
+.story-title {
+  font-family: 'Cinzel', 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1f3a52;
+  letter-spacing: 2px;
+  margin: 0 0 12px 0;
+  text-transform: uppercase;
+}
+
+.story-description {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: #333333;
+  margin: 0;
+  text-align: center;
+}
+
+/* Pembatas Daun Antar Paragraf */
+.leaf-divider-small {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 22px auto;
+  width: 100%;
+}
+
+.leaf-divider-small .line-decor {
+  height: 1px;
+  width: 40px;
+  background-color: #1f3a52;
+  opacity: 0.3;
+}
+
+.story-final {
+  margin-top: 5px;
+}
+
+/* ==========================================
+   PAGE 8: GALLERY / OUR MOMENT SECTION
+   ========================================== */
+
+.gallery-section {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 30px 20px 0 20px !important;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Icon Kamera & Header Titles */
+.gallery-icon-wrapper {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title-gallery {
+  font-family: 'Cinzel', 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1f3a52;
+  letter-spacing: 2px;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.subtitle-moment {
+  font-family: 'Sacramento', 'Great Vibes', cursive;
+  font-size: 2.5rem;
+  color: #a0aab2;
+  margin: -4px 0 24px 0;
+  font-weight: 400;
+}
+
+/* Grid Foto 2 Kolom */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.gallery-item {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1.25;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.gallery-item:active img {
+  transform: scale(1.03);
+}
+
+/* Quote Romantis */
+.gallery-quote-wrapper {
+  margin-top: 32px;
+  padding: 0 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.gallery-quote-text {
+  font-family: 'Cormorant Garamond', 'Playfair Display', serif;
+  font-size: 0.92rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: #333333;
+  text-align: center;
+  margin: 0;
+  letter-spacing: 0.2px;
+}
+
+/* Banner Transisi dengan Bingkai Diagonal Unik */
+.gallery-featured-banner {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  background-color: #96b4c3;
+  padding: 35px 20px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.featured-card-frame {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  background-color: #ffffff;
+  padding: 10px;
+  border-top-left-radius: 80px;
+  border-bottom-right-radius: 80px;
+  border-top-right-radius: 12px;
+  border-bottom-left-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.featured-card-frame img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-top-left-radius: 72px;
+  border-bottom-right-radius: 72px;
+  border-top-right-radius: 6px;
+  border-bottom-left-radius: 6px;
+  object-fit: cover;
+}
+
+/* ==========================================
+   PAGE 9: WEDDING WISHES & RSVP
+   ========================================== */
+
+.wishes-section {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 20px 40px 20px;
+  background-color: #96b4c3; /* Latar Dusty Blue */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.title-wedding-wishes {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #1f3a52;
+  margin: 0;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.subtitle-wishes {
+  font-family: 'Great Vibes', cursive;
+  font-size: 2.5rem;
+  color: #1f3a52;
+  margin: -6px 0 24px 0;
+  line-height: 1;
+}
+
+/* Card Kontainer Putih */
+.wishes-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 24px 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+}
+
+.comments-count {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* Badge Indikator RSVP (Hadir / Tidak Hadir) */
+.rsvp-summary-wrapper {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.rsvp-badge {
+  flex: 1;
+  padding: 10px 8px;
+  border-radius: 8px;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-hadir {
+  background-color: #3b9b66; /* Hijau */
+}
+
+.badge-absent {
+  background-color: #d91414; /* Merah */
+}
+
+.rsvp-badge .count {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.rsvp-badge .label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+/* Form Styling */
+.wishes-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+}
+
+.form-group {
+  width: 100%;
+}
+
+.form-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  color: #333333;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: #1f3a52;
+}
+
+.form-input::placeholder {
+  color: #b0b0b0;
+}
+
+.form-textarea {
+  resize: none;
+}
+
+.form-select {
+  color: #555555;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23b0b0b0%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px top 50%;
+  background-size: 10px auto;
+}
+
+.btn-submit-wishes {
+  width: 100px;
+  padding: 10px 0;
+  background-color: #1f3a52;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(31, 58, 82, 0.2);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  align-self: flex-start;
+  margin-top: 4px;
+}
+
+.btn-submit-wishes:active {
+  transform: scale(0.96);
+  background-color: #152839;
+}
+
+/* List Ucapan Tamu (Dinamis) */
+.wishes-list {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+
+.wish-item {
+  padding: 10px 12px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border-left: 3px solid #1f3a52;
+}
+
+.wish-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.wish-author {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1f3a52;
+}
+
+.wish-status {
+  font-size: 0.68rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.wish-status.hadir { background-color: #3b9b66; }
+.wish-status.tidak-hadir { background-color: #d91414; }
+
+.wish-body {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.78rem;
+  color: #444444;
+  line-height: 1.4;
+}
+
+/* ==========================================
+   PAGE 10: DOA PENGANTIN SECTION
+   ========================================== */
+
+.doa-section {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 30px 20px 50px 20px !important;
+  background-color: #96b4c3; /* Latar Dusty Blue */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Judul Doa Pengantin (Persis seperti Gambar Referensi) */
+.title-doa {
+  font-family: 'Playfair Display', 'Georgia', serif;
+  font-size: 2.1rem;
+  font-weight: 800; /* Extra bold/Heavy */
+  color: #ffffff;  /* Warna putih bersih */
+  margin: 0 0 24px 0;
+  letter-spacing: -0.2px;
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Card Putih Doa Pengantin */
+.doa-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 24px 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Wrapper & Gambar Kaligrafi Arab */
+.doa-arabic-img-wrapper {
+  width: 100%;
+  max-width: 280px;
+  margin-bottom: 16px;
+}
+
+.doa-arabic-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+/* Terjemahan Doa dalam Card Putih */
+.translation-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: #333333;
+  margin: 0 0 12px 0;
+  font-weight: 500;
+}
+
+.hadith-source {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  color: #666666;
+  font-weight: 400;
+}
+
+//* ==========================================
+   PAGE 11: WEDDING GIFT SECTION
+   ========================================== */
+
+.gift-section {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 16px 0 16px !important;
+  background-color: #96b4c3; /* Latar Dusty Blue */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Card Putih dengan Lengkungan Atas Presisi */
+.gift-card {
+  width: 100%;
+  background-color: #ffffff;
+  border-top-left-radius: 40px;
+  border-top-right-radius: 40px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  padding: 40px 24px 50px 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Ikon Kado */
+.gift-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 16px;
+}
+
+.gift-icon {
+  width: 100%;
+  height: 100%;
+  fill: #1f3a52;
+}
+
+/* Title WEDDING Gift */
+.title-wedding-gift {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #1f3a52;
+  margin: 0 0 6px 0; /* Memberi jarak bawah sedikit */
+  line-height: 1.1;
+  letter-spacing: 1px;
+}
+
+.subtitle-gift {
+  font-family: 'Great Vibes', cursive;
+  font-size: 2.8rem;
+  color: #1f3a52;
+  margin: 0 0 24px 0; /* Ubah margin-top dari -8px menjadi 0 agar tidak bertumpuk */
+  line-height: 1;
+}
+
+/* Deskripsi Font Serif Sesuai Gambar */
+.gift-description {
+  font-family: 'Playfair Display', 'Georgia', serif;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: #333333;
+  margin: 0 0 32px 0;
+  padding: 0 10px;
+  font-weight: 400;
+}
+
+/* Tombol Lihat Rekening Oval Gelap */
+.btn-lihat-rekening {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 22px;
+  background-color: #1f3a52;
+  color: #ffffff;
+  border: none;
+  border-radius: 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(31, 58, 82, 0.2);
+}
+
+.btn-lihat-rekening:active {
+  transform: scale(0.96);
+}
+
+/* Container Utama Kartu */
+.bank-container {
+  width: 100%;
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  transition: all 0.4s ease-in-out;
+}
+
+/* Class tersembunyi */
+.bank-container.hidden {
+  display: none;
+}
+
+/* Desain Kartu dengan Gambar Background JPG */
+.card-item {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  border-radius: 20px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 24px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+/* Path Gambar JPG dari folder assets */
+.card-bg-1 {
+  background-image: url('assets/kartu1.png');
+}
+
+.card-bg-2 {
+  background-image: url('assets/kartu2.png');
+}
+
+/* Layout Teks di Atas Kartu */
+.card-content {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  z-index: 2;
+}
+
+.card-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  color: #dddddd;
+  margin-bottom: 2px;
+}
+
+.card-number {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+.card-holder {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+/* Tombol Copy */
+.btn-copy {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  padding: 10px;
+  color: #ffffff;
+  cursor: pointer;
+  z-index: 2;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.btn-copy:active {
+  transform: scale(0.92);
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Footer Kado */
+.kado-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 12px;
+  gap: 4px;
+}
+
+.btn-kado {
+  background: #333333;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.kado-footer span {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  color: #333333;
+  font-weight: 600;
+}
+
+/* ==========================================
+   PAGE 12: FOOTER & CLOSING (FULL IMAGE STYLE)
+   ========================================== */
+
+.footer-closing-section {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 16px 20px 16px !important;
+  background-color: #96b4c3; /* Latar Dusty Blue */
+  box-sizing: border-box;
+}
+
+/* Kartu Utama dengan Background Foto Mempelai */
+.closing-hero-card {
+  position: relative;
+  width: 100%;
+  min-height: 580px;
+  border-radius: 32px;
+  /* Ganti URL foto sesuai file foto kalian di assets */
+  background-image: url('assets/bg-closing.jpeg'); 
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px 30px 20px;
+  box-sizing: border-box;
+}
+
+/* Overlay Gradien agar Teks Putih Terbaca Jelas */
+.closing-hero-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom, 
+    rgba(0, 0, 0, 0.1) 0%, 
+    rgba(150, 180, 195, 0.4) 40%, 
+    #96b4c3 85%
+  );
+  z-index: 1;
+}
+
+/* Avatar Lingkaran Atas */
+.top-circle-avatar {
+  position: relative;
+  z-index: 2;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.top-circle-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Container Teks */
+.closing-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  color: #ffffff;
+}
+
+.happy-label {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 6px;
+  font-style: italic;
+}
+
+.couples-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 16px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.closing-paragraph {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: #ffffff;
+  max-width: 320px;
+  margin: 0 0 24px 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Logo Lingkaran M */
+.brand-logo-circle {
+  width: 44px;
+  height: 44px;
+  background-color: #e5ddd0; /* Warna Krem Khas Brand */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.brand-logo-circle span {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #555555;
+}
+
+/* Ikon Sosmed */
+.social-icons {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.social-btn {
+  color: #ffffff;
+  opacity: 0.9;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.social-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Watermark Teks */
+.watermark-text p {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}

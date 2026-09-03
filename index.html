@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Undangan Pernikahan Umi & Yusup</title>
+  
+  <!-- AOS Animation CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- 1. HERO / COVER UTAMA (PAGE 1) -->
+  <section id="hero" class="hero-section">
+    <div class="hero-overlay"></div>
+    
+    <div class="hero-content">
+      <!-- Bagian Atas: Judul & Tanggal -->
+      <div class="header-text" data-aos="fade-down">
+        <p class="subtitle">THE WEDDING OF</p>
+        <h1 class="couple-names">Umi & Yusup</h1>
+        <p class="date">SABTU, 12 DESEMBER 2026</p>
+      </div>
+
+      <!-- Bagian Bawah: Nama Tamu + Tombol Buka Undangan -->
+      <div class="guest-action-block" data-aos="fade-up" data-aos-delay="200">
+        <p class="guest-label">Kepada Yth.<br>Bapak/Ibu/Saudara/i</p>
+        <h3 id="guest-name" class="guest-name">Tamu Undangan</h3>
+
+        <button id="btnOpen" class="btn-open" onclick="openInvitation()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+          Buka Undangan
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Audio Backsound -->
+  <audio id="bgMusic" loop>
+    <source src="assets/audio.mp3" type="audio/mpeg" />
+  </audio>
+
+  <!-- 2. OPENING / COVER DALAM (PAGE 2) -->
+  <section id="opening" class="opening-section">
+    <div class="opening-overlay"></div>
+    
+    <div class="opening-content" data-aos="fade-up">
+      <div class="opening-text">
+        <p class="subtitle">THE WEDDING OF</p>
+        <h1 class="couple-names">UMI & YUSUP</h1>
+        <p class="date">SABTU, 12 DESEMBER 2026</p>
+      </div>
+    </div>
+  </section>
+
+<!-- 3. PAGE 3: WE ARE GETTING MARRIED & COUNTDOWN -->
+  <section id="countdown-section" class="countdown-section">
+    <div class="countdown-overlay"></div>
+
+    <div class="countdown-content" data-aos="fade-up">
+      <!-- Header Text -->
+      <h2 class="title-we-are">We Are</h2>
+      <p class="subtitle-getting-married">Getting Married</p>
+
+      <!-- Leaf Icon / Divider -->
+      <div class="leaf-divider">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17,8C8,10 59,16.17 3.82,21.34L5.23,22.75C11.07,16.91 19,10 19,10M20.5,3C20.5,3 14,3 9,7.5C4,12 3,18 3,18C3,18 9,17 13.5,12.5C18,8 20.5,3 20.5,3Z"/>
+        </svg>
+      </div>
+
+      <!-- Text Undangan -->
+      <p class="invitation-text">
+        Segala puji bagi Allah SWT yang telah menjadikan hambaNya hidup berpasang-pasangan. Dengan memohon ridho, rahmat, dan berkah Allah SWT, kami bermaksud untuk mengundang Bapak/Ibu/Saudara/i dalam acara pernikahan yang kami selenggarakan.
+      </p>
+
+      <!-- Countdown Timer Box -->
+      <div class="timer-grid">
+        <div class="timer-box">
+          <span id="days">00</span>
+          <p>Days</p>
+        </div>
+        <div class="timer-box">
+          <span id="hours">00</span>
+          <p>Hours</p>
+        </div>
+        <div class="timer-box">
+          <span id="minutes">00</span>
+          <p>Minutes</p>
+        </div>
+        <div class="timer-box">
+          <span id="seconds">00</span>
+          <p>Seconds</p>
+        </div>
+      </div>
+
+     <!-- Tombol Save The Date -->
+<a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Wedding+Umi+%26+Yusup&dates=20261212T050000Z/20261212T100000Z&details=Acara+Pernikahan+Umi+%26+Yusup.+Merupakan+suatu+kehormatan+dan+kebahagiaan+bagi+kami+apabila+Bapak/Ibu/Saudara/i+berkenan+hadir.&location=Kediaman+Mempelai+Wanita" target="_blank" class="btn-save-date">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+    <line x1="16" y1="2" x2="16" y2="6"></line>
+    <line x1="8" y1="2" x2="8" y2="6"></line>
+    <line x1="3" y1="10" x2="21" y2="10"></line>
+  </svg>
+  SAVE THE DATE
+</a>
+
+<!-- 4. PAGE 4: BRIDE & GROOM (PROFIL MEMPELAI) -->
+<section id="mempelai" class="mempelai-section">
+  <div class="mempelai-card" data-aos="fade-up">
+    
+    <!-- Bismillah Gambar -->
+    <div class="bismillah-wrapper" data-aos="fade-down">
+      <img src="assets/bismillah.png" alt="Bismillah" class="bismillah-img">
+    </div>
+
+    <h2 class="section-title-bride">Bride & Groom</h2>
+    
+    <div class="leaf-divider">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17,8C8,10 59,16.17 3.82,21.34L5.23,22.75C11.07,16.91 19,10 19,10M20.5,3C20.5,3 14,3 9,7.5C4,12 3,18 3,18C3,18 9,17 13.5,12.5C18,8 20.5,3 20.5,3Z"/>
+      </svg>
+    </div>
+
+    <!-- Mempelai Wanita (The Bride) -->
+    <div class="profile-row bride-row" data-aos="fade-up">
+      <div class="profile-capsule-img">
+        <img src="assets/mempelai-wanita.jpeg" alt="Umi" />
+      </div>
+      <div class="profile-details">
+        <div class="label-wrapper">
+          <span class="label-role">The Bride</span>
+          <span class="line-decor"></span>
+        </div>
+        <h3 class="person-fullname">Umiyati Hidayah</h3>
+        <p class="parents-detail">
+          Putri pertama dari<br>
+          Bapak Tutu<br>
+          dan Ibu Rita Anggraini
+        </p>
+        <a href="https://instagram.com/username_umi" target="_blank" class="btn-ig" aria-label="Instagram Umi">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Divider Dan (&) -->
+    <div class="ampersand-divider" data-aos="zoom-in">
+      <span>&amp;</span>
+    </div>
+
+    <!-- Mempelai Pria (The Groom) -->
+    <div class="profile-row groom-row" data-aos="fade-up">
+      <div class="profile-details align-right">
+        <div class="label-wrapper right">
+          <span class="line-decor"></span>
+          <span class="label-role">The Groom</span>
+        </div>
+        <h3 class="person-fullname">Yusup Supriadi, S.Kom.</h3>
+        <p class="parents-detail">
+          Putra ketiga dari<br>
+          Bapak Ood<br>
+          dan Ibu Enok Rohana
+        </p>
+        <a href="https://instagram.com/username_yusup" target="_blank" class="btn-ig" aria-label="Instagram Yusup">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+        </a>
+      </div>
+      <div class="profile-capsule-img">
+        <img src="assets/mempelai-pria.jpeg" alt="Yusup" />
+      </div>
+    </div>
+
+    <!-- Divider Diamond Bawah -->
+    <div class="diamond-divider">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M6 3h12l4 6-10 12L2 9z"/>
+        <path d="M11 3v18"/>
+        <path d="M2 9h20"/>
+      </svg>
+    </div>
+
+  </div>
+</section>
+
+<!-- 5. PAGE 5: WEDDING EVENT (BERURUTAN) -->
+<section id="wedding-event" class="event-section">
+  <div class="event-content" data-aos="fade-up" data-aos-duration="900">
+    
+    <!-- 1. Icon Cincin -->
+    <div class="rings-icon-wrapper" data-aos="zoom-in" data-aos-delay="100">
+      <svg class="rings-svg" width="70" height="70" viewBox="0 0 100 100" fill="none" stroke="#1f3a52" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="38" cy="58" r="21" stroke-width="3.5" />
+        <circle cx="38" cy="58" r="16" stroke-width="2.5" />
+        <path d="M 31 34 C 31 29, 36 27, 38 31 C 40 27, 45 29, 45 34 C 45 39, 38 43, 38 43 C 38 43, 31 39, 31 34 Z" fill="none" stroke-width="3" />
+        <circle cx="62" cy="58" r="21" stroke-width="3.5" />
+        <circle cx="62" cy="58" r="16" stroke-width="2.5" />
+        <path d="M 55 34 C 55 29, 60 27, 62 31 C 64 27, 69 29, 69 34 C 69 39, 62 43, 62 43 C 62 43, 55 39, 55 34 Z" fill="none" stroke-width="3" />
+      </svg>
+    </div>
+
+    <!-- 2. Judul Section -->
+    <h2 class="title-wedding" data-aos="zoom-in" data-aos-delay="150">Wedding</h2>
+    <p class="subtitle-event" data-aos="zoom-in" data-aos-delay="200">Event</p>
+
+    <!-- KARTU UTAMA CONTAINING SEQUENTIAL ELEMENTS -->
+    <div class="event-card" data-aos="fade-up" data-aos-delay="250">
+      
+      <!-- 3. AKAD NIKAH -->
+      <div class="event-step-block" data-aos="fade-up" data-aos-delay="300">
+        <div class="card-title-wrapper">
+          <span class="line-decor"></span>
+          <h3 class="card-title">AKAD NIKAH</h3>
+          <span class="line-decor"></span>
+        </div>
+        <p class="event-date">SABTU, 12 DESEMBER 2026</p>
+        <p class="event-time">PUKUL : 08.00 - 10.00 WIB</p>
+      </div>
+
+      <div class="event-divider-line" data-aos="fade-up" data-aos-delay="350"></div>
+
+      <!-- 4. RESEPSI -->
+      <div class="event-step-block" data-aos="fade-up" data-aos-delay="400">
+        <div class="card-title-wrapper">
+          <span class="line-decor"></span>
+          <h3 class="card-title">RESEPSI</h3>
+          <span class="line-decor"></span>
+        </div>
+        <p class="event-date">SABTU, 12 DESEMBER 2026</p>
+        <p class="event-time">PUKUL : 11.00 - SELESAI</p>
+      </div>
+
+      <div class="event-divider-line" data-aos="fade-up" data-aos-delay="450"></div>
+
+      <!-- 5. DETAIL LOKASI & TOMBOL GOOGLE MAPS (DI PALING BOTTOM) -->
+      <div class="location-bottom-block" data-aos="fade-up" data-aos-delay="500">
+        <div class="location-pin-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="#ffffff">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </svg>
+        </div>
+
+        <p class="location-name">Kediaman Mempelai Wanita</p>
+        <p class="location-address">
+          Kp. Pekopen Timur – Desa Lambang Jaya,<br>
+          Kecamatan Tambun Selatan<br>
+          Kabupaten Bekasi, Jawa Barat
+        </p>
+
+        <!-- Tombol Google Maps di Akhir -->
+        <a href="https://yusup604.github.io/wedding-yusup-umi/" target="_blank" class="btn-gmaps">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="#1f3a52">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </svg>
+          GOOGLE MAPS
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+  <!-- 6. PAGE 6: QUOTE AR-RUM 21 -->
+<section id="quote-section" class="quote-section">
+  <!-- Pembatas Daun Atas -->
+  <div class="leaf-divider-top" data-aos="zoom-in" data-aos-delay="100">
+    <span class="line-decor"></span>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="#1f3a52">
+      <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.23,22.75C11.07,16.91 19,10 19,10M20.5,3C20.5,3 14,3 9,7.5C4,12 3,18 3,18C3,18 9,17 13.5,12.5C18,8 20.5,3 20.5,3Z"/>
+    </svg>
+    <span class="line-decor"></span>
+  </div>
+
+  <!-- Kartu Putih Bersih Untuk Teks Ayat -->
+  <div class="quote-card" data-aos="fade-up" data-aos-delay="200">
+    <p class="quote-text">
+      "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir."
+    </p>
+    <p class="quote-source">- QS. Ar-Rum : 21 -</p>
+  </div>
+</section>
+    <!-- 7. PAGE 7: LOVE STORY -->
+<section id="love-story" class="love-story-section">
+  
+  <!-- Header Judul -->
+  <h2 class="title-love" data-aos="zoom-in" data-aos-delay="100">LOVE</h2>
+  <p class="subtitle-story" data-aos="zoom-in" data-aos-delay="200">Story</p>
+
+  <!-- Pembatas Daun Atas -->
+  <div class="leaf-divider" data-aos="zoom-in" data-aos-delay="300">
+    <span class="line-decor"></span>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="#1f3a52">
+      <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.23,22.75C11.07,16.91 19,10 19,10M20.5,3C20.5,3 14,3 9,7.5C4,12 3,18 3,18C3,18 9,17 13.5,12.5C18,8 20.5,3 20.5,3Z"/>
+    </svg>
+    <span class="line-decor"></span>
+  </div>
+
+  <!-- Foto Utama dengan Frame -->
+  <div class="story-featured-wrapper" data-aos="fade-up" data-aos-delay="400">
+    <div class="story-featured-frame">
+      <img src="assets/love-story-main.jpeg" alt="Love Story Featured" class="story-featured-img">
+    </div>
+  </div>
+
+  <!-- Timeline Cerita -->
+  <div class="story-timeline">
+    
+    <!-- Bagian 1: Awal Bertemu -->
+    <div class="story-item" data-aos="fade-up" data-aos-delay="500">
+      <h3 class="story-title">AWAL BERTEMU</h3>
+      <p class="story-description">
+        Tidak ada yang kebetulan di dunia ini. Semua sudah tersusun rapi oleh sang Maha Kuasa. Kita tidak bisa memilih kepada siapa kita akan jatuh cinta. Kami bertemu pada pertengahan tahun 2024, tidak ada yang pernah menyangka bahwa pertemuan ini membawa kami pada suatu ikatan cinta yang suci hari ini.
+      </p>
+    </div>
+
+    <!-- Pembatas Daun Kecil 1 -->
+    <div class="leaf-divider-small" data-aos="zoom-in" data-aos-delay="550">
+      <span class="line-decor"></span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="#1f3a52">
+        <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.23,22.75C11.07,16.91 19,10 19,10M20.5,3C20.5,3 14,3 9,7.5C4,12 3,18 3,18C3,18 9,17 13.5,12.5C18,8 20.5,3 20.5,3Z"/>
+      </svg>
+      <span class="line-decor"></span>
+    </div>
+
+    <!-- Bagian 2: Lamaran -->
+    <div class="story-item" data-aos="fade-up" data-aos-delay="600">
+      <h3 class="story-title">LAMARAN</h3>
+      <p class="story-description">
+        Kehendak Nya menuntut kami pada sebuah pertemuan yang tak pernah di sangka hingga akhirnya di pertengahan tahun 2025 kami memantapkan hati untuk membawa hubungan ini kejenjang yang lebih serius dengan mempertemukan kedua orang tua dan keluarga besar dalam silaturahmi dan lamaran
+      </p>
+    </div>
+
+    <!-- Pembatas Daun Kecil 2 -->
+    <div class="leaf-divider-small" data-aos="zoom-in" data-aos-delay="650">
+      <span class="line-decor"></span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="#1f3a52">
+        <path d="M17,8C8,10 5.9,16.17 3.82,21.34L5.23,22.75C11.07,16.91 19,10 19,10M20.5,3C20.5,3 14,3 9,7.5C4,12 3,18 3,18C3,18 9,17 13.5,12.5C18,8 20.5,3 20.5,3Z"/>
+      </svg>
+      <span class="line-decor"></span>
+    </div>
+
+    <!-- Bagian 3: Penutup & Pernikahan -->
+    <div class="story-item story-final" data-aos="fade-up" data-aos-delay="700">
+      <h3 class="story-title">MENIKAH</h3>
+      <p class="story-description">
+        karena berjodoh lah maka kami dipertemukan, Atas izin Allah SWT serta restu dan ridho kedua orang tua kami memutuskan untuk mengikrarkan janji suci pernikahan kami di tanggal 12 Desember 2026. Serta memulai kisah baru kami dalam suatu ikatan suci pernikahan yang semoga senantiasa diberkahi oleh Allah SWT.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- 8. PAGE 8: GALLERY / OUR MOMENT -->
+<section id="gallery" class="gallery-section">
+  
+  <!-- Icon Kamera Header -->
+  <div class="gallery-icon-wrapper" data-aos="zoom-in" data-aos-delay="100">
+    <svg class="camera-svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1f3a52" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+      <circle cx="12" cy="13" r="4"></circle>
+    </svg>
+  </div>
+
+  <!-- Judul Section -->
+  <h2 class="title-gallery" data-aos="zoom-in" data-aos-delay="200">Gallery</h2>
+  <p class="subtitle-moment" data-aos="zoom-in" data-aos-delay="300">Our Moment</p>
+
+  <!-- Grid Foto 2 Kolom Presisi -->
+  <div class="gallery-grid" data-aos="fade-up" data-aos-delay="350">
+    <div class="gallery-item">
+      <img src="assets/gallery-1.jpeg" alt="Our Moment 1" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/gallery-2.jpeg" alt="Our Moment 2" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/gallery-3.jpeg" alt="Our Moment 3" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/gallery-4.jpeg" alt="Our Moment 4" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/gallery-5.jpeg" alt="Our Moment 5" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/gallery-6.jpeg" alt="Our Moment 6" loading="lazy">
+    </div>
+  </div>
+
+  <!-- Quote Romantis Penutup Galeri -->
+  <div class="gallery-quote-wrapper" data-aos="fade-up" data-aos-delay="400">
+    <p class="gallery-quote-text">
+      “I love you. I am who I am because of you. You are every reason, every hope, and every dream I've ever had, and no matter what happens to us in the future, everyday we are together is the greatest day of my life. I will always be yours.”
+    </p>
+  </div>
+
+  <!-- Transisi Banner Foto Utama (Latar Biru Dusty) -->
+  <div class="gallery-featured-banner" data-aos="fade-up" data-aos-delay="450">
+    <div class="featured-card-frame">
+      <img src="assets/gallery-featured.jpeg" alt="Featured Moment" loading="lazy">
+    </div>
+  </div>
+
+</section>
+
+<!-- PAGE 9: WEDDING WISHES & RSVP -->
+<section id="wishes" class="wishes-section">
+  
+  <!-- Header Title -->
+  <h2 class="title-wedding-wishes" data-aos="zoom-in" data-aos-delay="100">Wedding</h2>
+  <p class="subtitle-wishes" data-aos="zoom-in" data-aos-delay="200">Wishes</p>
+
+  <!-- Container Kartu Putih Form -->
+  <div class="wishes-card" data-aos="fade-up" data-aos-delay="300">
+    
+    <!-- Total Ucapan / Komentar -->
+    <div class="comments-count"><span id="totalComments">0</span> Comments</div>
+
+    <!-- Badge Ringkasan Kehadiran -->
+    <div class="rsvp-summary-wrapper">
+      <div class="rsvp-badge badge-hadir">
+        <span class="count" id="countHadir">0</span>
+        <span class="label">Hadir</span>
+      </div>
+      <div class="rsvp-badge badge-absent">
+        <span class="count" id="countTidakHadir">0</span>
+        <span class="label">Tidak Hadir</span>
+      </div>
+    </div>
+
+    <!-- Form Input Ucapan & RSVP -->
+    <form class="wishes-form" id="wishesForm">
+      
+      <div class="form-group">
+        <input type="text" id="guestName" class="form-input" placeholder="Nama" required />
+      </div>
+
+      <div class="form-group">
+        <textarea id="guestMessage" class="form-input form-textarea" placeholder="Ucapan" rows="3" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <select id="guestAttendance" class="form-input form-select" required>
+          <option value="" disabled selected hidden>Konfirmasi Kehadiran</option>
+          <option value="Hadir">Hadir</option>
+          <option value="Tidak Hadir">Tidak Hadir</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn-submit-wishes">Kirim</button>
+
+    </form>
+
+    <!-- Tempat Menampilkan Daftar Ucapan dari Tamu -->
+    <div class="wishes-list" id="wishesList">
+      <!-- Ucapan yang dikirim akan muncul di sini secara dinamis -->
+    </div>
+
+  </div> <!-- End .wishes-card -->
+
+</section>
+
+<!-- 10. PAGE 10: DOA PENGANTIN -->
+<section id="doa-pengantin" class="doa-section">
+  
+  <!-- Judul Doa Pengantin Tepat Di Atas Card -->
+  <h2 class="title-doa" data-aos="zoom-in" data-aos-delay="100">Doa Pengantin</h2>
+
+  <!-- Container Kartu Putih -->
+  <div class="doa-card" data-aos="fade-up" data-aos-delay="200">
+    
+    <!-- Gambar Kaligrafi Arab -->
+    <div class="doa-arabic-img-wrapper">
+      <img src="assets/doa-pengantin-arabic.png" alt="Doa Pengantin Kaligrafi" class="doa-arabic-img">
+    </div>
+
+    <!-- Terjemahan Doa (Teks Gelap) -->
+    <p class="translation-text">
+      “Semoga Allah memberkahimu dan memberkahi apa yang menjadi tanggung jawabmu, serta menyatukan kalian berdua dalam kebaikan.”
+    </p>
+
+    <!-- Sumber Riwayat -->
+    <span class="hadith-source">(HR. Abu Dawud no. 2130)</span>
+
+  </div>
+
+</section>
+
+<!-- SECTION WEDDING GIFT -->
+<section id="wedding-gift" class="gift-section">
+  <div class="gift-card">
+    
+    <!-- Ikon Kado -->
+    <div class="gift-icon-wrapper">
+      <svg class="gift-icon" viewBox="0 0 24 24">
+        <path d="M11.5 2C10.12 2 9 3.12 9 4.5C9 5.24 9.33 5.91 9.85 6.37L2 6.38V10.38H22V6.38L14.15 6.37C14.67 5.91 15 5.24 15 4.5C15 3.12 13.88 2 12.5 2H11.5ZM11.5 3.5H12.5C13.05 3.5 13.5 3.95 13.5 4.5C13.5 5.05 13.05 5.5 12.5 5.5H11.5C10.95 5.5 10.5 5.05 10.5 4.5C10.5 3.95 10.95 3.5 11.5 3.5ZM3 11.38V21.38C3 21.93 3.45 22.38 4 22.38H11V11.38H3ZM13 11.38V22.38H20C20.55 22.38 21 21.93 21 21.38V11.38H13Z"/>
+      </svg>
+    </div>
+
+    <h2 class="title-wedding-gift">WEDDING</h2>
+    <p class="subtitle-gift">Gift</p>
+
+    <p class="gift-description">
+      Doa restu anda merupakan karunia yang sangat berarti bagi kami. Namun jika memberi adalah ungkapan tanda kasih, kami akan senang hati menerimanya yang tentu akan semakin melengkapi kebahagiaan kami.
+    </p>
+
+    <!-- Tombol Trigger -->
+    <button type="button" class="btn-lihat-rekening" id="btnToggleBank">
+      <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+        <path d="M1 3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1H1zm7 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+        <path d="M0 5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V5zm3 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm11 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+      </svg>
+      Lihat Rekening
+    </button>
+
+    <!-- Container Daftar Kartu (Awalnya Tersembunyi) -->
+    <div id="bankContainer" class="bank-container hidden">
+      
+      <!-- Kartu 1 (kartu1.jpg) -->
+      <div class="card-item card-bg-1">
+        <div class="card-content">
+          <span class="card-label">Nomor Rekening</span>
+          <span class="card-number" id="rekeningBca">087782588635</span>
+          <span class="card-label">Atas Nama</span>
+          <span class="card-holder">UMIYATI HIDAYAH</span>
+        </div>
+        <button type="button" class="btn-copy" onclick="copyText('rekeningBca')">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+            <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Kartu 2 (kartu2.jpg) -->
+      <div class="card-item card-bg-2">
+        <div class="card-content">
+          <span class="card-label">Nomor Rekening</span>
+          <span class="card-number" id="rekeningPermata">04144021652</span>
+          <span class="card-label">Atas Nama</span>
+          <span class="card-holder">YUSUP SUPRIADI</span>
+        </div>
+        <button type="button" class="btn-copy" onclick="copyText('rekeningPermata')">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+            <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+ <!-- 12. PAGE 12: FOOTER & CLOSING SECTION -->
+<section id="footer-closing" class="footer-closing-section">
+  
+  <!-- Container Utama dengan Background Foto Mempelai -->
+  <div class="closing-hero-card">
+    
+    <!-- Foto / Bingkai Kecil di Atas (Opsional) -->
+    <div class="top-circle-avatar">
+      <img src="assets/bg-closing.jpeg" alt="Widya & Habib">
+    </div>
+
+    <!-- Container Teks Overlay -->
+    <div class="closing-content">
+      <p class="happy-label">Kami yang berbahagia</p>
+      <h2 class="couples-name">Umi & Yusup</h2>
+      
+      <p class="closing-paragraph">
+        Merupakan suatu kebahagiaan dan kehormatan bagi kami, apabila Bapak/Ibu/Saudara/i, berkenan hadir dan memberikan doa restu kepada kami. Terima kasih
+      </p>
+
+      <!-- Logo Bulat M / Initial 
+      <div class="brand-logo-circle">
+        <span>M</span>
+      </div> -->
+
+      <!-- Ikon Sosial Media (WA & IG) 
+      <div class="social-icons">
+        <a href="#" class="social-btn">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326z"/>
+          </svg>
+        </a>
+        <a href="#" class="social-btn">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.298.039.851.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.039 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.039-.851-.174-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003z"/>
+          </svg>
+        </a>
+      </div> -->
+
+      <!-- Watermark Footer -->
+      <div class="watermark-text">
+        <p>Made by love :Yusup Supriadi</p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
