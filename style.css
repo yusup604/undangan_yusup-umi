@@ -1943,17 +1943,23 @@ section:has(+ #quote-section) {
   align-items: center;
   justify-content: center;
   gap: 6px;
+}
+
+/* TAMBAHAN KUNCI: Khusus mengatur teks span agar tidak pecah dua baris */
+.security-modal-footer span {
   font-family: monospace;
-  font-size: 0.68rem;
+  font-size: 0.62rem;        /* Sedikit diperkecil dari 0.68rem agar muat di semua HP */
   color: #a0a0a0;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;     /* Sedikit merapatkan karakter agar pas */
   text-transform: uppercase;
+  white-space: nowrap;       /* 🔥 INI KUNCINYA: Melarang teks jatuh ke baris bawah */
 }
 
 .security-modal-footer svg {
   flex-shrink: 0;
   color: #a0a0a0;
 }
+
 /* Indikator Mini Percobaan Pembobolan */
 .mini-security-alert {
   position: fixed;
