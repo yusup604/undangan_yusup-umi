@@ -287,3 +287,165 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// =========================================================================
+// 1. MASUKKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI SINI
+// =========================================================================
+const GOOGLE_SCRIPT_URL = "PASTE_URL_WEB_APP_ANDA_DI_SINI";
+
+document.addEventListener("DOMContentLoaded", function () {
+  
+  // =========================================================================
+  // 2. AMBIL NAMA TAMU DARI URL (Contoh: ://domain.com)
+  // =========================================================================
+  const urlParams = new URLSearchParams(window.location.search);
+  const guestParam = urlParams.get('to');
+  let cleanedName = "";
+
+  if (guestParam) {
+    cleanedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
+    
+    // Isi nama tamu di teks cover/pembuka (jika ada element dengan id ini)
+    const guestElement = document.getElementById('guest-name');
+    if (guestElement) {
+      guestElement.innerText = cleanedName;
+    }
+
+    // OTOMATIS mengisi kolom "Nama" pada Form RSVP (id: guestName)
+    const inputGuestName = document.getElementById('guestName');
+    if (inputGuestName) {
+      inputGuestName.value = cleanedName;
+    }
+  }
+
+  // =========================================================================
+  // 3. MUAT DATA DARI LOCAL STORAGE (Agar ucapan langsung muncul saat web dibuka)
+  // =========================================================================
+  loadWishesFromLocal();
+
+  // =========================================================================
+  // 4. PROSES KIRIM DATA SAAT FORM DI-SUBMIT
+  // =========================================================================
+  const wishesForm = document.getElementById('wishesForm');
+  if (wishesForm) {
+    wishesForm.addEventListener('submit', function (e) {
+      e.preventDefault(); // Mencegah halaman reload otomatis
+
+      // Ambil nilai dari input form
+      const nama = document.getElementById('guestName').value;
+      const ucapan = document.getElementById('guestMessage').value;
+      const kehadiran = document.getElementById('guestAttendance').value;
+
+      // Data yang akan dikirim ke Google Sheets (Hanya Nama & Kehadiran, Tanpa Ucapan)
+      const formData = {
+        nama: nama,
+        kehadiran: kehadiran
+      };
+
+      // Efek loading pada tombol kirim
+      const submitBtn = wishesForm.querySelector('.btn-submit-wishes');
+      const originalBtnText = submitBtn.innerText;
+      submitBtn.innerText = "Mengirim...";
+      submitBtn.disabled = true;
+
+      // Kirim absensi ke Google Sheets menggunakan Fetch API
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors', // Menghindari kendala CORS kebijakan Google
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+      .then(() => {
+        // Teks Ucapan HANYA disimpan di Local Browser (LocalStorage)
+        saveWishToLocal(nama, ucapan, kehadiran);
+
+        // Reset form input (Kecuali kolom Nama agar nama tamu tetap tertera)
+        document.getElementById('guestMessage').value = "";
+        document.getElementById('guestAttendance').selectedIndex = 0;
+
+        alert("Terima kasih! Konfirmasi kehadiran Anda telah tersimpan.");
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        alert("Gagal mengirim data, silakan coba lagi.");
+      })
+      .finally(() => {
+        // Kembalikan teks tombol semula
+        submitBtn.innerText = originalBtnText;
+        submitBtn.disabled = false;
+      });
+    });
+  }
+});
+
+// =========================================================================
+// 5. FUNGSI LOGIKA LOCAL STORAGE & PERHITUNGAN BADGE (COMMENTS COUT)
+// =========================================================================
+
+// Fungsi menyimpan data ucapan ke memori lokal browser
+function saveWishToLocal(nama, ucapan, kehadiran) {
+  let wishes = JSON.parse(localStorage.getItem('wedding_wishes')) || [];
+  
+  const newWish = {
+    nama: nama,
+    ucapan: ucapan,
+    kehadiran: kehadiran,
+    waktu: new Date().toLocaleDateString('id-ID', { hour: '2-digit', minute: '2-digit' })
+  };
+
+  wishes.unshift(newWish); // Menaruh ucapan terbaru di urutan paling atas list
+  localStorage.setItem('wedding_wishes', JSON.stringify(wishes));
+
+  // Render ulang list ucapan dan perbarui angka statistik di atas form
+  loadWishesFromLocal();
+}
+
+// Fungsi menampilkan ucapan di bawah form & menghitung jumlah total rsvp
+function loadWishesFromLocal() {
+  const wishesList = document.getElementById('wishesList');
+  const totalCommentsOpt = document.getElementById('totalComments');
+  const countHadirOpt = document.getElementById('countHadir');
+  const countTidakHadirOpt = document.getElementById('countTidakHadir');
+
+  let wishes = JSON.parse(localStorage.getItem('wedding_wishes')) || [];
+
+  let totalHadir = 0;
+  let totalTidakHadir = 0;
+  let htmlContent = "";
+
+  // Iterasi data untuk menyusun HTML ucapan serta menghitung akumulasi status
+  wishes.forEach(wish => {
+    if (wish.kehadiran === "Hadir") {
+      totalHadir++;
+    } else if (wish.kehadiran === "Tidak Hadir") {
+      totalTidakHadir++;
+    }
+
+    // Struktur tampilan kotak komentar/ucapan di bawah form
+    htmlContent += `
+      <div class="wish-item" style="border-bottom: 1px solid #eee; padding: 12px 0; margin-top: 10px;">
+        <strong style="color: #333; font-size: 0.95rem;">${wish.nama}</strong> 
+        <span style="font-size: 0.75rem; font-weight: bold; padding: 2px 8px; border-radius: 20px; margin-left: 6px; display: inline-block; ${wish.kehadiran === 'Hadir' ? 'background-color: #e6f4ea; color: #137333;' : 'background-color: #fce8e6; color: #c5221f;'}">
+          ${wish.kehadiran}
+        </span>
+        <p style="margin: 6px 0 4px 0; color: #555; font-size: 0.9rem; line-height: 1.4;">${wish.ucapan}</p>
+        <small style="color: #999; font-size: 0.75rem;">${wish.waktu}</small>
+      </div>
+    `;
+  });
+
+  // Masukkan susunan html ucapan ke dalam elemen <div id="wishesList">
+  if (wishesList) {
+    wishesList.innerHTML = htmlContent;
+  }
+
+  // Update angka badge sesuai rumus akumulasi yang Anda minta:
+  // Nilai "Comments" adalah total penjumlahan (Hadir + Tidak Hadir)
+  if (totalCommentsOpt) totalCommentsOpt.innerText = totalHadir + totalTidakHadir;
+  if (countHadirOpt) countHadirOpt.innerText = totalHadir;
+  if (countTidakHadirOpt) countTidakHadirOpt.innerText = totalTidakHadir;
+}
+
+
+
