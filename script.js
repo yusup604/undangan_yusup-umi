@@ -287,12 +287,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-
 // =========================================================================
-// 1. MASUKKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI SINI
+// 1. URL WEB APP GOOGLE APPS SCRIPT ANDA (SUDAH DI-UPDATE DAN BENAR)
 // =========================================================================
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQ_YloF6OtJlqydibxLghluIRRyaATltZmbQyK-qsDblejaLgIb65yBSjEvaLOdGesSA/exec";
-
+const GOOGLE_SCRIPT_URL = "https://google.com";
 
 document.addEventListener("DOMContentLoaded", function () {
   
@@ -385,7 +383,12 @@ document.addEventListener("DOMContentLoaded", function () {
 // 5. FUNGSI UTK SIMPAN UCAPAN KE LOCAL STORAGE
 // =========================================================================
 function saveWishToLocal(nama, ucapan, kehadiran) {
-  let wishes = JSON.parse(localStorage.getItem('wedding_wishes')) || [];
+  let wishes = [];
+  try {
+    wishes = JSON.parse(localStorage.getItem('wedding_wishes')) || [];
+  } catch(e) {
+    wishes = [];
+  }
   
   const newWish = {
     nama: nama,
@@ -405,42 +408,56 @@ function saveWishToLocal(nama, ucapan, kehadiran) {
 // 6. HITUNG JUMLAH COMMENTS DAN HADIR LANGSUNG DARI GOOGLE SHEETS
 // =========================================================================
 function loadWishesFromLocal() {
-  const wishesList = document.getElementById('wishesList');
-  const totalCommentsOpt = document.getElementById('totalComments');
-  const countHadirOpt = document.getElementById('countHadir');
-  const countTidakHadirOpt = document.getElementById('countTidakHadir');
+  var wishesList = document.getElementById("wishesList");
+  var totalCommentsOpt = document.getElementById("totalComments");
+  var countHadirOpt = document.getElementById("countHadir");
+  var countTidakHadirOpt = document.getElementById("countTidakHadir");
 
-  // A. AMBIL ANGKA JUMLAH DATA LANGSUNG DARI GOOGLE SHEETS
-  fetch(GOOGLE_SCRIPT_URL)
-    .then(response => response.json())
-    .then(data => {
-      // Menghitung jumlah komentar berdasarkan akumulasi data di Google Sheets
-      if (totalCommentsOpt) totalCommentsOpt.innerText = data.totalComments;
-      if (countHadirOpt) countHadirOpt.innerText = data.hadir;
-      if (countTidakHadirOpt) countTidakHadirOpt.innerText = data.tidakHadir;
-    })
-    .catch(err => console.error("Gagal memuat statistik dari Sheets:", err));
+  // A. AMBIL ANGKA STATISTIK DARI GOOGLE SHEETS
+  if (GOOGLE_SCRIPT_URL) {
+    fetch(GOOGLE_SCRIPT_URL)
+      .then(function(response) {
+        if (!response.ok) throw new Error("Network error");
+        return response.json();
+      })
+      .then(function(data) {
+        if (data) {
+          if (totalCommentsOpt) totalCommentsOpt.innerText = data.totalComments || 0;
+          if (countHadirOpt) countHadirOpt.innerText = data.hadir || 0;
+          if (countTidakHadirOpt) countTidakHadirOpt.innerText = data.tidakHadir || 0;
+        }
+      })
+      .catch(function(err) {
+        console.error("Gagal memuat statistik dari Sheets:", err);
+        if (totalCommentsOpt) totalCommentsOpt.innerText = "0";
+        if (countHadirOpt) countHadirOpt.innerText = "0";
+        if (countTidakHadirOpt) countTidakHadirOpt.innerText = "0";
+      });
+  }
 
-  // B. TAMPILKAN DAFTAR UCAPAN DARI LOCALSTORAGE INTERNAL BROWSER
-  let wishes = JSON.parse(localStorage.getItem('wedding_wishes')) || [];
-  let htmlContent = "";
-
-  wishes.forEach(wish => {
-    htmlContent += `
-      <div class="wish-item" style="border-bottom: 1px solid #eee; padding: 12px 0; margin-top: 10px;">
-        <strong style="color: #333; font-size: 0.95rem;">${wish.nama}</strong> 
-        <span style="font-size: 0.75rem; font-weight: bold; padding: 2px 8px; border-radius: 20px; margin-left: 6px; display: inline-block; ${wish.kehadiran === 'Hadir' ? 'background-color: #e6f4ea; color: #137333;' : 'background-color: #fce8e6; color: #c5221f;'}">
-          ${wish.kehadiran}
-        </span>
-        <p style="margin: 6px 0 4px 0; color: #555; font-size: 0.9rem; line-height: 1.4;">${wish.ucapan}</p>
-        <small style="color: #999; font-size: 0.75rem;">${wish.waktu}</small>
-      </div>
-    `;
+  // B. TAMPILKAN DAFTAR UCAPAN DARI LOCALSTORAGE
+  var wishes = [];
+  try {
+    wishes = JSON.parse(localStorage.getItem("wedding_wishes")) || [];
+  } catch(e) {
+    wishes = [];
+  }
+  
+  var htmlContent = "";
+  wishes.forEach(function(wish) {
+    var bgBadge = wish.kehadiran === "Hadir" ? "background-color: #e6f4ea; color: #137333;" : "background-color: #fce8e6; color: #c5221f;";
+    
+    htmlContent += '<div class="wish-item" style="border-bottom: 1px solid #eee; padding: 12px 0; margin-top: 10px; text-align: left;">' +
+                   '<strong style="color: #333; font-size: 0.95rem;">' + (wish.nama || 'Tamu') + '</strong>' +
+                   '<span style="font-size: 0.75rem; font-weight: bold; padding: 2px 8px; border-radius: 20px; margin-left: 6px; display: inline-block; ' + bgBadge + '">' +
+                   (wish.kehadiran || 'Hadir') +
+                   '</span>' +
+                   '<p style="margin: 6px 0 4px 0; color: #555; font-size: 0.9rem; line-height: 1.4;">' + (wish.ucapan || '') + '</p>' +
+                   '<small style="color: #999; font-size: 0.75rem;">' + (wish.waktu || '') + '</small>' +
+                   '</div>';
   });
 
   if (wishesList) {
     wishesList.innerHTML = htmlContent;
   }
 }
-
-
