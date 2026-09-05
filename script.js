@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (guestParam) {
     const guestElement = document.getElementById('guest-name');
     if (guestElement) {
-      guestElement.innerText = guestParam;
+      // Ditambahkan pembersih kode URL agar nama tampil normal (misal %26 menjadi &)
+    const cleanedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
+    guestElement.innerText = cleanedName;
     }
   }
 });
@@ -47,23 +49,35 @@ function updateCountdown() {
     const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-    document.getElementById('days').innerText = days < 10 ? '0' + days : days;
-    document.getElementById('hours').innerText = hours < 10 ? '0' + hours : hours;
-    document.getElementById('minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
-    document.getElementById('seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
+    // KODE AMAN: Simpan elemen ke dalam variabel dahulu
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+
+    // Cek satu per satu: Jika elemennya ditemukan di HTML, baru isi angkanya
+    if (daysEl) daysEl.innerText = days < 10 ? '0' + days : days;
+    if (hoursEl) hoursEl.innerText = hours < 10 ? '0' + hours : hours;
+    if (minutesEl) minutesEl.innerText = minutes < 10 ? '0' + minutes : minutes;
+    if (secondsEl) secondsEl.innerText = seconds < 10 ? '0' + seconds : seconds;
   }
 }
 
-setInterval(updateCountdown, 1000);
-updateCountdown();
 
+// KODE PERBAIKAN UNTUK MENGGANTIKAN BLOK KODE TERSEBUT
 document.addEventListener('DOMContentLoaded', function() {
+  
+  // 1. Jalankan hitung mundur dengan aman setelah halaman siap
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  // 2. Fungsi tombol Lihat Rekening
   const btnToggleBank = document.getElementById('btnToggleBank');
   const bankContainer = document.getElementById('bankContainer');
 
   if (btnToggleBank && bankContainer) {
     btnToggleBank.addEventListener('click', function() {
-      // Toggle tampil/sembunyi
+      // Toggle tampil/sembunyi kelas hidden
       bankContainer.classList.toggle('hidden');
 
       // Scroll halus ke arah kartu saat dibuka
@@ -73,6 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+
 
 // Fungsi Copy Nomor Rekening
 function copyText(elementId) {
