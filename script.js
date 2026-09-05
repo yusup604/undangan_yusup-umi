@@ -295,7 +295,6 @@ const GOOGLE_SCRIPT_URL = "https://google.com";
 // =========================================================================
 // 2. LOGIKA HITUNG MUNDUR (COUNTDOWN) - DIATUR AGAR TIDAK DUPLIKAT
 // =========================================================================
-// Silakan sesuaikan tanggal pernikahan Anda di bawah ini jika diperlukan
 const targetWeddingDate = new Date("Dec 31, 2026 08:00:00").getTime();
 
 const countdownTimer = setInterval(function() {
@@ -307,7 +306,6 @@ const countdownTimer = setInterval(function() {
   const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-  // Masukkan ke elemen countdown Anda jika ada di HTML
   const daysEl = document.getElementById("days");
   const hoursEl = document.getElementById("hours");
   const minutesEl = document.getElementById("minutes");
@@ -338,13 +336,11 @@ document.addEventListener("DOMContentLoaded", function () {
   if (guestParam) {
     cleanedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
     
-    // Isi nama tamu di teks cover/pembuka (jika ada element dengan id ini)
     const guestElement = document.getElementById('guest-name');
     if (guestElement) {
       guestElement.innerText = cleanedName;
     }
 
-    // OTOMATIS mengisi kolom "Nama" pada Form RSVP (id: guestName)
     const inputGuestName = document.getElementById('guestName');
     if (inputGuestName) {
       inputGuestName.value = cleanedName;
@@ -362,39 +358,33 @@ document.addEventListener("DOMContentLoaded", function () {
   const wishesForm = document.getElementById('wishesForm');
   if (wishesForm) {
     wishesForm.addEventListener('submit', function (e) {
-      e.preventDefault(); // Mencegah halaman reload otomatis
+      e.preventDefault(); 
 
-      // Ambil nilai dari input form
       const nama = document.getElementById('guestName').value;
       const ucapan = document.getElementById('guestMessage').value;
       const kehadiran = document.getElementById('guestAttendance').value;
 
-      // Data yang akan dikirim ke Google Sheets (Hanya Nama & Kehadiran, Tanpa Ucapan)
       const formData = {
         nama: nama,
         kehadiran: kehadiran
       };
 
-      // Efek loading pada tombol kirim
       const submitBtn = wishesForm.querySelector('.btn-submit-wishes');
       const originalBtnText = submitBtn.innerText;
       submitBtn.innerText = "Mengirim...";
       submitBtn.disabled = true;
 
-      // Kirim absensi ke Google Sheets menggunakan Fetch API
       fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        mode: 'no-cors', // Menghindari kendala CORS kebijakan Google
+        mode: 'no-cors', 
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(formData)
       })
       .then(() => {
-        // Teks Ucapan HANYA disimpan di Local Browser (LocalStorage)
         saveWishToLocal(nama, ucapan, kehadiran);
 
-        // Reset form input (Kecuali kolom Nama agar nama tamu tetap tertera)
         document.getElementById('guestMessage').value = "";
         document.getElementById('guestAttendance').selectedIndex = 0;
 
@@ -405,7 +395,6 @@ document.addEventListener("DOMContentLoaded", function () {
         alert("Gagal mengirim data, silakan coba lagi.");
       })
       .finally(() => {
-        // Kembalikan teks tombol semula
         submitBtn.innerText = originalBtnText;
         submitBtn.disabled = false;
       });
@@ -431,10 +420,9 @@ function saveWishToLocal(nama, ucapan, kehadiran) {
     waktu: new Date().toLocaleDateString('id-ID', { hour: '2-digit', minute: '2-digit' })
   };
 
-  wishes.unshift(newWish); // Menaruh ucapan terbaru di urutan paling atas list
+  wishes.unshift(newWish); 
   localStorage.setItem('wedding_wishes', JSON.stringify(wishes));
 
-  // Ambil ulang data jumlah dari Google Sheets dan perbarui tampilan ucapan
   loadWishesFromLocal();
 }
 
@@ -447,7 +435,6 @@ function loadWishesFromLocal() {
   var countHadirOpt = document.getElementById("countHadir");
   var countTidakHadirOpt = document.getElementById("countTidakHadir");
 
-  // A. AMBIL ANGKA STATISTIK DARI GOOGLE SHEETS (DITEMBAK KE URL YANG BENAR)
   if (GOOGLE_SCRIPT_URL) {
     fetch(GOOGLE_SCRIPT_URL)
       .then(function(response) {
@@ -469,7 +456,6 @@ function loadWishesFromLocal() {
       });
   }
 
-  // B. TAMPILKAN DAFTAR UCAPAN DARI LOCALSTORAGE
   var wishes = [];
   try {
     wishes = JSON.parse(localStorage.getItem("wedding_wishes")) || [];
