@@ -110,6 +110,12 @@ document.addEventListener('DOMContentLoaded', () => {
     AOS.init({ duration: 1000, once: false });
   }
 
+  // 🌟 PERBAIKAN UTAMA: Deklarasi Parameter URL diletakkan paling atas agar bisa dibaca oleh sistem
+  const urlParams = new URLSearchParams(window.location.search);
+  const guestParam = urlParams.get('to');
+  const guestElement = document.getElementById('guest-name');
+
+  // HASH MASTER SHA-256 Asli dari PIN Rahasia Anda: "010626"
   const HASH_MASTER = "b90e97f4eae90b89fae27840e851ea9802d84f8d512a58bf5460f926b5ab4717"; 
 
   // Variabel Kontrol Keamanan Eksponensial
@@ -155,10 +161,9 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('invitation_admin', 'true');
       localStorage.setItem('guest_original_name', targetCleanedName);
       
-      const guestElement = document.getElementById('guest-name');
       if (guestElement) guestElement.innerText = targetCleanedName;
-      
       if (securityModal) securityModal.classList.remove('active');
+      
       document.body.style.overflow = "auto";
       document.body.style.height = "auto";
 
@@ -224,7 +229,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Jangan mereset jumlah salah atau timer jika sedang dikunci agar peretas tidak bisa kabur/reset sistem
     if (!sedangDikunci) salahHitung = 0; 
     
-    const guestElement = document.getElementById('guest-name');
     if (guestElement && savedOriginalName) {
       guestElement.innerText = savedOriginalName;
       const urlParams = new URLSearchParams(window.location.search);
@@ -248,7 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // 4. LOGIKA VALIDASI ALUR DETEKSI PARAMETER URL
-  const guestElement = document.getElementById('guest-name');
   if (guestElement && guestParam) {
     const cleanedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
     targetCleanedName = cleanedName; 
@@ -279,3 +282,4 @@ document.addEventListener('DOMContentLoaded', () => {
     guestElement.innerText = "Tamu Undangan";
   }
 });
+
