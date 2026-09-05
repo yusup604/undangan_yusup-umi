@@ -2000,4 +2000,28 @@ section:has(+ #quote-section) {
   }
 }
 
+/* --- RESPONSIVE FONT UNTUK NAMA PENGANTIN --- */
+
+/* Pengaturan Standar (Untuk Laptop / Layar Lebar) */
+.couples-name {
+  font-size: 3rem; /* Sesuaikan dengan ukuran awal laptop Anda, misal 3rem atau 45px */
+  white-space: nowrap; /* Memaksa tulisan tetap satu baris di laptop */
+}
+
+/* Jika dibuka di HP (Layar maksimal lebar 576px atau di bawahnya) */
+@media (max-width: 576px) {
+  .couples-name {
+    font-size: 1.8rem !important; /* Ukuran teks otomatis mengecil di HP agar tidak patah jadi 2 baris */
+    white-space: nowrap; /* Memaksa tulisan tetap dipaksa satu baris di HP */
+  }
+}
+
+/* Jika layar HP sangat kecil (Layar maksimal lebar 360px) */
+@media (max-width: 360px) {
+  .couples-name {
+    font-size: 1.5rem !important; /* Semakin kecil layar HP, teks akan semakin menyesuaikan */
+  }
+}
+
+
 
