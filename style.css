@@ -1936,3 +1936,23 @@ section:has(+ #quote-section) {
 
 .btn-sec-confirm:hover { background-color: #15293b; }
 
+/* 🌟 PERBAIKAN BARU: Komponen Tambahan Footer Enkripsi */
+.security-modal-footer {
+  margin-top: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: monospace;
+  font-size: 0.68rem;
+  color: #a0a0a0;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.security-modal-footer svg {
+  flex-shrink: 0;
+  color: #a0a0a0;
+}
+
+
