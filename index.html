@@ -628,25 +628,45 @@
 <!-- KOTAK DIALOG KEAMANAN KUSTOM (POP-UP PIN) -->
 <div id="securityModal" class="security-modal-overlay">
   <div class="security-modal-box">
-    <div class="security-modal-icon">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-      </svg>
-    </div>
-    <h3 class="security-modal-title">SECURITY SYSTEM</h3>
-    <p class="security-modal-desc">Deteksi perubahan identitas dilakukan. Masukkan PIN Keamanan untuk verifikasi akses Pemilik:</p>
     
-    <!-- Perbaikan: Ditambahkan inputmode numerik untuk memicu keyboard angka di smartphone -->
-    <input type="password" id="modalPinInput" class="security-modal-input" placeholder="••••••" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off">
-    <div id="modalErrorMessage" class="security-modal-error">PIN Salah! Akses Ditolak.</div>
-    
-    <div class="security-modal-buttons">
-      <button type="button" class="btn-sec-modal btn-sec-cancel" id="btnSecCancel">Batal</button>
-      <button type="button" class="btn-sec-modal btn-sec-confirm" id="btnSecConfirm">Verifikasi</button>
+    <!-- KONTEN UTAMA (Akan disembunyikan saat terkunci) -->
+    <div id="modalNormalState">
+      <div class="security-modal-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+      </div>
+      <h3 class="security-modal-title">SECURITY SYSTEM</h3>
+      <p class="security-modal-desc">Deteksi perubahan identitas dilakukan. Masukkan PIN Keamanan untuk verifikasi akses Pemilik:</p>
+      
+      <input type="password" id="modalPinInput" class="security-modal-input" placeholder="••••••" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off">
+      <div id="modalErrorMessage" class="security-modal-error">PIN Salah! Akses Ditolak.</div>
+      
+      <div class="security-modal-buttons">
+        <button type="button" class="btn-sec-modal btn-sec-cancel" id="btnSecCancel">Batal</button>
+        <button type="button" class="btn-sec-modal btn-sec-confirm" id="btnSecConfirm">Verifikasi</button>
+      </div>
     </div>
 
-    <!-- Area Footer Copyright Tambahan -->
+    <!-- KONTEN BLOKIR / LOCK STATE (Muncul saat salah kelipatan 3 kali) -->
+    <div id="modalLockedState" style="display: none;">
+      <div class="security-modal-icon" style="color: #d9534f;">
+        <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          <line x1="12" y1="15" x2="12" y2="15.01"></line>
+        </svg>
+      </div>
+      <h3 class="security-modal-title" style="color: #d9534f; letter-spacing: 3px;">ACCESS LOCKED</h3>
+      <p class="security-modal-desc">Terlalu banyak percobaan ilegal. Akses dibekukan sementara demi keamanan.</p>
+      
+      <div class="security-modal-buttons">
+        <button type="button" class="btn-sec-modal btn-sec-cancel" id="btnSecLockedBack" style="flex: 1;">Kembali</button>
+      </div>
+    </div>
+
+    <!-- Area Footer Copyright -->
     <div class="security-modal-footer">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="10"></circle>
@@ -654,6 +674,7 @@
       </svg>
       <span>SECURE SYSTEM ENCRYPTION &copy; YUSUP SUPRIADI</span>
     </div>
+
   </div>
 </div>
 
