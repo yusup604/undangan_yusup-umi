@@ -103,54 +103,62 @@ function copyText(elementId) {
 }
 
 // =================================================================
-// 1. GERBANG SECURITY SYSTEM KUSTOM (VERSI FIX BUGS & PENUMPUKAN EVENT)
+// 1. GERBANG SECURITY SYSTEM KUSTOM (EXPONENTIAL BACKOFF ENCRYPTION)
 // =================================================================
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof AOS !== 'undefined') {
     AOS.init({ duration: 1000, once: false });
   }
 
-  // Hash bawaan sistem Anda untuk mencocokkan PIN rahasia
-  const HASH_MASTER = "nhzkn"; 
+  const HASH_MASTER = "b90e97f4eae90b89fae27840e851ea9802d84f8d512a58bf5460f926b5ab4717"; 
 
-  function hitungHash(teks) {
-    let hash = 0;
-    for (let i = 0; i < teks.length; i++) {
-      hash = (hash << 5) - hash + teks.charCodeAt(i);
-      hash |= 0;
-    }
-    return Math.abs(hash).toString(36).substring(0, 5);
+  // Variabel Kontrol Keamanan Eksponensial
+  let salahHitung = 0;
+  let sedangDikunci = false;
+  let targetCleanedName = "";
+  
+  // Konfigurasi waktu pemblokiran (60 detik untuk blokir pertama)
+  let waktuBlokirDasar = 60; 
+  let faktorPengali = 1;
+
+  // Fungsi enkripsi SHA-256 bawaan browser
+  async function hitungHashSHA256(teks) {
+    const msgBuffer = new TextEncoder().encode(teks);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
   }
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const guestParam = urlParams.get('to');
-  const guestElement = document.getElementById('guest-name');
-
+  // Elemen DOM Kontainer Keamanan
   const securityModal = document.getElementById('securityModal');
+  const modalNormalState = document.getElementById('modalNormalState');
+  const modalLockedState = document.getElementById('modalLockedState');
+
+  // Elemen Input & Tombol
   const modalPinInput = document.getElementById('modalPinInput');
   const modalErrorMessage = document.getElementById('modalErrorMessage');
   const btnSecConfirm = document.getElementById('btnSecConfirm');
   const btnSecCancel = document.getElementById('btnSecCancel');
-
-  // Perbaikan Scope: Menangkap nilai nama global agar bisa diakses semua fungsi internal
-  let targetCleanedName = "";
+  const btnSecLockedBack = document.getElementById('btnSecLockedBack');
 
   // 1. FUNGSI UTAMA: PROSES VERIFIKASI PIN
-  function prosesVerifikasiPIN() {
-    if (!modalPinInput) return;
+  async function prosesVerifikasiPIN() {
+    if (!modalPinInput || sedangDikunci) return;
     
     const inputUser = modalPinInput.value;
-    const hashInputUser = hitungHash(inputUser);
+    const hashInputUser = await hitungHashSHA256(inputUser);
 
     if (hashInputUser === HASH_MASTER) {
-      // PIN BENAR
+      // AKSES DISETUJUI
+      salahHitung = 0;
+      faktorPengali = 1; // Reset tingkat perkalian waktu blokir
       localStorage.setItem('invitation_admin', 'true');
       localStorage.setItem('guest_original_name', targetCleanedName);
+      
+      const guestElement = document.getElementById('guest-name');
       if (guestElement) guestElement.innerText = targetCleanedName;
       
       if (securityModal) securityModal.classList.remove('active');
-      
-      // Lepas kunci scroll karena owner terverifikasi
       document.body.style.overflow = "auto";
       document.body.style.height = "auto";
 
@@ -159,49 +167,88 @@ document.addEventListener('DOMContentLoaded', () => {
       alert("👑 Akses Terverifikasi! Status Perangkat Diperbarui Sebagai Pemilik.");
     } else {
       // PIN SALAH
-      if (modalErrorMessage) modalErrorMessage.style.display = "block";
-      modalPinInput.value = "";
-      modalPinInput.focus();
+      salahHitung++;
+      
+      if (salahHitung >= 3) {
+        // AKTIVASI LOCKDOWN EKSPOENSIAL
+        sedangDikunci = true;
+        
+        // Tukar tampilan ke kondisi blokir tanpa hitung mundur visual
+        if (modalNormalState) modalNormalState.style.display = "none";
+        if (modalLockedState) modalLockedState.style.display = "block";
+        
+        // Menghitung durasi pemblokiran saat ini (60 detik * faktor pengali)
+        let durasiBlokirAktif = waktuBlokirDasar * faktorPengali;
+        
+        // Timer latar belakang tetap berjalan tanpa mengubah UI teks teks
+        setTimeout(() => {
+          sedangDikunci = false;
+          salahHitung = 0;
+          
+          // Lipatgandakan faktor pengali untuk hukuman berikutnya jika salah lagi (1 -> 2 -> 4 -> 8, dst)
+          faktorPengali = faktorPengali * 2; 
+          
+          if (modalNormalState) modalNormalState.style.display = "block";
+          if (modalLockedState) modalLockedState.style.display = "none";
+          
+          if (modalPinInput) {
+            modalPinInput.value = "";
+            modalPinInput.focus();
+          }
+          if (modalErrorMessage) modalErrorMessage.style.display = "none";
+        }, durasiBlokirAktif * 1000);
+        
+      } else {
+        // Peringatan salah biasa di bawah input kolom PIN
+        if (modalErrorMessage) {
+          modalErrorMessage.style.display = "block";
+          modalErrorMessage.innerText = `PIN Salah! Akses Ditolak. (${salahHitung}/3)`;
+        }
+        modalPinInput.value = "";
+        modalPinInput.focus();
+      }
     }
   }
 
-  // 2. FUNGSI UTAMA: PEMBATALAN AKSES
+  // 2. FUNGSI UTAMA: PEMBATALAN AKSES / KEMBALI
   function batalkanVerifikasi() {
     const savedOriginalName = localStorage.getItem('guest_original_name');
-    
     if (securityModal) securityModal.classList.remove('active');
     
-    // Kembalikan fungsi scroll normal untuk tamu
     document.body.style.overflow = "auto";
     document.body.style.height = "auto";
 
     if (modalPinInput) modalPinInput.value = "";
     if (modalErrorMessage) modalErrorMessage.style.display = "none";
     
-    // Paksa reset nama & URL kembali terkunci ke awal
+    // Jangan mereset jumlah salah atau timer jika sedang dikunci agar peretas tidak bisa kabur/reset sistem
+    if (!sedangDikunci) salahHitung = 0; 
+    
+    const guestElement = document.getElementById('guest-name');
     if (guestElement && savedOriginalName) {
       guestElement.innerText = savedOriginalName;
+      const urlParams = new URLSearchParams(window.location.search);
       urlParams.set('to', savedOriginalName);
       window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
     }
   }
 
-  // 3. INISIALISASI EVENT LISTENERS (Dipasang di luar untuk mencegah penumpukan fungsi klik)
+  // 3. INISIALISASI EVENT LISTENERS
   if (btnSecConfirm) btnSecConfirm.addEventListener('click', prosesVerifikasiPIN);
   if (btnSecCancel) btnSecCancel.addEventListener('click', batalkanVerifikasi);
+  if (btnSecLockedBack) btnSecLockedBack.addEventListener('click', batalkanVerifikasi);
   
   if (modalPinInput) {
     modalPinInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') prosesVerifikasiPIN();
     });
-
-    // Perbaikan Baru: Memaksa kolom input pop-up hanya bisa diketik oleh angka numerik
     modalPinInput.addEventListener('input', function() {
       this.value = this.value.replace(/[^0-9]/g, '');
     });
   }
 
-  // 4. LOGIKA VALIDASI ALUR DETEKSI IDENTITAS PERANGKAT
+  // 4. LOGIKA VALIDASI ALUR DETEKSI PARAMETER URL
+  const guestElement = document.getElementById('guest-name');
   if (guestElement && guestParam) {
     const cleanedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
     targetCleanedName = cleanedName; 
@@ -219,11 +266,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cleanedName.toLowerCase().trim() === savedOriginalName.toLowerCase().trim()) {
           guestElement.innerText = cleanedName;
         } else {
-          // 🚨 TERDETEKSI PERUBAHAN MANUAL ILEGAL
           if (securityModal) {
             securityModal.classList.add('active');
-            
-            // Kunci total scroll body HP agar tidak bisa digulir ke halaman utama
             document.body.style.overflow = "hidden";
             document.body.style.height = "100vh";
           }
