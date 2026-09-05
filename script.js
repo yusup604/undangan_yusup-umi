@@ -290,9 +290,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // =========================================================================
 // 1. MASUKKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI SINI
 // =========================================================================
-const GOOGLE_SCRIPT_URL = "// =========================================================================
-// 1. MASUKKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI SINI
-// =========================================================================
 const GOOGLE_SCRIPT_URL = "PASTE_URL_WEB_APP_ANDA_DI_SINI";
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -321,12 +318,12 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // =========================================================================
-  // 3. MUAT DATA SEKALIGUS TARIK STATISTIK DARI GOOGLE SHEETS
+  // 3. AMBIL STATISTIK & DAFTAR UCAPAN SAAT HALAMAN DIBUKA
   // =========================================================================
   loadWishesFromLocal();
 
   // =========================================================================
-  // 4. PROSES KIRIM DATA SAAT FORM DI-SUBMIT
+  // 4. PROSES KIRIM DATA KE GOOGLE SHEETS SAAT FORM DI-SUBMIT
   // =========================================================================
   const wishesForm = document.getElementById('wishesForm');
   if (wishesForm) {
@@ -383,10 +380,8 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // =========================================================================
-// 5. FUNGSI LOGIKA LOCAL STORAGE & SINKRONISASI COUUNT SPREADSHEET
+// 5. FUNGSI UTK SIMPAN UCAPAN KE LOCAL STORAGE
 // =========================================================================
-
-// Fungsi menyimpan data ucapan ke memori lokal browser
 function saveWishToLocal(nama, ucapan, kehadiran) {
   let wishes = JSON.parse(localStorage.getItem('wedding_wishes')) || [];
   
@@ -400,21 +395,24 @@ function saveWishToLocal(nama, ucapan, kehadiran) {
   wishes.unshift(newWish); // Menaruh ucapan terbaru di urutan paling atas list
   localStorage.setItem('wedding_wishes', JSON.stringify(wishes));
 
-  // Render ulang list ucapan dan perbarui angka statistik dari Sheets
+  // Ambil ulang data jumlah dari Google Sheets dan perbarui tampilan ucapan
   loadWishesFromLocal();
 }
 
-// Fungsi menampilkan ucapan di bawah form & mengambil data jumlah rsvp dari Google Sheets
+// =========================================================================
+// 6. HITUNG JUMLAH COMMENTS DAN HADIR LANGSUNG DARI GOOGLE SHEETS
+// =========================================================================
 function loadWishesFromLocal() {
   const wishesList = document.getElementById('wishesList');
   const totalCommentsOpt = document.getElementById('totalComments');
   const countHadirOpt = document.getElementById('countHadir');
   const countTidakHadirOpt = document.getElementById('countTidakHadir');
 
-  // A. AMBIL ANGKA STATISTIK REAL-TIME DARI GOOGLE SHEETS (DOGET)
+  // A. AMBIL ANGKA JUMLAH DATA LANGSUNG DARI GOOGLE SHEETS
   fetch(GOOGLE_SCRIPT_URL)
     .then(response => response.json())
     .then(data => {
+      // Menghitung jumlah komentar berdasarkan akumulasi data di Google Sheets
       if (totalCommentsOpt) totalCommentsOpt.innerText = data.totalComments;
       if (countHadirOpt) countHadirOpt.innerText = data.hadir;
       if (countTidakHadirOpt) countTidakHadirOpt.innerText = data.tidakHadir;
@@ -442,155 +440,5 @@ function loadWishesFromLocal() {
     wishesList.innerHTML = htmlContent;
   }
 }
-";
-
-document.addEventListener("DOMContentLoaded", function () {
-  
-  // =========================================================================
-  // 2. AMBIL NAMA TAMU DARI URL (Contoh: ://domain.com)
-  // =========================================================================
-  const urlParams = new URLSearchParams(window.location.search);
-  const guestParam = urlParams.get('to');
-  let cleanedName = "";
-
-  if (guestParam) {
-    cleanedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
-    
-    // Isi nama tamu di teks cover/pembuka (jika ada element dengan id ini)
-    const guestElement = document.getElementById('guest-name');
-    if (guestElement) {
-      guestElement.innerText = cleanedName;
-    }
-
-    // OTOMATIS mengisi kolom "Nama" pada Form RSVP (id: guestName)
-    const inputGuestName = document.getElementById('guestName');
-    if (inputGuestName) {
-      inputGuestName.value = cleanedName;
-    }
-  }
-
-  // =========================================================================
-  // 3. MUAT DATA SEKALIGUS TARIK STATISTIK DARI GOOGLE SHEETS
-  // =========================================================================
-  loadWishesFromLocal();
-
-  // =========================================================================
-  // 4. PROSES KIRIM DATA SAAT FORM DI-SUBMIT
-  // =========================================================================
-  const wishesForm = document.getElementById('wishesForm');
-  if (wishesForm) {
-    wishesForm.addEventListener('submit', function (e) {
-      e.preventDefault(); // Mencegah halaman reload otomatis
-
-      // Ambil nilai dari input form
-      const nama = document.getElementById('guestName').value;
-      const ucapan = document.getElementById('guestMessage').value;
-      const kehadiran = document.getElementById('guestAttendance').value;
-
-      // Data yang akan dikirim ke Google Sheets (Hanya Nama & Kehadiran, Tanpa Ucapan)
-      const formData = {
-        nama: nama,
-        kehadiran: kehadiran
-      };
-
-      // Efek loading pada tombol kirim
-      const submitBtn = wishesForm.querySelector('.btn-submit-wishes');
-      const originalBtnText = submitBtn.innerText;
-      submitBtn.innerText = "Mengirim...";
-      submitBtn.disabled = true;
-
-      // Kirim absensi ke Google Sheets menggunakan Fetch API
-      fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors', // Menghindari kendala CORS kebijakan Google
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      })
-      .then(() => {
-        // Teks Ucapan HANYA disimpan di Local Browser (LocalStorage)
-        saveWishToLocal(nama, ucapan, kehadiran);
-
-        // Reset form input (Kecuali kolom Nama agar nama tamu tetap tertera)
-        document.getElementById('guestMessage').value = "";
-        document.getElementById('guestAttendance').selectedIndex = 0;
-
-        alert("Terima kasih! Konfirmasi kehadiran Anda telah tersimpan.");
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        alert("Gagal mengirim data, silakan coba lagi.");
-      })
-      .finally(() => {
-        // Kembalikan teks tombol semula
-        submitBtn.innerText = originalBtnText;
-        submitBtn.disabled = false;
-      });
-    });
-  }
-});
-
-// =========================================================================
-// 5. FUNGSI LOGIKA LOCAL STORAGE & SINKRONISASI COUUNT SPREADSHEET
-// =========================================================================
-
-// Fungsi menyimpan data ucapan ke memori lokal browser
-function saveWishToLocal(nama, ucapan, kehadiran) {
-  let wishes = JSON.parse(localStorage.getItem('wedding_wishes')) || [];
-  
-  const newWish = {
-    nama: nama,
-    ucapan: ucapan,
-    kehadiran: kehadiran,
-    waktu: new Date().toLocaleDateString('id-ID', { hour: '2-digit', minute: '2-digit' })
-  };
-
-  wishes.unshift(newWish); // Menaruh ucapan terbaru di urutan paling atas list
-  localStorage.setItem('wedding_wishes', JSON.stringify(wishes));
-
-  // Render ulang list ucapan dan perbarui angka statistik dari Sheets
-  loadWishesFromLocal();
-}
-
-// Fungsi menampilkan ucapan di bawah form & mengambil data jumlah rsvp dari Google Sheets
-function loadWishesFromLocal() {
-  const wishesList = document.getElementById('wishesList');
-  const totalCommentsOpt = document.getElementById('totalComments');
-  const countHadirOpt = document.getElementById('countHadir');
-  const countTidakHadirOpt = document.getElementById('countTidakHadir');
-
-  // A. AMBIL ANGKA STATISTIK REAL-TIME DARI GOOGLE SHEETS (DOGET)
-  fetch(GOOGLE_SCRIPT_URL)
-    .then(response => response.json())
-    .then(data => {
-      if (totalCommentsOpt) totalCommentsOpt.innerText = data.totalComments;
-      if (countHadirOpt) countHadirOpt.innerText = data.hadir;
-      if (countTidakHadirOpt) countTidakHadirOpt.innerText = data.tidakHadir;
-    })
-    .catch(err => console.error("Gagal memuat statistik dari Sheets:", err));
-
-  // B. TAMPILKAN DAFTAR UCAPAN DARI LOCALSTORAGE INTERNAL BROWSER
-  let wishes = JSON.parse(localStorage.getItem('wedding_wishes')) || [];
-  let htmlContent = "";
-
-  wishes.forEach(wish => {
-    htmlContent += `
-      <div class="wish-item" style="border-bottom: 1px solid #eee; padding: 12px 0; margin-top: 10px;">
-        <strong style="color: #333; font-size: 0.95rem;">${wish.nama}</strong> 
-        <span style="font-size: 0.75rem; font-weight: bold; padding: 2px 8px; border-radius: 20px; margin-left: 6px; display: inline-block; ${wish.kehadiran === 'Hadir' ? 'background-color: #e6f4ea; color: #137333;' : 'background-color: #fce8e6; color: #c5221f;'}">
-          ${wish.kehadiran}
-        </span>
-        <p style="margin: 6px 0 4px 0; color: #555; font-size: 0.9rem; line-height: 1.4;">${wish.ucapan}</p>
-        <small style="color: #999; font-size: 0.75rem;">${wish.waktu}</small>
-      </div>
-    `;
-  });
-
-  if (wishesList) {
-    wishesList.innerHTML = htmlContent;
-  }
-}
-
 
 
