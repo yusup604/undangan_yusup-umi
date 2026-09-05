@@ -103,14 +103,25 @@ function copyText(elementId) {
 }
 
 // =================================================================
-// 1. GERBANG SECURITY SYSTEM KUSTOM LINTAS PERANGKAT
+// 1. GERBANG SECURITY SYSTEM KUSTOM (VERSI ANTI-HACKING TOOLS / HASHED)
 // =================================================================
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof AOS !== 'undefined') {
     AOS.init({ duration: 1000, once: false });
   }
 
-  const PIN_MASTER = "010626"; // PIN Rahasia Akses Admin Anda
+  // Tools hacking/scanning tidak akan bisa menebak PIN asli dari kode acak ini.
+  const HASH_MASTER = "nhzkn"; 
+
+  // Fungsi internal untuk mengubah input ketikan menjadi kode Hash
+  function hitungHash(teks) {
+    let hash = 0;
+    for (let i = 0; i < teks.length; i++) {
+      hash = (hash << 5) - hash + teks.charCodeAt(i);
+      hash |= 0;
+    }
+    return Math.abs(hash).toString(36).substring(0, 5);
+  }
 
   const urlParams = new URLSearchParams(window.location.search);
   const guestParam = urlParams.get('to');
@@ -129,34 +140,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const isAdmin = localStorage.getItem('invitation_admin') === 'true';
 
     if (isAdmin) {
-      // JIKA ADMIN: Bebas lolos tanpa pop-up PIN
       guestElement.innerText = cleanedName;
     } else {
-      // JIKA BUKAN ADMIN
       if (!savedOriginalName) {
-        // Kunjungan Pertama Tamu Asli: Kunci memori nama awal
         localStorage.setItem('guest_original_name', cleanedName);
         guestElement.innerText = cleanedName;
       } else {
-        // Kunjungan Berikutnya: Cek apakah nama di URL dirubah manual
         if (cleanedName.toLowerCase().trim() === savedOriginalName.toLowerCase().trim()) {
           guestElement.innerText = cleanedName;
         } else {
-          // 🚨 TERDETEKSI PERUBAHAN NAMA: Munculkan Modal Kustom Anda
+          // 🚨 TERDETEKSI PERUBAHAN NAMA: Munculkan Modal Kustom
           if (securityModal) securityModal.classList.add('active');
           if (modalPinInput) modalPinInput.focus();
 
-          // Aksi tombol VERIFIKASI (Konfirmasi PIN)
           btnSecConfirm.addEventListener('click', prosesVerifikasiPIN);
-          // Aksi menekan tombol Enter di keyboard saat input PIN
           modalPinInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') prosesVerifikasiPIN();
           });
 
           function prosesVerifikasiPIN() {
-            const inputPIN = modalPinInput.value;
-            if (inputPIN === PIN_MASTER) {
-              // PIN BENAR
+            const inputUser = modalPinInput.value;
+            
+            // 2. PERBAIKAN UTAMA: Ubah input user menjadi Hash, lalu bandingkan hasilnya
+            const hashInputUser = hitungHash(inputUser);
+
+            if (hashInputUser === HASH_MASTER) {
+              
               localStorage.setItem('invitation_admin', 'true');
               localStorage.setItem('guest_original_name', cleanedName);
               guestElement.innerText = cleanedName;
@@ -172,13 +181,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           }
 
-          // Aksi tombol BATAL (Cancel)
           btnSecCancel.addEventListener('click', () => {
             securityModal.classList.remove('active');
             modalPinInput.value = "";
             modalErrorMessage.style.display = "none";
             
-            // Kembalikan ke nama asli awal tamu
             guestElement.innerText = savedOriginalName;
             urlParams.set('to', savedOriginalName);
             window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
