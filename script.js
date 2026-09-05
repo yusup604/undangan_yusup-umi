@@ -103,17 +103,15 @@ function copyText(elementId) {
 }
 
 // =================================================================
-// 1. GERBANG SECURITY SYSTEM KUSTOM (VERSI ANTI-HACKING TOOLS / HASHED)
+// 1. GERBANG SECURITY SYSTEM KUSTOM (VERSI FIX CELEH SCROLL / BYPASS)
 // =================================================================
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof AOS !== 'undefined') {
     AOS.init({ duration: 1000, once: false });
   }
 
-  // Tools hacking/scanning tidak akan bisa menebak PIN asli dari kode acak ini.
-  const HASH_MASTER = "nhzkn"; 
+  const HASH_MASTER = "4v6e1"; 
 
-  // Fungsi internal untuk mengubah input ketikan menjadi kode Hash
   function hitungHash(teks) {
     let hash = 0;
     for (let i = 0; i < teks.length; i++) {
@@ -127,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const guestParam = urlParams.get('to');
   const guestElement = document.getElementById('guest-name');
 
-  // Deklarasi Elemen Modal Kustom
   const securityModal = document.getElementById('securityModal');
   const modalPinInput = document.getElementById('modalPinInput');
   const modalErrorMessage = document.getElementById('modalErrorMessage');
@@ -149,8 +146,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cleanedName.toLowerCase().trim() === savedOriginalName.toLowerCase().trim()) {
           guestElement.innerText = cleanedName;
         } else {
-          // 🚨 TERDETEKSI PERUBAHAN NAMA: Munculkan Modal Kustom
-          if (securityModal) securityModal.classList.add('active');
+          // 🚨 TERDETEKSI PERUBAHAN MANUAL ILEGAL
+          if (securityModal) {
+            securityModal.classList.add('active');
+            
+            // TAMBALAN BARU: Kunci total scroll body HP agar tidak bisa digulir ke halaman 2
+            document.body.style.overflow = "hidden";
+            document.body.style.height = "100vh";
+          }
           if (modalPinInput) modalPinInput.focus();
 
           btnSecConfirm.addEventListener('click', prosesVerifikasiPIN);
@@ -160,16 +163,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
           function prosesVerifikasiPIN() {
             const inputUser = modalPinInput.value;
-            
-            // 2. PERBAIKAN UTAMA: Ubah input user menjadi Hash, lalu bandingkan hasilnya
             const hashInputUser = hitungHash(inputUser);
 
             if (hashInputUser === HASH_MASTER) {
-              
+              // PIN BENAR
               localStorage.setItem('invitation_admin', 'true');
               localStorage.setItem('guest_original_name', cleanedName);
               guestElement.innerText = cleanedName;
               securityModal.classList.remove('active');
+              
+              // TAMBALAN BARU: Lepas kunci scroll karena owner terverifikasi
+              document.body.style.overflow = "auto";
+              document.body.style.height = "auto";
+
               modalPinInput.value = "";
               modalErrorMessage.style.display = "none";
               alert("👑 Akses Terverifikasi! Status Perangkat Diperbarui Sebagai Pemilik.");
@@ -183,9 +189,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
           btnSecCancel.addEventListener('click', () => {
             securityModal.classList.remove('active');
+            
+            // TAMBALAN BARU: Kembalikan fungsi scroll normal untuk tamu
+            document.body.style.overflow = "auto";
+            document.body.style.height = "auto";
+
             modalPinInput.value = "";
             modalErrorMessage.style.display = "none";
             
+            // Paksa reset nama & URL kembali terkunci ke awal
             guestElement.innerText = savedOriginalName;
             urlParams.set('to', savedOriginalName);
             window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
