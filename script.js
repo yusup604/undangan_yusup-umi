@@ -290,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // =========================================================================
 // 1. MASUKKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI SINI
 // =========================================================================
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQ_YloF6OtJlqydibxLghluIRRyaATltZmbQyK-qsDblejaLgIb65yBSjEvaLOdGesSA/exec";
+const GOOGLE_SCRIPT_URL = "PASTE_URL_WEB_APP_ANDA_DI_SINI";
 
 document.addEventListener("DOMContentLoaded", function () {
   
@@ -318,7 +318,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // =========================================================================
-  // 3. MUAT DATA DARI LOCAL STORAGE (Agar ucapan langsung muncul saat web dibuka)
+  // 3. MUAT DATA SEKALIGUS TARIK STATISTIK DARI GOOGLE SHEETS
   // =========================================================================
   loadWishesFromLocal();
 
@@ -380,7 +380,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // =========================================================================
-// 5. FUNGSI LOGIKA LOCAL STORAGE & PERHITUNGAN BADGE (COMMENTS COUT)
+// 5. FUNGSI LOGIKA LOCAL STORAGE & SINKRONISASI COUUNT SPREADSHEET
 // =========================================================================
 
 // Fungsi menyimpan data ucapan ke memori lokal browser
@@ -397,32 +397,32 @@ function saveWishToLocal(nama, ucapan, kehadiran) {
   wishes.unshift(newWish); // Menaruh ucapan terbaru di urutan paling atas list
   localStorage.setItem('wedding_wishes', JSON.stringify(wishes));
 
-  // Render ulang list ucapan dan perbarui angka statistik di atas form
+  // Render ulang list ucapan dan perbarui angka statistik dari Sheets
   loadWishesFromLocal();
 }
 
-// Fungsi menampilkan ucapan di bawah form & menghitung jumlah total rsvp
+// Fungsi menampilkan ucapan di bawah form & mengambil data jumlah rsvp dari Google Sheets
 function loadWishesFromLocal() {
   const wishesList = document.getElementById('wishesList');
   const totalCommentsOpt = document.getElementById('totalComments');
   const countHadirOpt = document.getElementById('countHadir');
   const countTidakHadirOpt = document.getElementById('countTidakHadir');
 
-  let wishes = JSON.parse(localStorage.getItem('wedding_wishes')) || [];
+  // A. AMBIL ANGKA STATISTIK REAL-TIME DARI GOOGLE SHEETS (DOGET)
+  fetch(GOOGLE_SCRIPT_URL)
+    .then(response => response.json())
+    .then(data => {
+      if (totalCommentsOpt) totalCommentsOpt.innerText = data.totalComments;
+      if (countHadirOpt) countHadirOpt.innerText = data.hadir;
+      if (countTidakHadirOpt) countTidakHadirOpt.innerText = data.tidakHadir;
+    })
+    .catch(err => console.error("Gagal memuat statistik dari Sheets:", err));
 
-  let totalHadir = 0;
-  let totalTidakHadir = 0;
+  // B. TAMPILKAN DAFTAR UCAPAN DARI LOCALSTORAGE INTERNAL BROWSER
+  let wishes = JSON.parse(localStorage.getItem('wedding_wishes')) || [];
   let htmlContent = "";
 
-  // Iterasi data untuk menyusun HTML ucapan serta menghitung akumulasi status
   wishes.forEach(wish => {
-    if (wish.kehadiran === "Hadir") {
-      totalHadir++;
-    } else if (wish.kehadiran === "Tidak Hadir") {
-      totalTidakHadir++;
-    }
-
-    // Struktur tampilan kotak komentar/ucapan di bawah form
     htmlContent += `
       <div class="wish-item" style="border-bottom: 1px solid #eee; padding: 12px 0; margin-top: 10px;">
         <strong style="color: #333; font-size: 0.95rem;">${wish.nama}</strong> 
@@ -435,16 +435,9 @@ function loadWishesFromLocal() {
     `;
   });
 
-  // Masukkan susunan html ucapan ke dalam elemen <div id="wishesList">
   if (wishesList) {
     wishesList.innerHTML = htmlContent;
   }
-
-  // Update angka badge sesuai rumus akumulasi yang Anda minta:
-  // Nilai "Comments" adalah total penjumlahan (Hadir + Tidak Hadir)
-  if (totalCommentsOpt) totalCommentsOpt.innerText = totalHadir + totalTidakHadir;
-  if (countHadirOpt) countHadirOpt.innerText = totalHadir;
-  if (countTidakHadirOpt) countTidakHadirOpt.innerText = totalTidakHadir;
 }
 
 
