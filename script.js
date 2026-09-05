@@ -86,3 +86,36 @@ function copyText(elementId) {
     });
   }
 }
+
+// Fungsi untuk mengambil nama tamu dari link URL
+function getGuestName() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const guestName = urlParams.get('to');
+
+  if (guestName) {
+    // Menghapus tanda plus (+) atau %20 dan mengubahnya jadi spasi
+    const cleanedName = decodeURIComponent(guestName.replace(/\+/g, ' '));
+    document.getElementById('guest-name').innerText = cleanedName;
+  }
+}
+
+// Jalankan fungsi nama tamu secara otomatis saat halaman web selesai dimuat
+window.addEventListener('DOMContentLoaded', getGuestName);
+
+// Fungsi untuk membuka undangan saat tombol diklik
+function openInvitation() {
+  // 1. Putar musik latar belakang
+  const audio = document.getElementById('bgMusic');
+  if (audio) {
+    audio.play().catch(error => {
+      console.log("Musik diblokir oleh browser, memerlukan interaksi pengguna dahulu.");
+    });
+  }
+  
+  // 2. Arahkan halaman ke section berikutnya setelah cover dibuka
+  // Ganti 'section-berikutnya' dengan ID section setelah Hero (misal: #couple, #wedding-gift)
+  const nextSection = document.querySelector('.hero-section').nextElementSibling;
+  if (nextSection) {
+    nextSection.scrollIntoView({ behavior: 'smooth' });
+  }
+}
