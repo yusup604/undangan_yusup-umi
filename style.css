@@ -2011,7 +2011,7 @@ section:has(+ #quote-section) {
 /* Jika dibuka di HP (Layar maksimal lebar 576px atau di bawahnya) */
 @media (max-width: 576px) {
   .couples-name {
-    font-size: 1.8rem !important; /* Ukuran teks otomatis mengecil di HP agar tidak patah jadi 2 baris */
+    font-size: 1.6rem !important; /* Ukuran teks otomatis mengecil di HP agar tidak patah jadi 2 baris */
     white-space: nowrap; /* Memaksa tulisan tetap dipaksa satu baris di HP */
   }
 }
