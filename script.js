@@ -103,31 +103,26 @@ function copyText(elementId) {
 }
 
 // =================================================================
-// 1. GERBANG SECURITY SYSTEM KUSTOM (EXPONENTIAL BACKOFF ENCRYPTION)
+// 1. GERBANG SECURITY SYSTEM KUSTOM (EXPONENTIAL BACKOFF & PERMANENT ALERT)
 // =================================================================
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof AOS !== 'undefined') {
     AOS.init({ duration: 1000, once: false });
   }
 
-  // 🌟 PERBAIKAN UTAMA: Deklarasi Parameter URL diletakkan paling atas agar bisa dibaca oleh sistem
   const urlParams = new URLSearchParams(window.location.search);
   const guestParam = urlParams.get('to');
   const guestElement = document.getElementById('guest-name');
 
-  // HASH MASTER SHA-256 Asli dari PIN Rahasia Anda: "010626"
   const HASH_MASTER = "b90e97f4eae90b89fae27840e851ea9802d84f8d512a58bf5460f926b5ab4717"; 
 
-  // Variabel Kontrol Keamanan Eksponensial
   let salahHitung = 0;
   let sedangDikunci = false;
   let targetCleanedName = "";
   
-  // Konfigurasi waktu pemblokiran (60 detik untuk blokir pertama)
   let waktuBlokirDasar = 60; 
   let faktorPengali = 1;
 
-  // Fungsi enkripsi SHA-256 bawaan browser
   async function hitungHashSHA256(teks) {
     const msgBuffer = new TextEncoder().encode(teks);
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -135,17 +130,26 @@ document.addEventListener('DOMContentLoaded', () => {
     return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
   }
 
-  // Elemen DOM Kontainer Keamanan
   const securityModal = document.getElementById('securityModal');
   const modalNormalState = document.getElementById('modalNormalState');
   const modalLockedState = document.getElementById('modalLockedState');
+  const miniSecurityAlert = document.getElementById('miniSecurityAlert'); // Elemen tanda mini baru
 
-  // Elemen Input & Tombol
   const modalPinInput = document.getElementById('modalPinInput');
   const modalErrorMessage = document.getElementById('modalErrorMessage');
   const btnSecConfirm = document.getElementById('btnSecConfirm');
   const btnSecCancel = document.getElementById('btnSecCancel');
   const btnSecLockedBack = document.getElementById('btnSecLockedBack');
+
+  // 🌟 PERBAIKAN BARU: Periksa apakah perangkat ini punya riwayat pernah diblokir saat web dibuka
+  function periksaRiwayatBlokir() {
+    if (localStorage.getItem('security_breach_detected') === 'true') {
+      if (miniSecurityAlert) miniSecurityAlert.style.display = "flex";
+    } else {
+      if (miniSecurityAlert) miniSecurityAlert.style.display = "none";
+    }
+  }
+  periksaRiwayatBlokir(); // Jalankan langsung saat DOM siap
 
   // 1. FUNGSI UTAMA: PROSES VERIFIKASI PIN
   async function prosesVerifikasiPIN() {
@@ -157,10 +161,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (hashInputUser === HASH_MASTER) {
       // AKSES DISETUJUI
       salahHitung = 0;
-      faktorPengali = 1; // Reset tingkat perkalian waktu blokir
+      faktorPengali = 1; 
       localStorage.setItem('invitation_admin', 'true');
       localStorage.setItem('guest_original_name', targetCleanedName);
       
+      // 🌟 PERBAIKAN BARU: Hapus tanda "ACCESS LOCKED" mini secara permanen karena pemilik sah berhasil masuk
+      localStorage.removeItem('security_breach_detected');
+      periksaRiwayatBlokir();
+
       if (guestElement) guestElement.innerText = targetCleanedName;
       if (securityModal) securityModal.classList.remove('active');
       
@@ -178,19 +186,18 @@ document.addEventListener('DOMContentLoaded', () => {
         // AKTIVASI LOCKDOWN EKSPOENSIAL
         sedangDikunci = true;
         
-        // Tukar tampilan ke kondisi blokir tanpa hitung mundur visual
+        // 🌟 PERBAIKAN BARU: Simpan status pembobolan ke memori agar tanda mini terus muncul kedepannya
+        localStorage.setItem('security_breach_detected', 'true');
+        periksaRiwayatBlokir();
+
         if (modalNormalState) modalNormalState.style.display = "none";
         if (modalLockedState) modalLockedState.style.display = "block";
         
-        // Menghitung durasi pemblokiran saat ini (60 detik * faktor pengali)
         let durasiBlokirAktif = waktuBlokirDasar * faktorPengali;
         
-        // Timer latar belakang tetap berjalan tanpa mengubah UI teks teks
         setTimeout(() => {
           sedangDikunci = false;
           salahHitung = 0;
-          
-          // Lipatgandakan faktor pengali untuk hukuman berikutnya jika salah lagi (1 -> 2 -> 4 -> 8, dst)
           faktorPengali = faktorPengali * 2; 
           
           if (modalNormalState) modalNormalState.style.display = "block";
@@ -204,7 +211,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, durasiBlokirAktif * 1000);
         
       } else {
-        // Peringatan salah biasa di bawah input kolom PIN
         if (modalErrorMessage) {
           modalErrorMessage.style.display = "block";
           modalErrorMessage.innerText = `PIN Salah! Akses Ditolak. (${salahHitung}/3)`;
@@ -225,8 +231,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (modalPinInput) modalPinInput.value = "";
     if (modalErrorMessage) modalErrorMessage.style.display = "none";
-    
-    // Jangan mereset jumlah salah atau timer jika sedang dikunci agar peretas tidak bisa kabur/reset sistem
     if (!sedangDikunci) salahHitung = 0; 
     
     if (guestElement && savedOriginalName) {
