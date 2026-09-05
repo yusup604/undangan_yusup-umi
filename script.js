@@ -110,7 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
     AOS.init({ duration: 1000, once: false });
   }
 
-  const HASH_MASTER = "4v6e1"; 
+  const HASH_MASTER = "nhzkn"; 
+
 
   function hitungHash(teks) {
     let hash = 0;
