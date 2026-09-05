@@ -101,3 +101,78 @@ function copyText(elementId) {
     });
   }
 }
+
+// =================================================================
+// 1. GERBANG KEAMANAN NAMA TAMU (ANTI-MANIPULASI URL LINTAS PERANGKAT)
+// =================================================================
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof AOS !== 'undefined') {
+    AOS.init({ duration: 1000, once: false });
+  }
+
+  // PIN Master Anda (Sensitif huruf besar/kecil atau angka)
+  const PIN_MASTER = "010626"; 
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const guestParam = urlParams.get('to');
+  const guestElement = document.getElementById('guest-name');
+
+  if (guestElement) {
+    if (guestParam) {
+      // 1. Bersihkan teks spasi (+) dan simbol khusus seperti %26 menjadi &
+      const cleanedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
+      
+      // 2. Ambil data memori yang tersimpan di perangkat saat ini
+      const savedOriginalName = localStorage.getItem('guest_original_name');
+      const isAdmin = localStorage.getItem('invitation_admin') === 'true';
+
+      // =============================================================
+      // PETA LOGIKA PERANGKAT
+      // =============================================================
+      if (isAdmin) {
+        // KONDISI A: HP ANDA (ADMINISTRATOR)
+        // Bebas ganti nama ke siapa saja di URL tanpa terhalang popup PIN lagi
+        guestElement.innerText = cleanedName;
+      } else {
+        // KONDISI B: HP ORANG LAIN / TAMU BIAYA
+        if (!savedOriginalName) {
+          // JIKA KUNJUNGAN PERTAMA DI HP TAMU:
+          // Kunci nama pertama ini ke dalam memori internal HP mereka
+          localStorage.setItem('guest_original_name', cleanedName);
+          guestElement.innerText = cleanedName;
+        } else {
+          // JIKA KUNJUNGAN KEDUA DST (Mencoba Mengubah Nama di URL):
+          // Bandingkan nama di URL sekarang dengan nama asli awal yang terkunci di memori HP
+          if (cleanedName.toLowerCase().trim() === savedOriginalName.toLowerCase().trim()) {
+            // Jika nama di URL tidak diubah-ubah, tampilkan nama mereka dengan ramah
+            guestElement.innerText = cleanedName;
+          } else {
+            // 🚨 DETEKSI MANIPULASI: TANTANG DENGAN POPUP INPUT PIN
+            const inputPIN = prompt("⚠️ Perubahan identitas tamu dideteksi.\nMasukkan PIN Keamanan jika Anda adalah Pemilik Undangan:");
+
+            if (inputPIN === PIN_MASTER) {
+              // JIKA PIN BENAR (Ini adalah HP Anda yang sedang membuat nama baru):
+              alert("👑 PIN Benar! Perangkat Anda sekarang resmi menjadi Administrator.");
+              localStorage.setItem('invitation_admin', 'true'); // Kunci status Admin permanen di HP Anda
+              localStorage.setItem('guest_original_name', cleanedName); // Perbarui memori nama baru
+              guestElement.innerText = cleanedName;
+            } else {
+              // JIKA PIN SALAH / DI-CANCEL (Ini adalah HP Tamu Iseng):
+              alert("❌ PIN Salah atau Dibatalkan! Nama diblokir dan dikunci kembali.");
+              
+              // Paksa teks di layar kembali ke nama asli awal tamu tersebut
+              guestElement.innerText = savedOriginalName;
+              
+              // Paksa URL di browser kembali terkunci ke nama asli awal tamu
+              urlParams.set('to', savedOriginalName);
+              window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
+            }
+          }
+        }
+      }
+    } else {
+      // Jika link dibuka polosan tanpa nama (?to= tidak ada)
+      guestElement.innerText = "Tamu Undangan";
+    }
+  }
+});
