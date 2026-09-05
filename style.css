@@ -1954,5 +1954,44 @@ section:has(+ #quote-section) {
   flex-shrink: 0;
   color: #a0a0a0;
 }
+/* Indikator Mini Percobaan Pembobolan */
+.mini-security-alert {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  background-color: rgba(217, 83, 79, 0.1); /* Merah transparan premium */
+  border: 1px solid #d9534f;
+  color: #d9534f;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 0.65rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  z-index: 9999; /* Di bawah overlay modal, tapi di atas konten web */
+  box-shadow: 0 4px 12px rgba(217, 83, 79, 0.15);
+  pointer-events: none; /* Supaya tidak menghalangi klik pada elemen di bawahnya */
+  animation: pulseAlert 2s infinite ease-in-out;
+}
+
+/* Efek kedip lambat premium agar tetap terlihat */
+@keyframes pulseAlert {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+/* Penyesuaian responsif untuk HP layar kecil */
+@media (max-width: 480px) {
+  .mini-security-alert {
+    top: 12px;
+    right: 12px;
+    padding: 5px 8px;
+    font-size: 0.6rem;
+  }
+}
 
 
