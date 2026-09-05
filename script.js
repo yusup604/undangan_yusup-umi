@@ -103,15 +103,15 @@ function copyText(elementId) {
 }
 
 // =================================================================
-// 1. GERBANG SECURITY SYSTEM KUSTOM (VERSI FIX CELEH SCROLL / BYPASS)
+// 1. GERBANG SECURITY SYSTEM KUSTOM (VERSI FIX BUGS & PENUMPUKAN EVENT)
 // =================================================================
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof AOS !== 'undefined') {
     AOS.init({ duration: 1000, once: false });
   }
 
+  // Hash bawaan sistem Anda untuk mencocokkan PIN rahasia
   const HASH_MASTER = "nhzkn"; 
-
 
   function hitungHash(teks) {
     let hash = 0;
@@ -132,8 +132,80 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnSecConfirm = document.getElementById('btnSecConfirm');
   const btnSecCancel = document.getElementById('btnSecCancel');
 
+  // Perbaikan Scope: Menangkap nilai nama global agar bisa diakses semua fungsi internal
+  let targetCleanedName = "";
+
+  // 1. FUNGSI UTAMA: PROSES VERIFIKASI PIN
+  function prosesVerifikasiPIN() {
+    if (!modalPinInput) return;
+    
+    const inputUser = modalPinInput.value;
+    const hashInputUser = hitungHash(inputUser);
+
+    if (hashInputUser === HASH_MASTER) {
+      // PIN BENAR
+      localStorage.setItem('invitation_admin', 'true');
+      localStorage.setItem('guest_original_name', targetCleanedName);
+      if (guestElement) guestElement.innerText = targetCleanedName;
+      
+      if (securityModal) securityModal.classList.remove('active');
+      
+      // Lepas kunci scroll karena owner terverifikasi
+      document.body.style.overflow = "auto";
+      document.body.style.height = "auto";
+
+      modalPinInput.value = "";
+      if (modalErrorMessage) modalErrorMessage.style.display = "none";
+      alert("👑 Akses Terverifikasi! Status Perangkat Diperbarui Sebagai Pemilik.");
+    } else {
+      // PIN SALAH
+      if (modalErrorMessage) modalErrorMessage.style.display = "block";
+      modalPinInput.value = "";
+      modalPinInput.focus();
+    }
+  }
+
+  // 2. FUNGSI UTAMA: PEMBATALAN AKSES
+  function batalkanVerifikasi() {
+    const savedOriginalName = localStorage.getItem('guest_original_name');
+    
+    if (securityModal) securityModal.classList.remove('active');
+    
+    // Kembalikan fungsi scroll normal untuk tamu
+    document.body.style.overflow = "auto";
+    document.body.style.height = "auto";
+
+    if (modalPinInput) modalPinInput.value = "";
+    if (modalErrorMessage) modalErrorMessage.style.display = "none";
+    
+    // Paksa reset nama & URL kembali terkunci ke awal
+    if (guestElement && savedOriginalName) {
+      guestElement.innerText = savedOriginalName;
+      urlParams.set('to', savedOriginalName);
+      window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
+    }
+  }
+
+  // 3. INISIALISASI EVENT LISTENERS (Dipasang di luar untuk mencegah penumpukan fungsi klik)
+  if (btnSecConfirm) btnSecConfirm.addEventListener('click', prosesVerifikasiPIN);
+  if (btnSecCancel) btnSecCancel.addEventListener('click', batalkanVerifikasi);
+  
+  if (modalPinInput) {
+    modalPinInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') prosesVerifikasiPIN();
+    });
+
+    // Perbaikan Baru: Memaksa kolom input pop-up hanya bisa diketik oleh angka numerik
+    modalPinInput.addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9]/g, '');
+    });
+  }
+
+  // 4. LOGIKA VALIDASI ALUR DETEKSI IDENTITAS PERANGKAT
   if (guestElement && guestParam) {
     const cleanedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
+    targetCleanedName = cleanedName; 
+    
     const savedOriginalName = localStorage.getItem('guest_original_name');
     const isAdmin = localStorage.getItem('invitation_admin') === 'true';
 
@@ -151,58 +223,11 @@ document.addEventListener('DOMContentLoaded', () => {
           if (securityModal) {
             securityModal.classList.add('active');
             
-            // TAMBALAN BARU: Kunci total scroll body HP agar tidak bisa digulir ke halaman 2
+            // Kunci total scroll body HP agar tidak bisa digulir ke halaman utama
             document.body.style.overflow = "hidden";
             document.body.style.height = "100vh";
           }
           if (modalPinInput) modalPinInput.focus();
-
-          btnSecConfirm.addEventListener('click', prosesVerifikasiPIN);
-          modalPinInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') prosesVerifikasiPIN();
-          });
-
-          function prosesVerifikasiPIN() {
-            const inputUser = modalPinInput.value;
-            const hashInputUser = hitungHash(inputUser);
-
-            if (hashInputUser === HASH_MASTER) {
-              // PIN BENAR
-              localStorage.setItem('invitation_admin', 'true');
-              localStorage.setItem('guest_original_name', cleanedName);
-              guestElement.innerText = cleanedName;
-              securityModal.classList.remove('active');
-              
-              // TAMBALAN BARU: Lepas kunci scroll karena owner terverifikasi
-              document.body.style.overflow = "auto";
-              document.body.style.height = "auto";
-
-              modalPinInput.value = "";
-              modalErrorMessage.style.display = "none";
-              alert("👑 Akses Terverifikasi! Status Perangkat Diperbarui Sebagai Pemilik.");
-            } else {
-              // PIN SALAH
-              modalErrorMessage.style.display = "block";
-              modalPinInput.value = "";
-              modalPinInput.focus();
-            }
-          }
-
-          btnSecCancel.addEventListener('click', () => {
-            securityModal.classList.remove('active');
-            
-            // TAMBALAN BARU: Kembalikan fungsi scroll normal untuk tamu
-            document.body.style.overflow = "auto";
-            document.body.style.height = "auto";
-
-            modalPinInput.value = "";
-            modalErrorMessage.style.display = "none";
-            
-            // Paksa reset nama & URL kembali terkunci ke awal
-            guestElement.innerText = savedOriginalName;
-            urlParams.set('to', savedOriginalName);
-            window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
-          });
         }
       }
     }
