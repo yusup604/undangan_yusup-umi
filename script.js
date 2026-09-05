@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
     AOS.init({ duration: 1000, once: false });
   }
 
-  const PIN_MASTER = "1234"; // PIN Rahasia Akses Admin Anda
+  const PIN_MASTER = "010626"; // PIN Rahasia Akses Admin Anda
 
   const urlParams = new URLSearchParams(window.location.search);
   const guestParam = urlParams.get('to');
