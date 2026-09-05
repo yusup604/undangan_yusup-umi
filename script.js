@@ -291,8 +291,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // =========================================================================
 // 1. MASUKKAN URL WEB APP GOOGLE APPS SCRIPT ANDA DI SINI
 // =========================================================================
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQ_YloF6OtJlqydibxLghluIRRyaATltZmbQyK-qsDblejaLgIb65yBSjEvaLOdGesSA/exec
-";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQ_YloF6OtJlqydibxLghluIRRyaATltZmbQyK-qsDblejaLgIb65yBSjEvaLOdGesSA/exec";
+
 
 document.addEventListener("DOMContentLoaded", function () {
   
