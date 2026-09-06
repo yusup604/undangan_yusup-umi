@@ -251,6 +251,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (guestElement && savedOriginalName) {
       guestElement.innerText = savedOriginalName;
+            // 🌟 LANGKAH 3: Paksa input RSVP kembali ke nama asli tamu, bukan nama manipulasi dari URL
+      sinkronkanNamaRSVP(savedOriginalName);
       const urlParams = new URLSearchParams(window.location.search);
       urlParams.set('to', savedOriginalName);
       window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
