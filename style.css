@@ -2102,25 +2102,3 @@ section:has(+ #quote-section) {
   font-weight: 500;
 }
 
-/* Tombol Tutup */
-.rsvp-modal-btn {
-  background: #8E7A5D; /* Warna emas bronze/earth tone */
-  color: #ffffff;
-  border: none;
-  padding: 12px 35px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(142, 122, 93, 0.2);
-  transition: all 0.3s ease;
-}
-
-.rsvp-modal-btn:hover {
-  background: #76644b;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(142, 122, 93, 0.3);
-}
-
-
