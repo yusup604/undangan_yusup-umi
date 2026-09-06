@@ -430,7 +430,7 @@ document.addEventListener("DOMContentLoaded", function () {
       // Kirim absensi ke Google Sheets menggunakan Fetch API
       fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        mode: 'no-cors', // Menghindari kendala CORS kebijakan Google
+        
         headers: {
           'Content-Type': 'application/json'
         },
