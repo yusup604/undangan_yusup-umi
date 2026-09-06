@@ -258,36 +258,49 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // 4. LOGIKA VALIDASI ALUR DETEKSI PARAMETER URL
-  if (guestElement && guestParam) {
-    const cleanedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
-    targetCleanedName = cleanedName; 
-    
-    const savedOriginalName = localStorage.getItem('guest_original_name');
-    const isAdmin = localStorage.getItem('invitation_admin') === 'true';
+if (guestElement && guestParam) {
+  const cleanedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
+  targetCleanedName = cleanedName; 
+  
+  const savedOriginalName = localStorage.getItem('guest_original_name');
+  const isAdmin = localStorage.getItem('invitation_admin') === 'true';
 
-    if (isAdmin) {
+  if (isAdmin) {
+    guestElement.innerText = cleanedName;
+  } else {
+    if (!savedOriginalName) {
+      localStorage.setItem('guest_original_name', cleanedName);
       guestElement.innerText = cleanedName;
     } else {
-      if (!savedOriginalName) {
-        localStorage.setItem('guest_original_name', cleanedName);
+      if (cleanedName.toLowerCase().trim() === savedOriginalName.toLowerCase().trim()) {
         guestElement.innerText = cleanedName;
       } else {
-        if (cleanedName.toLowerCase().trim() === savedOriginalName.toLowerCase().trim()) {
-          guestElement.innerText = cleanedName;
-        } else {
-          if (securityModal) {
-            securityModal.classList.add('active');
-            document.body.style.overflow = "hidden";
-            document.body.style.height = "100vh";
-          }
-          if (modalPinInput) modalPinInput.focus();
+        // [PERBAIKAN] Jika nama diganti & PIN salah/belum diisi, PAKSA nama kembali ke nama asli yang tersimpan!
+        guestElement.innerText = savedOriginalName;
+
+        if (securityModal) {
+          securityModal.classList.add('active');
+          document.body.style.overflow = "hidden";
+          document.body.style.height = "100vh";
         }
+        if (modalPinInput) modalPinInput.focus();
       }
     }
-  } else if (guestElement) {
-    guestElement.innerText = "Tamu Undangan";
   }
-});
+} else if (guestElement) {
+  // Jika tidak ada parameter URL, gunakan nama asli yang tersimpan atau default
+  const savedOriginalName = localStorage.getItem('guest_original_name');
+  guestElement.innerText = savedOriginalName ? savedOriginalName : "Tamu Undangan";
+}
+
+// [TAMBAHAN BENTENG RSVP] Singkronisasi langsung ke Form RSVP Page 9
+const rsvpInputName = document.getElementById('guestName');
+if (rsvpInputName && guestElement) {
+  rsvpInputName.value = guestElement.innerText; // Mengambil nilai dari elemen depan yang sudah aman
+  rsvpInputName.setAttribute('readonly', true);  // Mengunci kolom agar tidak bisa diketik manual
+  rsvpInputName.style.backgroundColor = "#f3f4f6"; // Memberikan warna abu-abu tanda terkunci
+}
+
 
 // =========================================================================
 // 1. URL WEB APP GOOGLE APPS SCRIPT ANDA (SUDAH TERSAMBUNG REKAP ABSENSI)
