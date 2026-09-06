@@ -444,10 +444,10 @@ if (wishesForm) {
       // Teks Ucapan HANYA disimpan di Local Browser (LocalStorage)
       saveWishToLocal(nama, ucapan, kehadiran);
 
-      // 🌟 SINKRONISASI OTOMATIS: Ambil angka terbaru dari Sheets setelah jeda 1 detik
+      // 🌟 RE-ABSENSI REAL-TIME: Panggil kembali fungsi pemuat statistik setelah jeda 1 detik
       setTimeout(() => {
-        if (typeof ambilDataCounterRealTime === "function") {
-          ambilDataCounterRealTime();
+        if (typeof loadWishesFromLocal === "function") {
+          loadWishesFromLocal();
         }
       }, 1000);
 
@@ -486,7 +486,6 @@ if (wishesForm) {
     });
   });
 }
-});
 
 
 // =========================================================================
