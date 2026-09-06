@@ -404,6 +404,27 @@ document.addEventListener("DOMContentLoaded", function () {
   // 3. MUAT ANGKA TOTAL DARI SPREADSHEET & UCAPAN LOKAL
   // =========================================================================
   loadWishesFromLocal();
+  ambilDataCounterRealTime(); // <--- Panggil fungsi ini agar angka langsung terupdate saat web dibuka
+
+  function ambilDataCounterRealTime() {
+    // Ambil elemen angka berdasarkan ID asli yang ada di HTML kamu
+    const totalCommentsElement = document.getElementById('totalComments');
+    const hadirCountElement = document.getElementById('countHadir');
+    const tidakHadirCountElement = document.getElementById('countTidakHadir');
+
+    // Lakukan penjemputan data (GET) ke Google Apps Script
+    fetch(GOOGLE_SCRIPT_URL)
+      .then(response => response.json())
+      .then(data => {
+        // Suntikkan angka riil dari Google Sheets ke dalam tampilan web
+        if (totalCommentsElement) totalCommentsElement.innerText = data.totalComments;
+        if (hadirCountElement) hadirCountElement.innerText = data.hadir;
+        if (tidakHadirCountElement) tidakHadirCountElement.innerText = data.tidakHadir;
+      })
+      .catch(error => {
+        console.error("Sistem RSVP: Gagal sinkronisasi counter dengan Google Sheets.", error);
+      });
+  }
 
   // =========================================================================
 // 4. PROSES KIRIM DATA KE GOOGLE SHEETS SAAT FORM DI-SUBMIT
@@ -442,6 +463,13 @@ if (wishesForm) {
     .then(() => {
       // Teks Ucapan HANYA disimpan di Local Browser (LocalStorage)
       saveWishToLocal(nama, ucapan, kehadiran);
+
+      // 🌟 SINKRONISASI OTOMATIS: Ambil angka terbaru dari Sheets setelah jeda 1 detik
+      setTimeout(() => {
+        if (typeof ambilDataCounterRealTime === "function") {
+          ambilDataCounterRealTime();
+        }
+      }, 1000);
 
       // Reset form input (Kecuali kolom Nama agar nama tamu tetap tertera)
       document.getElementById('guestMessage').value = "";
