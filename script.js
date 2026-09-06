@@ -428,59 +428,59 @@ document.addEventListener("DOMContentLoaded", function () {
       submitBtn.disabled = true;
 
       // Kirim absensi ke Google Sheets menggunakan Fetch API
-      fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'text/plain;charset=utf-8' // Trik aman lolos dari proteksi CORS Google
-        },
-        body: JSON.stringify(formData)
-      })
-      .then((response) => {
-        // Teks Ucapan HANYA disimpan di Local Browser (LocalStorage)
-        saveWishToLocal(nama, ucapan, kehadiran);
+fetch(GOOGLE_SCRIPT_URL, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'text/plain;charset=utf-8' // Trik aman lolos dari proteksi CORS Google
+  },
+  body: JSON.stringify(formData)
+})
+// ==================== PERBAIKAN DI SINI ====================
+.then((response) => response.json()) // << Tambahkan baris ini agar browser bisa membaca data dari Google Sheets
+.then((result) => {                  // << Ubah response menjadi result di sini
+// ===========================================================
+  // Teks Ucapan HANYA disimpan di Local Browser (LocalStorage)
+  saveWishToLocal(nama, ucapan, kehadiran);
 
-        // SINKRONISASI OTOMATIS: Beri jeda 2.5 detik agar Sheets selesai mencatat baris baru
-        setTimeout(() => {
-          if (typeof loadWishesFromLocal === "function") {
-            loadWishesFromLocal();
-          }
-        }, 2500);
+  // SINKRONISASI OTOMATIS: Beri jeda 2.5 detik agar Sheets selesai mencatat baris baru
+  setTimeout(() => {
+    if (typeof loadWishesFromLocal === "function") {
+      loadWishesFromLocal();
+    }
+  }, 2500);
 
-        // Reset form input (Kecuali kolom Nama agar nama tamu tetap tertera)
-        document.getElementById('guestMessage').value = "";
-        document.getElementById('guestAttendance').selectedIndex = 0;
+  // Reset form input (Kecuali kolom Nama agar nama tamu tetap tertera)
+  document.getElementById('guestMessage').value = "";
+  document.getElementById('guestAttendance').selectedIndex = 0;
 
-        // MENAMPILKAN POPUP MODAL KUSTOM (PENGGANTI ALERT)
-        const rsvpModal = document.getElementById('rsvpModal');
-        const closeRsvpModal = document.getElementById('closeRsvpModal');
+  // MENAMPILKAN POPUP MODAL KUSTOM (PENGGANTI ALERT)
+  const rsvpModal = document.getElementById('rsvpModal');
+  const closeRsvpModal = document.getElementById('closeRsvpModal');
 
-        if (rsvpModal && closeRsvpModal) {
-          rsvpModal.classList.add('show');
+  if (rsvpModal && closeRsvpModal) {
+    rsvpModal.classList.add('show');
 
-          // Fungsi menutup modal saat tombol OK diklik
-          closeRsvpModal.onclick = function () {
-            rsvpModal.classList.remove('show');
-          };
+    // Fungsi menutup modal saat tombol OK diklik
+    closeRsvpModal.onclick = function () {
+      rsvpModal.classList.remove('show');
+    };
 
-          // Menutup modal jika area di luar kotak putih diklik
-          rsvpModal.onclick = function (event) {
-            if (event.target === rsvpModal) {
-              rsvpModal.classList.remove('show');
-            }
-          };
-        }
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        alert("Gagal mengirim data, silakan coba lagi.");
-      })
-      .finally(() => {
-        // Kembalikan teks tombol semula
-        submitBtn.innerText = originalBtnText;
-        submitBtn.disabled = false;
-      });
-    });
+    // Menutup modal jika area di luar kotak putih diklik
+    rsvpModal.onclick = function (event) {
+      if (event.target === rsvpModal) {
+        rsvpModal.classList.remove('show');
+      }
+    };
   }
+}) // << Pastikan ada tanda kurung penutup untuk .then((result) =>
+.catch((error) => {
+  console.error('Error:', error);
+  alert("Gagal mengirim data, silakan coba lagi.");
+})
+.finally(() => {
+  // Kembalikan teks tombol semula
+  submitBtn.innerText = originalBtnText;
+  submitBtn.disabled = false;
 });
 
 
