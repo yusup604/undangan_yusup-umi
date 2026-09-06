@@ -383,7 +383,8 @@ document.addEventListener("DOMContentLoaded", function () {
         body: JSON.stringify(formData)
       })
       .then(() => {
-        saveWishToLocal(nama, ucapan, Caravan || kehadiran);
+        // SUDAH DIPERBAIKI: Menghapus kata Caravan || yang salah ketik
+        saveWishToLocal(nama, ucapan, kehadiran);
 
         document.getElementById('guestMessage').value = "";
         document.getElementById('guestAttendance').selectedIndex = 0;
