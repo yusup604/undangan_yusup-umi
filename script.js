@@ -114,9 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const guestParam = urlParams.get('to');
   const guestElement = document.getElementById('guest-name');
 
-
   const HASH_MASTER = "b5dc342b3bf760927df3750529d20c58f0003cd02e1c9db865ee1a26ca3d8031";
-
 
   let salahHitung = 0;
   let sedangDikunci = false;
@@ -125,14 +123,19 @@ document.addEventListener('DOMContentLoaded', () => {
   let waktuBlokirDasar = 60; 
   let faktorPengali = 1;
 
-  // 🌟 LANGKAH 1: Tambahkan fungsi nama RSVP
+  // 🌟 FUNGSI BARU: Mengunci dan mensinkronkan input Nama di Form RSVP (id="guestName")
   function sinkronkanNamaRSVP(namaAman) {
-    // Mencari elemen input nama di form RSVP (pastikan ID 'rsvp-name' sesuai dengan HTML Anda)
-    const rsvpNameInput = document.getElementById('rsvp-name') || document.querySelector('.rsvp-input-name');
+    const rsvpNameInput = document.getElementById('guestName');
     
     if (rsvpNameInput) {
-      rsvpNameInput.value = namaAman; // Isi otomatis dengan nama yang aman
-      rsvpNameInput.readOnly = true;  // Kunci input agar tamu tidak bisa mengubahnya secara paksa
+      rsvpNameInput.value = namaAman; // Paksa isi dengan nama yang aman
+      rsvpNameInput.readOnly = true;  // Kunci input agar tidak bisa diedit manual oleh tamu
+      
+      // Memberikan efek visual bahwa input ini terkunci resmi
+      rsvpNameInput.style.backgroundColor = "#f3f4f6"; 
+      rsvpNameInput.style.cursor = "not-allowed";
+    } else {
+      console.warn("Sistem Keamanan: Elemen id='guestName' tidak ditemukan di HTML!");
     }
   }
 
@@ -146,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const securityModal = document.getElementById('securityModal');
   const modalNormalState = document.getElementById('modalNormalState');
   const modalLockedState = document.getElementById('modalLockedState');
-  const miniSecurityAlert = document.getElementById('miniSecurityAlert'); // Elemen tanda mini baru
+  const miniSecurityAlert = document.getElementById('miniSecurityAlert');
 
   const modalPinInput = document.getElementById('modalPinInput');
   const modalErrorMessage = document.getElementById('modalErrorMessage');
@@ -154,7 +157,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnSecCancel = document.getElementById('btnSecCancel');
   const btnSecLockedBack = document.getElementById('btnSecLockedBack');
 
-  // 🌟 PERBAIKAN BARU: Periksa apakah perangkat ini punya riwayat pernah diblokir saat web dibuka
   function periksaRiwayatBlokir() {
     if (localStorage.getItem('security_breach_detected') === 'true') {
       if (miniSecurityAlert) miniSecurityAlert.style.display = "flex";
@@ -162,7 +164,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (miniSecurityAlert) miniSecurityAlert.style.display = "none";
     }
   }
-  periksaRiwayatBlokir(); // Jalankan langsung saat DOM siap
+  periksaRiwayatBlokir();
 
   // 1. FUNGSI UTAMA: PROSES VERIFIKASI PIN
   async function prosesVerifikasiPIN() {
@@ -177,11 +179,10 @@ document.addEventListener('DOMContentLoaded', () => {
       faktorPengali = 1; 
       localStorage.setItem('invitation_admin', 'true');
       localStorage.setItem('guest_original_name', targetCleanedName);
-
-            // 🌟 LANGKAH 2: Masukkan baris ini agar form RSVP mengikuti nama baru yang diizinkan Admin
+      
+      // 🌟 SINKRONISASI: Izinkan nama baru masuk form RSVP karena PIN benar
       sinkronkanNamaRSVP(targetCleanedName);
 
-      // 🌟 PERBAIKAN BARU: Hapus tanda "ACCESS LOCKED" mini secara permanen karena pemilik sah berhasil masuk
       localStorage.removeItem('security_breach_detected');
       periksaRiwayatBlokir();
 
@@ -199,12 +200,15 @@ document.addEventListener('DOMContentLoaded', () => {
       salahHitung++;
       
       if (salahHitung >= 3) {
-        // AKTIVASI LOCKDOWN EKSPOENSIAL
+        // AKTIVASI LOCKDOWN EKSPONENSIAL
         sedangDikunci = true;
         
-        // 🌟 PERBAIKAN BARU: Simpan status pembobolan ke memori agar tanda mini terus muncul kedepannya
         localStorage.setItem('security_breach_detected', 'true');
         periksaRiwayatBlokir();
+
+        // 🌟 SINKRONISASI: PIN salah 3x, langsung paksa form RSVP kembali ke nama asli
+        const savedOriginalName = localStorage.getItem('guest_original_name');
+        if (savedOriginalName) sinkronkanNamaRSVP(savedOriginalName);
 
         if (modalNormalState) modalNormalState.style.display = "none";
         if (modalLockedState) modalLockedState.style.display = "block";
@@ -251,8 +255,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (guestElement && savedOriginalName) {
       guestElement.innerText = savedOriginalName;
-            // 🌟 LANGKAH 3: Paksa input RSVP kembali ke nama asli tamu, bukan nama manipulasi dari URL
+      
+      // 🌟 SINKRONISASI: Kembalikan nama RSVP ke nama asli saat tombol batal diklik
       sinkronkanNamaRSVP(savedOriginalName);
+
       const urlParams = new URLSearchParams(window.location.search);
       urlParams.set('to', savedOriginalName);
       window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
@@ -272,7 +278,8 @@ document.addEventListener('DOMContentLoaded', () => {
       this.value = this.value.replace(/[^0-9]/g, '');
     });
   }
-// 4. LOGIKA VALIDASI ALUR DETEKSI PARAMETER URL
+
+  // 4. LOGIKA VALIDASI ALUR DETEKSI PARAMETER URL
   if (guestElement && guestParam) {
     const cleanedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
     targetCleanedName = cleanedName; 
@@ -282,20 +289,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (isAdmin) {
       guestElement.innerText = cleanedName;
-      sinkronkanNamaRSVP(cleanedName); // 🌟 Tambahan 4A: Jika admin, ijinkan nama URL masuk RSVP
+      sinkronkanNamaRSVP(cleanedName); // Set form RSVP untuk Admin
     } else {
       if (!savedOriginalName) {
         localStorage.setItem('guest_original_name', cleanedName);
         guestElement.innerText = cleanedName;
-        sinkronkanNamaRSVP(cleanedName); // 🌟 Tambahan 4B: Kunjungan pertama, set nama asli ke RSVP
+        sinkronkanNamaRSVP(cleanedName); // Set form RSVP kunjungan pertama
       } else {
         if (cleanedName.toLowerCase().trim() === savedOriginalName.toLowerCase().trim()) {
           guestElement.innerText = cleanedName;
-          sinkronkanNamaRSVP(cleanedName); // 🌟 Tambahan 4C: Jika cocok dengan nama asli, ijinkan
+          sinkronkanNamaRSVP(cleanedName); // Set form RSVP jika nama cocok
         } else {
-          
-          // 🌟 Tambahan 4D: JIKA TAMU MENCOBA GANTI URL SECARA ILEGAL!
-          // Form RSVP langsung dipaksa kembali ke nama asli (terkunci) sebelum modal PIN selesai.
+          // 🌟 SINKRONISASI: Deteksi manipulasi URL, langsung paksa form RSVP ke nama asli
           sinkronkanNamaRSVP(savedOriginalName); 
 
           if (securityModal) {
@@ -309,10 +314,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   } else if (guestElement) {
     guestElement.innerText = "Tamu Undangan";
-    sinkronkanNamaRSVP("Tamu Undangan"); // 🌟 Tambahan 4E: Jika tidak ada parameter URL (?to=)
+    sinkronkanNamaRSVP("Tamu Undangan");
   }
-
 });
+
 
 // =========================================================================
 // 1. URL WEB APP GOOGLE APPS SCRIPT ANDA (SUDAH TERSAMBUNG REKAP ABSENSI)
