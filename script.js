@@ -400,31 +400,11 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // =========================================================================
+   // =========================================================================
   // 3. MUAT ANGKA TOTAL DARI SPREADSHEET & UCAPAN LOKAL
   // =========================================================================
-  loadWishesFromLocal();
-  ambilDataCounterRealTime(); // <--- Panggil fungsi ini agar angka langsung terupdate saat web dibuka
+  loadWishesFromLocal(); // Cukup panggil fungsi ini saja, karena di dalamnya sudah ada fetch GET
 
-  function ambilDataCounterRealTime() {
-    // Ambil elemen angka berdasarkan ID asli yang ada di HTML kamu
-    const totalCommentsElement = document.getElementById('totalComments');
-    const hadirCountElement = document.getElementById('countHadir');
-    const tidakHadirCountElement = document.getElementById('countTidakHadir');
-
-    // Lakukan penjemputan data (GET) ke Google Apps Script
-    fetch(GOOGLE_SCRIPT_URL)
-      .then(response => response.json())
-      .then(data => {
-        // Suntikkan angka riil dari Google Sheets ke dalam tampilan web
-        if (totalCommentsElement) totalCommentsElement.innerText = data.totalComments;
-        if (hadirCountElement) hadirCountElement.innerText = data.hadir;
-        if (tidakHadirCountElement) tidakHadirCountElement.innerText = data.tidakHadir;
-      })
-      .catch(error => {
-        console.error("Sistem RSVP: Gagal sinkronisasi counter dengan Google Sheets.", error);
-      });
-  }
 
   // =========================================================================
 // 4. PROSES KIRIM DATA KE GOOGLE SHEETS SAAT FORM DI-SUBMIT
