@@ -2037,5 +2037,90 @@ section:has(+ #quote-section) {
   }
 }
 
+/* Styling Overlay Latar Belakang */
+.rsvp-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px); /* Efek blur estetik */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+/* Tampilan Aktif kirim rsvp Popup */
+.rsvp-modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Kartu Popup */
+.rsvp-modal-card {
+  background: #ffffff;
+  padding: 40px 30px;
+  border-radius: 16px;
+  max-width: 400px;
+  width: 85%;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  border: 1px solid #eae5d9;
+  transform: translateY(30px);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.rsvp-modal-overlay.active .rsvp-modal-card {
+  transform: translateY(0);
+}
+
+/* Icon Lingkaran */
+.rsvp-modal-icon {
+  width: 80px;
+  height: 80px;
+  background: #fdfbf7;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px auto;
+  border: 1px solid #f0e9dc;
+}
+
+/* Teks Pesan Asli */
+.rsvp-modal-text {
+  font-family: 'Inter', sans-serif; /* atau font undangan Anda */
+  font-size: 16px;
+  color: #4a4a4a;
+  line-height: 1.6;
+  margin-bottom: 28px;
+  font-weight: 500;
+}
+
+/* Tombol Tutup */
+.rsvp-modal-btn {
+  background: #8E7A5D; /* Warna emas bronze/earth tone */
+  color: #ffffff;
+  border: none;
+  padding: 12px 35px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(142, 122, 93, 0.2);
+  transition: all 0.3s ease;
+}
+
+.rsvp-modal-btn:hover {
+  background: #76644b;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(142, 122, 93, 0.3);
+}
 
 
