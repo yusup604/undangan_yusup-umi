@@ -287,47 +287,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+
 // =========================================================================
 // 1. URL WEB APP GOOGLE APPS SCRIPT ANDA (SUDAH TERSAMBUNG REKAP ABSENSI)
 // =========================================================================
 const GOOGLE_SCRIPT_URL = "https://google.com";
 
-// =========================================================================
-// 2. LOGIKA HITUNG MUNDUR (COUNTDOWN) - VARIABEL AMAN TIDAK BENTROK
-// =========================================================================
-const targetWeddingDateValue = new Date("Dec 31, 2026 08:00:00").getTime();
-
-const countdownTimer = setInterval(function() {
-  const now = new Date().getTime();
-  const distance = targetWeddingDateValue - now;
-
-  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-  const daysEl = document.getElementById("days");
-  const hoursEl = document.getElementById("hours");
-  const minutesEl = document.getElementById("minutes");
-  const secondsEl = document.getElementById("seconds");
-
-  if (daysEl) daysEl.innerText = days;
-  if (hoursEl) hoursEl.innerText = hours;
-  if (minutesEl) minutesEl.innerText = minutes;
-  if (secondsEl) secondsEl.innerText = seconds;
-
-  if (distance < 0) {
-    clearInterval(countdownTimer);
-    const countdownWrapper = document.getElementById("countdown");
-    if (countdownWrapper) countdownWrapper.innerHTML = "ACARA SUDAH DIMULAI";
-  }
-}, 1000);
-
 
 document.addEventListener("DOMContentLoaded", function () {
   
   // =========================================================================
-  // 3. AMBIL NAMA TAMU DARI URL (Contoh: ://domain.com)
+  // 2. AMBIL NAMA TAMU DARI URL (Contoh: ://domain.com)
   // =========================================================================
   const urlParams = new URLSearchParams(window.location.search);
   const guestParam = urlParams.get('to');
@@ -348,12 +318,12 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // =========================================================================
-  // 4. MUAT ANGKA TOTAL DARI SPREADSHEET & UCAPAN LOKAL
+  // 3. MUAT ANGKA TOTAL DARI SPREADSHEET & UCAPAN LOKAL
   // =========================================================================
   loadWishesFromLocal();
 
   // =========================================================================
-  // 5. PROSES KIRIM DATA ABSENSI KE GOOGLE SPREADSHEET
+  // 4. PROSES KIRIM DATA ABSENSI KE GOOGLE SPREADSHEET
   // =========================================================================
   const wishesForm = document.getElementById('wishesForm');
   if (wishesForm) {
@@ -383,7 +353,6 @@ document.addEventListener("DOMContentLoaded", function () {
         body: JSON.stringify(formData)
       })
       .then(() => {
-        // SUDAH DIPERBAIKI: Menghapus kata Caravan || yang salah ketik
         saveWishToLocal(nama, ucapan, kehadiran);
 
         document.getElementById('guestMessage').value = "";
@@ -404,7 +373,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // =========================================================================
-// 6. SIMPAN UCAPAN KE MEMORI LOKAL BROWSER (LOCALSTORAGE)
+// 5. SIMPAN UCAPAN KE MEMORI LOKAL BROWSER (LOCALSTORAGE)
 // =========================================================================
 function saveWishToLocal(nama, ucapan, kehadiran) {
   let wishes = [];
@@ -428,7 +397,7 @@ function saveWishToLocal(nama, ucapan, kehadiran) {
 }
 
 // =========================================================================
-// 7. TARIK ANGKA HITUNGAN RIIL SECARA REAL-TIME DARI GOOGLE SPREADSHEET
+// 6. TARIK ANGKA HITUNGAN RIIL SECARA REAL-TIME DARI GOOGLE SPREADSHEET
 // =========================================================================
 function loadWishesFromLocal() {
   var wishesList = document.getElementById("wishesList");
@@ -482,5 +451,3 @@ function loadWishesFromLocal() {
     wishesList.innerHTML = htmlContent;
   }
 }
-
-
