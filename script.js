@@ -402,52 +402,51 @@ document.addEventListener("DOMContentLoaded", function () {
   // =========================================================================
   loadWishesFromLocal();
 
-    // =========================================================================
-  // 4. PROSES KIRIM DATA KE GOOGLE SHEETS SAAT FORM DI-SUBMIT (FIXED UCAPAN)
+  // =========================================================================
+  // 4. PROSES KIRIM DATA KE GOOGLE SHEETS SAAT FORM DI-SUBMIT
   // =========================================================================
   const wishesForm = document.getElementById('wishesForm');
   if (wishesForm) {
     wishesForm.addEventListener('submit', function (e) {
       e.preventDefault(); 
 
-      // 1. Ambil semua data inputan tamu dengan aman
       const nama = document.getElementById('guestName').value;
       const ucapan = document.getElementById('guestMessage').value;
       const kehadiran = document.getElementById('guestAttendance').value;
 
-      // 2. Langsung amankan data ucapan ke Local Browser agar tidak hilang/kosong
-      saveWishToLocal(nama, ucapan, kehadiran);
-
-      // 3. Menyusun data kiriman ke Google Sheets
+      // MENYUSUN DATA: Menggunakan URLSearchParams agar Lolos CORS 100%
       const formData = new URLSearchParams();
       formData.append('nama', nama);
       formData.append('kehadiran', kehadiran);
-      formData.append('ucapan', ucapan); // Mengirim teks ucapan asli
+      formData.append('ucapan', ucapan); // <-- Data ucapan dikunci di sini untuk dikirim
 
       const submitBtn = wishesForm.querySelector('.btn-submit-wishes');
       const originalBtnText = submitBtn.innerText;
       submitBtn.innerText = "Mengirim...";
       submitBtn.disabled = true;
 
-      // 4. Kirim data lengkap ke Google Sheets
+      // Kirim data lengkap ke Google Sheets
       fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        body: formData
+        body: formData 
       })
       .then(response => response.json())
       .then((result) => {
-        // SINKRONISASI ANGKA COUNTER: Ambil statistik terbaru dari Sheets
+        // Teks Ucapan baru disimpan di Local Browser setelah server merespons sukses
+        saveWishToLocal(nama, ucapan, kehadiran);
+
+        // SINKRONISASI OTOMATIS: Jeda 1.5 detik agar spreadsheet selesai mencatat
         setTimeout(() => {
           if (typeof loadWishesFromLocal === "function") {
             loadWishesFromLocal();
           }
         }, 1500);
 
-        // RESET FORM INPUT DI SINI (Setelah data benar-benar sukses terkirim)
+        // RESET FORM INPUT (Aman dilakukan di sini karena data sudah sukses terkirim)
         document.getElementById('guestMessage').value = "";
         document.getElementById('guestAttendance').selectedIndex = 0;
 
-        // MENAMPILKAN POPUP MODAL KUSTOM SUCCESS
+        // MENAMPILKAN POPUP MODAL KUSTOM
         const rsvpModal = document.getElementById('rsvpModal');
         const closeRsvpModal = document.getElementById('closeRsvpModal');
 
@@ -475,6 +474,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
   }
+});
 
 
 // =========================================================================
