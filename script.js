@@ -402,7 +402,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // =========================================================================
   loadWishesFromLocal();
 
-  // =========================================================================
+    // =========================================================================
   // 4. PROSES KIRIM DATA KE GOOGLE SHEETS SAAT FORM DI-SUBMIT
   // =========================================================================
   const wishesForm = document.getElementById('wishesForm');
@@ -427,16 +427,15 @@ document.addEventListener("DOMContentLoaded", function () {
       submitBtn.innerText = "Mengirim...";
       submitBtn.disabled = true;
 
-            // Kirim absensi ke Google Sheets menggunakan Fetch API
+      // Kirim absensi ke Google Sheets menggunakan Fetch API
       fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         headers: {
-          // UBAH BARIS INI: Gunakan text/plain agar Google Apps Script tidak memicu error CORS di browser
-          'Content-Type': 'text/plain;charset=utf-8'
+          'Content-Type': 'text/plain;charset=utf-8' // Trik aman lolos dari proteksi CORS Google
         },
         body: JSON.stringify(formData)
       })
-      .then((response) => { // Ditambahkan parameter response agar alur fetch lebih stabil
+      .then((response) => {
         // Teks Ucapan HANYA disimpan di Local Browser (LocalStorage)
         saveWishToLocal(nama, ucapan, kehadiran);
 
@@ -471,6 +470,19 @@ document.addEventListener("DOMContentLoaded", function () {
           };
         }
       })
+      .catch((error) => {
+        console.error('Error:', error);
+        alert("Gagal mengirim data, silakan coba lagi.");
+      })
+      .finally(() => {
+        // Kembalikan teks tombol semula
+        submitBtn.innerText = originalBtnText;
+        submitBtn.disabled = false;
+      });
+    });
+  }
+});
+
 
 // =========================================================================
 // 5. SIMPAN UCAPAN KE MEMORI LOKAL BROWSER (LOCALSTORAGE)
