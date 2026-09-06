@@ -125,6 +125,17 @@ document.addEventListener('DOMContentLoaded', () => {
   let waktuBlokirDasar = 60; 
   let faktorPengali = 1;
 
+  // 🌟 LANGKAH 1: Tambahkan fungsi nama RSVP
+  function sinkronkanNamaRSVP(namaAman) {
+    // Mencari elemen input nama di form RSVP (pastikan ID 'rsvp-name' sesuai dengan HTML Anda)
+    const rsvpNameInput = document.getElementById('rsvp-name') || document.querySelector('.rsvp-input-name');
+    
+    if (rsvpNameInput) {
+      rsvpNameInput.value = namaAman; // Isi otomatis dengan nama yang aman
+      rsvpNameInput.readOnly = true;  // Kunci input agar tamu tidak bisa mengubahnya secara paksa
+    }
+  }
+
   async function hitungHashSHA256(teks) {
     const msgBuffer = new TextEncoder().encode(teks);
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
