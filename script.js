@@ -481,3 +481,12 @@ function loadWishesFromLocal() {
     wishesList.innerHTML = htmlContent;
   }
 }
+
+// Tambahkan fungsi ini di baris paling akhir file JavaScript Anda
+function tutupPopupRSVP() {
+  const successModal = document.getElementById('rsvpSuccessModal');
+  if (successModal) {
+    successModal.classList.remove('active');
+  }
+}
+
