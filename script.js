@@ -377,7 +377,7 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQ_YloF6OtJl
 document.addEventListener("DOMContentLoaded", function () {
   
   // =========================================================================
-  // 2. AMBIL NAMA TAMU DARI URL
+  // 2. AMBIL NAMA TAMU DARI URL (Fitur Kustom Nama Tamu)
   // =========================================================================
   const urlParams = new URLSearchParams(window.location.search);
   const guestParam = urlParams.get('to');
@@ -398,7 +398,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // =========================================================================
-  // 3. MUAT ANGKA TOTAL DARI SPREADSHEET Saat Web Dibuka
+  // 3. MUAT DATA DAN HITUNGAN STATISTIK DARI SPREADSHEET Saat Web Dibuka
   // =========================================================================
   loadWishesFromLocal();
 
@@ -414,24 +414,25 @@ document.addEventListener("DOMContentLoaded", function () {
       const ucapan = document.getElementById('guestMessage').value;
       const kehadiran = document.getElementById('guestAttendance').value;
 
-      // METODE BARU: Menggunakan URLSearchParams agar Lolos CORS 100%
+      // MENYUSUN DATA: Menggunakan URLSearchParams agar Lolos CORS 100%
       const formData = new URLSearchParams();
       formData.append('nama', nama);
       formData.append('kehadiran', kehadiran);
+      formData.append('ucapan', ucapan); // <-- Sudah ditambahkan agar ucapan masuk spreadsheet
 
       const submitBtn = wishesForm.querySelector('.btn-submit-wishes');
       const originalBtnText = submitBtn.innerText;
       submitBtn.innerText = "Mengirim...";
       submitBtn.disabled = true;
 
-      // Kirim data ke Google Sheets
+      // Kirim data lengkap ke Google Sheets
       fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        body: formData // Kirim sebagai form-urlencoded tanpa header JSON mentah
+        body: formData // Kirim sebagai form-urlencoded
       })
       .then(response => response.json())
       .then((result) => {
-        // Teks Ucapan disimpan di Local Browser (LocalStorage)
+        // Teks Ucapan disimpan di Local Browser (LocalStorage) untuk tampilan instan
         saveWishToLocal(nama, ucapan, kehadiran);
 
         // SINKRONISASI OTOMATIS: Jeda 1.5 detik agar spreadsheet selesai mencatat
@@ -441,7 +442,7 @@ document.addEventListener("DOMContentLoaded", function () {
           }
         }, 1500);
 
-        // Reset form input
+        // Reset form input setelah sukses
         document.getElementById('guestMessage').value = "";
         document.getElementById('guestAttendance').selectedIndex = 0;
 
@@ -476,7 +477,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // =========================================================================
-// 5. SIMPAN UCAPAN KE MEMORI LOKAL BROWSER
+// 5. SIMPAN UCAPAN KE MEMORI LOKAL BROWSER (LOCALSTORAGE)
 // =========================================================================
 function saveWishToLocal(nama, ucapan, kehadiran) {
   let wishes = [];
@@ -499,7 +500,7 @@ function saveWishToLocal(nama, ucapan, kehadiran) {
 }
 
 // =========================================================================
-// 6. TARIK ANGKA HITUNGAN REAL-TIME DARI SPREADSHEET
+// 6. TARIK ANGKA HITUNGAN REAL-TIME DARI GOOGLE SPREADSHEET
 // =========================================================================
 function loadWishesFromLocal() {
   var wishesList = document.getElementById("wishesList");
@@ -507,7 +508,7 @@ function loadWishesFromLocal() {
   var countHadirOpt = document.getElementById("countHadir");
   var countTidakHadirOpt = document.getElementById("countTidakHadir");
 
-  if (GOOGLE_SCRIPT_URL) {
+  if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== "PASTE_URL_APLIKASI_WEB_ANDA_DISINI") {
     var cacheBusterUrl = GOOGLE_SCRIPT_URL + "?_" + new Date().getTime();
 
     fetch(cacheBusterUrl, {
@@ -520,7 +521,7 @@ function loadWishesFromLocal() {
     })
     .then(function(data) {
       if (data) {
-        // Angka web diubah secara real-time mengikuti database Google Sheets
+        // Angka counter diubah secara real-time mengikuti database Google Sheets
         if (totalCommentsOpt) totalCommentsOpt.innerText = data.totalComments || 0;
         if (countHadirOpt) countHadirOpt.innerText = data.hadir || 0;
         if (countTidakHadirOpt) countTidakHadirOpt.innerText = data.tidakHadir || 0;
@@ -531,6 +532,7 @@ function loadWishesFromLocal() {
     });
   }
 
+  // Merender daftar ucapan yang tersimpan di LocalStorage ke halaman Web
   var wishes = [];
   try {
     wishes = JSON.parse(localStorage.getItem("wedding_wishes")) || [];
@@ -557,10 +559,14 @@ function loadWishesFromLocal() {
   }
 }
 
+// =========================================================================
+// 7. FUNGSI UNTUK MENUTUP POPUP MODAL RSVP SUCCESS
+// =========================================================================
 function tutupPopupRSVP() {
   const successModal = document.getElementById('rsvpSuccessModal');
   if (successModal) {
     successModal.classList.remove('active');
   }
 }
+
 
