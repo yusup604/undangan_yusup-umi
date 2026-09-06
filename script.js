@@ -358,33 +358,39 @@ document.addEventListener("DOMContentLoaded", function () {
   const wishesForm = document.getElementById('wishesForm');
   if (wishesForm) {
     wishesForm.addEventListener('submit', function (e) {
-      e.preventDefault(); 
+      e.preventDefault(); // Mencegah halaman reload otomatis
 
+      // Ambil nilai dari input form
       const nama = document.getElementById('guestName').value;
       const ucapan = document.getElementById('guestMessage').value;
       const kehadiran = document.getElementById('guestAttendance').value;
 
+      // Data yang akan dikirim ke Google Sheets (Hanya Nama & Kehadiran, Tanpa Ucapan)
       const formData = {
         nama: nama,
         kehadiran: kehadiran
       };
 
+      // Efek loading pada tombol kirim
       const submitBtn = wishesForm.querySelector('.btn-submit-wishes');
       const originalBtnText = submitBtn.innerText;
       submitBtn.innerText = "Mengirim...";
       submitBtn.disabled = true;
 
+      // Kirim absensi ke Google Sheets menggunakan Fetch API
       fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        mode: 'no-cors', 
+        mode: 'no-cors', // Menghindari kendala CORS kebijakan Google
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(formData)
       })
       .then(() => {
+        // Teks Ucapan HANYA disimpan di Local Browser (LocalStorage)
         saveWishToLocal(nama, ucapan, kehadiran);
 
+        // Reset form input (Kecuali kolom Nama agar nama tamu tetap tertera)
         document.getElementById('guestMessage').value = "";
         document.getElementById('guestAttendance').selectedIndex = 0;
 
@@ -395,6 +401,7 @@ document.addEventListener("DOMContentLoaded", function () {
         alert("Gagal mengirim data, silakan coba lagi.");
       })
       .finally(() => {
+        // Kembalikan teks tombol semula
         submitBtn.innerText = originalBtnText;
         submitBtn.disabled = false;
       });
