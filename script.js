@@ -287,12 +287,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-
 // =========================================================================
 // 1. URL WEB APP GOOGLE APPS SCRIPT ANDA (SUDAH TERSAMBUNG REKAP ABSENSI)
 // =========================================================================
 const GOOGLE_SCRIPT_URL = "https://google.com";
-
 
 document.addEventListener("DOMContentLoaded", function () {
   
