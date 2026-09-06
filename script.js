@@ -370,14 +370,14 @@ function tutupPopupRSVP() {
 }
 
 // =========================================================================
-// 1. URL WEB APP GOOGLE APPS SCRIPT ANDA (SUDAH TERSAMBUNG REKAP ABSENSI)
+// 1. URL WEB APP GOOGLE APPS SCRIPT ANDA
 // =========================================================================
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQ_YloF6OtJlqydibxLghluIRRyaATltZmbQyK-qsDblejaLgIb65yBSjEvaLOdGesSA/exec";
+const GOOGLE_SCRIPT_URL = "https://google.com";
 
 document.addEventListener("DOMContentLoaded", function () {
   
   // =========================================================================
-  // 2. AMBIL NAMA TAMU DARI URL (Contoh: ://domain.com)
+  // 2. AMBIL NAMA TAMU DARI URL (Contoh: ?to=Nama+Tamu)
   // =========================================================================
   const urlParams = new URLSearchParams(window.location.search);
   const guestParam = urlParams.get('to');
@@ -402,7 +402,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // =========================================================================
   loadWishesFromLocal();
 
-    // =========================================================================
+  // =========================================================================
   // 4. PROSES KIRIM DATA KE GOOGLE SHEETS SAAT FORM DI-SUBMIT
   // =========================================================================
   const wishesForm = document.getElementById('wishesForm');
@@ -415,7 +415,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const ucapan = document.getElementById('guestMessage').value;
       const kehadiran = document.getElementById('guestAttendance').value;
 
-      // Data yang akan dikirim ke Google Sheets (Hanya Nama & Kehadiran, Tanpa Ucapan)
+      // Data yang akan dikirim ke Google Sheets
       const formData = {
         nama: nama,
         kehadiran: kehadiran
@@ -427,62 +427,60 @@ document.addEventListener("DOMContentLoaded", function () {
       submitBtn.innerText = "Mengirim...";
       submitBtn.disabled = true;
 
-      // Kirim absensi ke Google Sheets menggunakan Fetch API
-fetch(GOOGLE_SCRIPT_URL, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'text/plain;charset=utf-8' // Trik aman lolos dari proteksi CORS Google
-  },
-  body: JSON.stringify(formData)
-})
-// ==================== PERBAIKAN DI SINI ====================
-.then((response) => response.json()) // << Tambahkan baris ini agar browser bisa membaca data dari Google Sheets
-.then((result) => {                  // << Ubah response menjadi result di sini
-// ===========================================================
-  // Teks Ucapan HANYA disimpan di Local Browser (LocalStorage)
-  saveWishToLocal(nama, ucapan, kehadiran);
+      // Kirim absensi ke Google Sheets menggunakan Fetch API standar
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8' // Trik lolos proteksi CORS
+        },
+        body: JSON.stringify(formData)
+      })
+      .then((response) => response.json()) // Mengubah respons menjadi JSON agar bisa dibaca web
+      .then((result) => {
+        // Teks Ucapan HANYA disimpan di Local Browser (LocalStorage)
+        saveWishToLocal(nama, ucapan, kehadiran);
 
-  // SINKRONISASI OTOMATIS: Beri jeda 2.5 detik agar Sheets selesai mencatat baris baru
-  setTimeout(() => {
-    if (typeof loadWishesFromLocal === "function") {
-      loadWishesFromLocal();
-    }
-  }, 2500);
+        // SINKRONISASI OTOMATIS: Beri jeda 2.5 detik agar Sheets selesai mencatat baris baru
+        setTimeout(() => {
+          if (typeof loadWishesFromLocal === "function") {
+            loadWishesFromLocal();
+          }
+        }, 2500);
 
-  // Reset form input (Kecuali kolom Nama agar nama tamu tetap tertera)
-  document.getElementById('guestMessage').value = "";
-  document.getElementById('guestAttendance').selectedIndex = 0;
+        // Reset form input (Kecuali kolom Nama)
+        document.getElementById('guestMessage').value = "";
+        document.getElementById('guestAttendance').selectedIndex = 0;
 
-  // MENAMPILKAN POPUP MODAL KUSTOM (PENGGANTI ALERT)
-  const rsvpModal = document.getElementById('rsvpModal');
-  const closeRsvpModal = document.getElementById('closeRsvpModal');
+        // MENAMPILKAN POPUP MODAL KUSTOM (PENGGANTI ALERT)
+        const rsvpModal = document.getElementById('rsvpModal');
+        const closeRsvpModal = document.getElementById('closeRsvpModal');
 
-  if (rsvpModal && closeRsvpModal) {
-    rsvpModal.classList.add('show');
+        if (rsvpModal && closeRsvpModal) {
+          rsvpModal.classList.add('show');
 
-    // Fungsi menutup modal saat tombol OK diklik
-    closeRsvpModal.onclick = function () {
-      rsvpModal.classList.remove('show');
-    };
+          closeRsvpModal.onclick = function () {
+            rsvpModal.classList.remove('show');
+          };
 
-    // Menutup modal jika area di luar kotak putih diklik
-    rsvpModal.onclick = function (event) {
-      if (event.target === rsvpModal) {
-        rsvpModal.classList.remove('show');
-      }
-    };
+          rsvpModal.onclick = function (event) {
+            if (event.target === rsvpModal) {
+              rsvpModal.classList.remove('show');
+            }
+          };
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        alert("Gagal mengirim data, silakan coba lagi.");
+      })
+      .finally(() => {
+        // Kembalikan teks tombol semula
+        submitBtn.innerText = originalBtnText;
+        submitBtn.disabled = false;
+      });
+    });
   }
-}) // << Pastikan ada tanda kurung penutup untuk .then((result) =>
-.catch((error) => {
-  console.error('Error:', error);
-  alert("Gagal mengirim data, silakan coba lagi.");
-})
-.finally(() => {
-  // Kembalikan teks tombol semula
-  submitBtn.innerText = originalBtnText;
-  submitBtn.disabled = false;
 });
-
 
 // =========================================================================
 // 5. SIMPAN UCAPAN KE MEMORI LOKAL BROWSER (LOCALSTORAGE)
@@ -518,27 +516,26 @@ function loadWishesFromLocal() {
   var countTidakHadirOpt = document.getElementById("countTidakHadir");
 
   if (GOOGLE_SCRIPT_URL) {
-    // Trik Cache Buster (?_=timestamp) agar browser dipaksa menarik angka terbaru
     var cacheBusterUrl = GOOGLE_SCRIPT_URL + "?_" + new Date().getTime();
 
     fetch(cacheBusterUrl, {
       method: "GET",
-      redirect: "follow" // Menembus proteksi CORS kebijakan pengalihan Google
+      redirect: "follow"
     })
-      .then(function(response) {
-        if (!response.ok) throw new Error("Network error");
-        return response.json();
-      })
-      .then(function(data) {
-        if (data) {
-          if (totalCommentsOpt) totalCommentsOpt.innerText = data.totalComments || 0;
-          if (countHadirOpt) countHadirOpt.innerText = data.hadir || 0;
-          if (countTidakHadirOpt) countTidakHadirOpt.innerText = data.tidakHadir || 0;
-        }
-      })
-      .catch(function(err) {
-        console.error("Gagal memuat statistik dari Sheets:", err);
-      });
+    .then(function(response) {
+      if (!response.ok) throw new Error("Network error");
+      return response.json();
+    })
+    .then(function(data) {
+      if (data) {
+        if (totalCommentsOpt) totalCommentsOpt.innerText = data.totalComments || 0;
+        if (countHadirOpt) countHadirOpt.innerText = data.hadir || 0;
+        if (countTidakHadirOpt) countTidakHadirOpt.innerText = data.tidakHadir || 0;
+      }
+    })
+    .catch(function(err) {
+      console.error("Gagal memuat statistik dari Sheets:", err);
+    });
   }
 
   var wishes = [];
@@ -567,11 +564,9 @@ function loadWishesFromLocal() {
   }
 }
 
-// Tambahkan fungsi ini di baris paling akhir file JavaScript Anda
 function tutupPopupRSVP() {
   const successModal = document.getElementById('rsvpSuccessModal');
   if (successModal) {
     successModal.classList.remove('active');
   }
 }
-
