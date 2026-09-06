@@ -188,15 +188,32 @@ document.addEventListener('DOMContentLoaded', () => {
       periksaRiwayatBlokir();
 
       if (guestElement) guestElement.innerText = targetCleanedName;
+      
+      // Menutup modal utama input PIN
       if (securityModal) securityModal.classList.remove('active');
       
-      document.body.style.overflow = "auto";
-      document.body.style.height = "auto";
-
       modalPinInput.value = "";
       if (modalErrorMessage) modalErrorMessage.style.display = "none";
       
-      alert("👑 Akses Terverifikasi! Status Perangkat Diperbarui Sebagai Pemilik.");
+      // Memunculkan Modal Pop-up Sukses Profesional yang Baru
+      const verifiedSuccessModal = document.getElementById('verifiedSuccessModal');
+      const btnSecSuccessClose = document.getElementById('btnSecSuccessClose');
+      
+      if (verifiedSuccessModal) {
+        verifiedSuccessModal.classList.add('active');
+      }
+
+      // Menangani penutupan pop-up ketika tombol "Lanjutkan" diklik
+      if (btnSecSuccessClose) {
+        btnSecSuccessClose.onclick = function() {
+          verifiedSuccessModal.classList.remove('active');
+          
+          // Mengembalikan scroll halaman setelah pop-up sukses ditutup resmi oleh pemilik
+          document.body.style.overflow = "auto";
+          document.body.style.height = "auto";
+        };
+      }
+      
     } else {
       // PIN SALAH
       salahHitung++;
@@ -242,7 +259,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   }
-
   // 2. FUNGSI UTAMA: PEMBATALAN AKSES / KEMBALI
   function batalkanVerifikasi() {
     const savedOriginalName = localStorage.getItem('guest_original_name');
