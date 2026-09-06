@@ -402,51 +402,52 @@ document.addEventListener("DOMContentLoaded", function () {
   // =========================================================================
   loadWishesFromLocal();
 
-  // =========================================================================
-  // 4. PROSES KIRIM DATA KE GOOGLE SHEETS SAAT FORM DI-SUBMIT
+    // =========================================================================
+  // 4. PROSES KIRIM DATA KE GOOGLE SHEETS SAAT FORM DI-SUBMIT (FIXED UCAPAN)
   // =========================================================================
   const wishesForm = document.getElementById('wishesForm');
   if (wishesForm) {
     wishesForm.addEventListener('submit', function (e) {
       e.preventDefault(); 
 
+      // 1. Ambil semua data inputan tamu dengan aman
       const nama = document.getElementById('guestName').value;
       const ucapan = document.getElementById('guestMessage').value;
       const kehadiran = document.getElementById('guestAttendance').value;
 
-      // MENYUSUN DATA: Menggunakan URLSearchParams agar Lolos CORS 100%
+      // 2. Langsung amankan data ucapan ke Local Browser agar tidak hilang/kosong
+      saveWishToLocal(nama, ucapan, kehadiran);
+
+      // 3. Menyusun data kiriman ke Google Sheets
       const formData = new URLSearchParams();
       formData.append('nama', nama);
       formData.append('kehadiran', kehadiran);
-      formData.append('ucapan', ucapan); // <-- Sudah ditambahkan agar ucapan masuk spreadsheet
+      formData.append('ucapan', ucapan); // Mengirim teks ucapan asli
 
       const submitBtn = wishesForm.querySelector('.btn-submit-wishes');
       const originalBtnText = submitBtn.innerText;
       submitBtn.innerText = "Mengirim...";
       submitBtn.disabled = true;
 
-      // Kirim data lengkap ke Google Sheets
+      // 4. Kirim data lengkap ke Google Sheets
       fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        body: formData // Kirim sebagai form-urlencoded
+        body: formData
       })
       .then(response => response.json())
       .then((result) => {
-        // Teks Ucapan disimpan di Local Browser (LocalStorage) untuk tampilan instan
-        saveWishToLocal(nama, ucapan, kehadiran);
-
-        // SINKRONISASI OTOMATIS: Jeda 1.5 detik agar spreadsheet selesai mencatat
+        // SINKRONISASI ANGKA COUNTER: Ambil statistik terbaru dari Sheets
         setTimeout(() => {
           if (typeof loadWishesFromLocal === "function") {
             loadWishesFromLocal();
           }
         }, 1500);
 
-        // Reset form input setelah sukses
+        // RESET FORM INPUT DI SINI (Setelah data benar-benar sukses terkirim)
         document.getElementById('guestMessage').value = "";
         document.getElementById('guestAttendance').selectedIndex = 0;
 
-        // MENAMPILKAN POPUP MODAL KUSTOM
+        // MENAMPILKAN POPUP MODAL KUSTOM SUCCESS
         const rsvpModal = document.getElementById('rsvpModal');
         const closeRsvpModal = document.getElementById('closeRsvpModal');
 
@@ -474,7 +475,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
   }
-});
+
 
 // =========================================================================
 // 5. SIMPAN UCAPAN KE MEMORI LOKAL BROWSER (LOCALSTORAGE)
