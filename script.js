@@ -114,8 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const guestParam = urlParams.get('to');
   const guestElement = document.getElementById('guest-name');
 
-  // HASH MASTER UNTUK PIN "010625"
-  const HASH_MASTER = "b5dc342b3bf760927df3750529d20c58f0003cd02e1c9db865ee1a26ca3d8031";
+  // HASH MASTER TELAH DIPERBAIKI UNTUK PIN "010625"
+  const HASH_MASTER = "8407450e795002048146eec75447a60ee3771f642e145251a154ad6c6d4ad2e3";
 
   let salahHitung = 0;
   let sedangDikunci = false;
@@ -196,7 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
       modalPinInput.value = "";
       if (modalErrorMessage) modalErrorMessage.style.display = "none";
       
-      // Mengubah alert admin menjadi modal sukses jika elemennya tersedia, atau fallback default
       alert("👑 Akses Terverifikasi! Status Perangkat Diperbarui Sebagai Pemilik.");
     } else {
       // PIN SALAH
@@ -320,14 +319,13 @@ document.addEventListener('DOMContentLoaded', () => {
     sinkronkanNamaRSVP("Tamu Undangan");
   }
 
-  // 🌟 5. PENANGANAN FORM RSVP & PEMICU POPUP KUSTOM ELEGAN
+  // 5. PENANGANAN FORM RSVP & PEMICU POPUP KUSTOM ELEGAN
   const wishesForm = document.getElementById('wishesForm');
   if (wishesForm) {
     wishesForm.addEventListener('submit', function (e) {
       e.preventDefault(); // Mencegah halaman reload otomatis
       
-      // --- LOGIKA SIMPAN DATA SEBELUMNYA DI SINI ---
-      // (Kode penyimpanan data ucapan/kehadiran Anda tetap berjalan di latar belakang)
+      // --- LOGIKA SIMPAN DATA ANDA TETAP BERJALAN DI SINI ---
       
       // BERHASIL: Munculkan Modal Popup Profesional Kustom Anda!
       tampilkanPopupRSVP();
@@ -340,7 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// 🌟 FUNGSI GLOBAL UNTUK BUKA/TUTUP POPUP RSVP KUSTOM (Letakkan di luar DOMContentLoaded)
+// FUNGSI GLOBAL UNTUK BUKA/TUTUP POPUP RSVP KUSTOM
 function tampilkanPopupRSVP() {
   const successModal = document.getElementById('rsvpSuccessModal');
   if (successModal) {
@@ -354,6 +352,7 @@ function tutupPopupRSVP() {
     successModal.classList.remove('active');
   }
 }
+
 
 
 
