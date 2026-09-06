@@ -517,7 +517,11 @@ function loadWishesFromLocal() {
   var countTidakHadirOpt = document.getElementById("countTidakHadir");
 
   if (GOOGLE_SCRIPT_URL) {
-    fetch(GOOGLE_SCRIPT_URL)
+    // 🌟 PERBAIKAN UTAMA: Tambahkan opsi metode GET dan redirect agar tembus kebijakan CORS
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: "GET",
+      redirect: "follow"
+    })
       .then(function(response) {
         if (!response.ok) throw new Error("Network error");
         return response.json();
@@ -531,9 +535,7 @@ function loadWishesFromLocal() {
       })
       .catch(function(err) {
         console.error("Gagal memuat statistik dari Sheets:", err);
-        if (totalCommentsOpt) totalCommentsOpt.innerText = "0";
-        if (countHadirOpt) countHadirOpt.innerText = "0";
-        if (countTidakHadirOpt) countTidakHadirOpt.innerText = "0";
+        // Baris paksaan kembalikan ke "0" dihapus agar tidak menimpa data yang sedang berjalan
       });
   }
 
