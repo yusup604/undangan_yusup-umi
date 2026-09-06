@@ -282,14 +282,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (isAdmin) {
       guestElement.innerText = cleanedName;
+      sinkronkanNamaRSVP(cleanedName); // 🌟 Tambahan 4A: Jika admin, ijinkan nama URL masuk RSVP
     } else {
       if (!savedOriginalName) {
         localStorage.setItem('guest_original_name', cleanedName);
         guestElement.innerText = cleanedName;
+        sinkronkanNamaRSVP(cleanedName); // 🌟 Tambahan 4B: Kunjungan pertama, set nama asli ke RSVP
       } else {
         if (cleanedName.toLowerCase().trim() === savedOriginalName.toLowerCase().trim()) {
           guestElement.innerText = cleanedName;
+          sinkronkanNamaRSVP(cleanedName); // 🌟 Tambahan 4C: Jika cocok dengan nama asli, ijinkan
         } else {
+          
+          // 🌟 Tambahan 4D: JIKA TAMU MENCOBA GANTI URL SECARA ILEGAL!
+          // Form RSVP langsung dipaksa kembali ke nama asli (terkunci) sebelum modal PIN selesai.
+          sinkronkanNamaRSVP(savedOriginalName); 
+
           if (securityModal) {
             securityModal.classList.add('active');
             document.body.style.overflow = "hidden";
@@ -301,7 +309,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   } else if (guestElement) {
     guestElement.innerText = "Tamu Undangan";
+    sinkronkanNamaRSVP("Tamu Undangan"); // 🌟 Tambahan 4E: Jika tidak ada parameter URL (?to=)
   }
+
 });
 
 // =========================================================================
