@@ -403,86 +403,72 @@ document.addEventListener("DOMContentLoaded", function () {
   loadWishesFromLocal();
 
   // =========================================================================
-  // 4. PROSES KIRIM DATA KE GOOGLE SHEETS SAAT FORM DI-SUBMIT
-  // =========================================================================
-  const wishesForm = document.getElementById('wishesForm');
-  if (wishesForm) {
-    wishesForm.addEventListener('submit', function (e) {
-      e.preventDefault(); // Mencegah halaman reload otomatis
+// 4. PROSES KIRIM DATA KE GOOGLE SHEETS SAAT FORM DI-SUBMIT
+// =========================================================================
+const wishesForm = document.getElementById('wishesForm');
+if (wishesForm) {
+  wishesForm.addEventListener('submit', function (e) {
+    e.preventDefault();
 
-      // Ambil nilai dari input form
-      const nama = document.getElementById('guestName').value;
-      const ucapan = document.getElementById('guestMessage').value;
-      const kehadiran = document.getElementById('guestAttendance').value;
+    const nama = document.getElementById('guestName').value;
+    const ucapan = document.getElementById('guestMessage').value;
+    const kehadiran = document.getElementById('guestAttendance').value;
 
-      // Data yang akan dikirim ke Google Sheets (Hanya Nama & Kehadiran, Tanpa Ucapan)
-      const formData = {
-        nama: nama,
-        kehadiran: kehadiran
-      };
+    const formData = {
+      nama: nama,
+      kehadiran: kehadiran
+    };
 
-      // Efek loading pada tombol kirim
-      const submitBtn = wishesForm.querySelector('.btn-submit-wishes');
-      const originalBtnText = submitBtn.innerText;
-      submitBtn.innerText = "Mengirim...";
-      submitBtn.disabled = true;
+    const submitBtn = wishesForm.querySelector('.btn-submit-wishes');
+    const originalBtnText = submitBtn.innerText;
+    submitBtn.innerText = "Mengirim...";
+    submitBtn.disabled = true;
 
-      // Kirim absensi ke Google Sheets menggunakan Fetch API
-      fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors', // Menghindari kendala CORS kebijakan Google
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      })
-      .then(() => {
-        // Teks Ucapan HANYA disimpan di Local Browser (LocalStorage)
-        saveWishToLocal(nama, ucapan, kehadiran);
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formData)
+    })
+    .then(() => {
+      // Simpan ucapan ke LocalStorage terlebih dahulu
+      saveWishToLocal(nama, ucapan, kehadiran);
 
-        // SINKRONISASI OTOMATIS: Ambil angka terbaru dari Sheets setelah jeda 1 detik
-        setTimeout(() => {
-          if (typeof loadWishesFromLocal === "function") {
-            loadWishesFromLocal();
-          }
-        }, 1000);
-
-        // Reset form input (Kecuali kolom Nama agar nama tamu tetap tertera)
-        document.getElementById('guestMessage').value = "";
-        document.getElementById('guestAttendance').selectedIndex = 0;
-
-        // MENAMPILKAN POPUP MODAL KUSTOM (PENGGANTI ALERT)
-        const rsvpModal = document.getElementById('rsvpModal');
-        const closeRsvpModal = document.getElementById('closeRsvpModal');
-
-        if (rsvpModal && closeRsvpModal) {
-          rsvpModal.classList.add('show');
-
-          // Fungsi menutup modal saat tombol OK diklik
-          closeRsvpModal.onclick = function () {
-            rsvpModal.classList.remove('show');
-          };
-
-          // Menutup modal jika area di luar kotak putih diklik
-          rsvpModal.onclick = function (event) {
-            if (event.target === rsvpModal) {
-              rsvpModal.classList.remove('show');
-            }
-          };
+      // 🌟 PERBAIKAN: Beri jeda 2.5 detik agar Google Sheets selesai memproses baris baru
+      setTimeout(() => {
+        if (typeof loadWishesFromLocal === "function") {
+          loadWishesFromLocal();
         }
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        alert("Gagal mengirim data, silakan coba lagi.");
-      })
-      .finally(() => {
-        // Kembalikan teks tombol semula
-        submitBtn.innerText = originalBtnText;
-        submitBtn.disabled = false;
-      });
+      }, 2500);
+
+      // Reset form input (Kecuali kolom Nama agar nama tamu tetap tertera)
+      document.getElementById('guestMessage').value = "";
+      document.getElementById('guestAttendance').selectedIndex = 0;
+
+      // MENAMPILKAN POPUP MODAL KUSTOM
+      const rsvpModal = document.getElementById('rsvpModal');
+      const closeRsvpModal = document.getElementById('closeRsvpModal');
+
+      if (rsvpModal && closeRsvpModal) {
+        rsvpModal.classList.add('show');
+        closeRsvpModal.onclick = function () { rsvpModal.classList.remove('show'); };
+        rsvpModal.onclick = function (event) { if (event.target === rsvpModal) rsvpModal.classList.remove('show'); };
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      alert("Gagal mengirim data, silakan coba lagi.");
+    })
+    .finally(() => {
+      submitBtn.innerText = originalBtnText;
+      submitBtn.disabled = false;
     });
-  }
-});
+  });
+}
+
+  
 // =========================================================================
 // 5. SIMPAN UCAPAN KE MEMORI LOKAL BROWSER (LOCALSTORAGE)
 // =========================================================================
