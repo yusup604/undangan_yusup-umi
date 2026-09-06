@@ -290,7 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // =========================================================================
 // 1. URL WEB APP GOOGLE APPS SCRIPT ANDA (SUDAH TERSAMBUNG REKAP ABSENSI)
 // =========================================================================
-const GOOGLE_SCRIPT_URL = "https://google.com";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQ_YloF6OtJlqydibxLghluIRRyaATltZmbQyK-qsDblejaLgIb65yBSjEvaLOdGesSA/exec";
 
 document.addEventListener("DOMContentLoaded", function () {
   
