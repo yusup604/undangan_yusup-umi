@@ -177,7 +177,10 @@ document.addEventListener('DOMContentLoaded', () => {
       faktorPengali = 1; 
       localStorage.setItem('invitation_admin', 'true');
       localStorage.setItem('guest_original_name', targetCleanedName);
-      
+
+            // 🌟 LANGKAH 2: Masukkan baris ini agar form RSVP mengikuti nama baru yang diizinkan Admin
+      sinkronkanNamaRSVP(targetCleanedName);
+
       // 🌟 PERBAIKAN BARU: Hapus tanda "ACCESS LOCKED" mini secara permanen karena pemilik sah berhasil masuk
       localStorage.removeItem('security_breach_detected');
       periksaRiwayatBlokir();
