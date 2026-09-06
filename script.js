@@ -275,7 +275,7 @@ if (guestElement && guestParam) {
       if (cleanedName.toLowerCase().trim() === savedOriginalName.toLowerCase().trim()) {
         guestElement.innerText = cleanedName;
       } else {
-        // [PERBAIKAN] Jika nama diganti & PIN salah/belum diisi, PAKSA nama kembali ke nama asli yang tersimpan!
+        // Jika nama diganti tapi PIN belum diisi/salah, tampilkan nama asli dari localStorage
         guestElement.innerText = savedOriginalName;
 
         if (securityModal) {
@@ -288,18 +288,23 @@ if (guestElement && guestParam) {
     }
   }
 } else if (guestElement) {
-  // Jika tidak ada parameter URL, gunakan nama asli yang tersimpan atau default
   const savedOriginalName = localStorage.getItem('guest_original_name');
   guestElement.innerText = savedOriginalName ? savedOriginalName : "Tamu Undangan";
 }
 
-// [TAMBAHAN BENTENG RSVP] Singkronisasi langsung ke Form RSVP Page 9
-const rsvpInputName = document.getElementById('guestName');
-if (rsvpInputName && guestElement) {
-  rsvpInputName.value = guestElement.innerText; // Mengambil nilai dari elemen depan yang sudah aman
-  rsvpInputName.setAttribute('readonly', true);  // Mengunci kolom agar tidak bisa diketik manual
-  rsvpInputName.style.backgroundColor = "#f3f4f6"; // Memberikan warna abu-abu tanda terkunci
+// [PERBAIKAN AMAN] Jalankan fungsi sinkronisasi RSVP tanpa merusak kode utama
+try {
+  const rsvpInputName = document.getElementById('guestName');
+  const currentValidName = guestElement ? guestElement.innerText : "";
+  
+  if (rsvpInputName && currentValidName) {
+    rsvpInputName.value = currentValidName;
+    rsvpInputName.setAttribute('readonly', true);
+  }
+} catch (error) {
+  console.log("Form RSVP belum dimuat sepenuhnya, dilewati agar tidak error:", error);
 }
+
 
 
 // =========================================================================
