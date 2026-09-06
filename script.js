@@ -427,16 +427,16 @@ document.addEventListener("DOMContentLoaded", function () {
       submitBtn.innerText = "Mengirim...";
       submitBtn.disabled = true;
 
-      // Kirim absensi ke Google Sheets menggunakan Fetch API
+            // Kirim absensi ke Google Sheets menggunakan Fetch API
       fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        
         headers: {
-          'Content-Type': 'application/json'
+          // UBAH BARIS INI: Gunakan text/plain agar Google Apps Script tidak memicu error CORS di browser
+          'Content-Type': 'text/plain;charset=utf-8'
         },
         body: JSON.stringify(formData)
       })
-      .then(() => {
+      .then((response) => { // Ditambahkan parameter response agar alur fetch lebih stabil
         // Teks Ucapan HANYA disimpan di Local Browser (LocalStorage)
         saveWishToLocal(nama, ucapan, kehadiran);
 
@@ -471,18 +471,7 @@ document.addEventListener("DOMContentLoaded", function () {
           };
         }
       })
-      .catch((error) => {
-        console.error('Error:', error);
-        alert("Gagal mengirim data, silakan coba lagi.");
-      })
-      .finally(() => {
-        // Kembalikan teks tombol semula
-        submitBtn.innerText = originalBtnText;
-        submitBtn.disabled = false;
-      });
-    });
-  }
-});
+
 // =========================================================================
 // 5. SIMPAN UCAPAN KE MEMORI LOKAL BROWSER (LOCALSTORAGE)
 // =========================================================================
