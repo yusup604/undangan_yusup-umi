@@ -114,7 +114,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const guestParam = urlParams.get('to');
   const guestElement = document.getElementById('guest-name');
 
-  const HASH_MASTER = "b90e97f4eae90b89fae27840e851ea9802d84f8d512a58bf5460f926b5ab4717"; 
+
+  const HASH_MASTER = "b5dc342b3bf760927df3750529d20c58f0003cd02e1c9db865ee1a26ca3d8031";
+
 
   let salahHitung = 0;
   let sedangDikunci = false;
