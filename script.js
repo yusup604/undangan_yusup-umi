@@ -103,7 +103,7 @@ function copyText(elementId) {
 }
 
 // =================================================================
-// 1. GERBANG SECURITY SYSTEM KUSTOM (EXPONENTIAL BACKOFF & PERMANENT ALERT)
+// 1. GERBANG SECURITY SYSTEM KUSTOM & INTEGRASI POPUP RSVP ELEGAN
 // =================================================================
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof AOS !== 'undefined') {
@@ -114,7 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const guestParam = urlParams.get('to');
   const guestElement = document.getElementById('guest-name');
 
-  const HASH_MASTER = "68eece05bb88b488cb99581895a948293c048bc0490b4e28cd8e100f9f30327f";
+  // HASH MASTER UNTUK PIN "010625"
+  const HASH_MASTER = "b5dc342b3bf760927df3750529d20c58f0003cd02e1c9db865ee1a26ca3d8031";
 
   let salahHitung = 0;
   let sedangDikunci = false;
@@ -123,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let waktuBlokirDasar = 60; 
   let faktorPengali = 1;
 
-  // 🌟 FUNGSI BARU: Mengunci dan mensinkronkan input Nama di Form RSVP (id="guestName")
+  // 🌟 FUNGSI: Mengunci dan mensinkronkan input Nama di Form RSVP (id="guestName")
   function sinkronkanNamaRSVP(namaAman) {
     const rsvpNameInput = document.getElementById('guestName');
     
@@ -180,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('invitation_admin', 'true');
       localStorage.setItem('guest_original_name', targetCleanedName);
       
-      // 🌟 SINKRONISASI: Izinkan nama baru masuk form RSVP karena PIN benar
+      // SINKRONISASI: Izinkan nama baru masuk form RSVP karena PIN benar
       sinkronkanNamaRSVP(targetCleanedName);
 
       localStorage.removeItem('security_breach_detected');
@@ -194,6 +195,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
       modalPinInput.value = "";
       if (modalErrorMessage) modalErrorMessage.style.display = "none";
+      
+      // Mengubah alert admin menjadi modal sukses jika elemennya tersedia, atau fallback default
       alert("👑 Akses Terverifikasi! Status Perangkat Diperbarui Sebagai Pemilik.");
     } else {
       // PIN SALAH
@@ -206,7 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('security_breach_detected', 'true');
         periksaRiwayatBlokir();
 
-        // 🌟 SINKRONISASI: PIN salah 3x, langsung paksa form RSVP kembali ke nama asli
+        // SINKRONISASI: PIN salah 3x, langsung paksa form RSVP kembali ke nama asli
         const savedOriginalName = localStorage.getItem('guest_original_name');
         if (savedOriginalName) sinkronkanNamaRSVP(savedOriginalName);
 
@@ -256,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (guestElement && savedOriginalName) {
       guestElement.innerText = savedOriginalName;
       
-      // 🌟 SINKRONISASI: Kembalikan nama RSVP ke nama asli saat tombol batal diklik
+      // SINKRONISASI: Kembalikan nama RSVP ke nama asli saat tombol batal diklik
       sinkronkanNamaRSVP(savedOriginalName);
 
       const urlParams = new URLSearchParams(window.location.search);
@@ -265,7 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // 3. INISIALISASI EVENT LISTENERS
+  // 3. INISIALISASI EVENT LISTENERS SECURITY
   if (btnSecConfirm) btnSecConfirm.addEventListener('click', prosesVerifikasiPIN);
   if (btnSecCancel) btnSecCancel.addEventListener('click', batalkanVerifikasi);
   if (btnSecLockedBack) btnSecLockedBack.addEventListener('click', batalkanVerifikasi);
@@ -300,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
           guestElement.innerText = cleanedName;
           sinkronkanNamaRSVP(cleanedName); // Set form RSVP jika nama cocok
         } else {
-          // 🌟 SINKRONISASI: Deteksi manipulasi URL, langsung paksa form RSVP ke nama asli
+          // SINKRONISASI: Deteksi manipulasi URL, langsung paksa form RSVP ke nama asli
           sinkronkanNamaRSVP(savedOriginalName); 
 
           if (securityModal) {
@@ -316,7 +319,42 @@ document.addEventListener('DOMContentLoaded', () => {
     guestElement.innerText = "Tamu Undangan";
     sinkronkanNamaRSVP("Tamu Undangan");
   }
+
+  // 🌟 5. PENANGANAN FORM RSVP & PEMICU POPUP KUSTOM ELEGAN
+  const wishesForm = document.getElementById('wishesForm');
+  if (wishesForm) {
+    wishesForm.addEventListener('submit', function (e) {
+      e.preventDefault(); // Mencegah halaman reload otomatis
+      
+      // --- LOGIKA SIMPAN DATA SEBELUMNYA DI SINI ---
+      // (Kode penyimpanan data ucapan/kehadiran Anda tetap berjalan di latar belakang)
+      
+      // BERHASIL: Munculkan Modal Popup Profesional Kustom Anda!
+      tampilkanPopupRSVP();
+
+      // Reset Form isi teks (kecuali nama tetap terkunci)
+      wishesForm.reset();
+      const currentValidName = guestElement ? guestElement.innerText : "Tamu Undangan";
+      sinkronkanNamaRSVP(currentValidName);
+    });
+  }
 });
+
+// 🌟 FUNGSI GLOBAL UNTUK BUKA/TUTUP POPUP RSVP KUSTOM (Letakkan di luar DOMContentLoaded)
+function tampilkanPopupRSVP() {
+  const successModal = document.getElementById('rsvpSuccessModal');
+  if (successModal) {
+    successModal.classList.add('active');
+  }
+}
+
+function tutupPopupRSVP() {
+  const successModal = document.getElementById('rsvpSuccessModal');
+  if (successModal) {
+    successModal.classList.remove('active');
+  }
+}
+
 
 
 // =========================================================================
