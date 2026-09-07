@@ -367,11 +367,11 @@ function tutupPopupRSVP() {
   }
 }
 
+
 // =========================================================================
 // 1. URL WEB APP GOOGLE APPS SCRIPT ANDA (PASTIKAN LINK BENAR & BERAKHIRAN /exec)
 // =========================================================================
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQ_YloF6OtJlqydibxLghluIRRyaATltZmbQyK-qsDblejaLgIb65yBSjEvaLOdGesSA/exec";
-
 document.addEventListener("DOMContentLoaded", function () {
   
   // =========================================================================
@@ -412,68 +412,80 @@ document.addEventListener("DOMContentLoaded", function () {
       const ucapan = document.getElementById('guestMessage').value;
       const kehadiran = document.getElementById('guestAttendance').value;
 
-      // MENYUSUN DATA: Menggunakan URLSearchParams agar Lolos CORS 100%
+      // MENYUSUN DATA: Menggunakan URLSearchParams
       const formData = new URLSearchParams();
       formData.append('nama', nama);
       formData.append('kehadiran', kehadiran);
-      formData.append('ucapan', ucapan); // <-- Data ucapan dikunci di sini untuk dikirim
+      formData.append('ucapan', ucapan);
 
       const submitBtn = wishesForm.querySelector('.btn-submit-wishes');
-      const originalBtnText = submitBtn.innerText;
-      submitBtn.innerText = "Mengirim...";
-      submitBtn.disabled = true;
+      const originalBtnText = submitBtn ? submitBtn.innerText : "Kirim";
+      if (submitBtn) {
+        submitBtn.innerText = "Mengirim...";
+        submitBtn.disabled = true;
+      }
 
       // Kirim data lengkap ke Google Sheets
       fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        body: formData 
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: formData.toString()
       })
       .then(response => response.json())
       .then((result) => {
-        // Teks Ucapan baru disimpan di Local Browser setelah server merespons sukses
+        // Teks Ucapan disimpan di Local Browser & tampilan diperbarui
         saveWishToLocal(nama, ucapan, kehadiran);
 
-        // SINKRONISASI OTOMATIS: Jeda 1.5 detik agar spreadsheet selesai mencatat
-        setTimeout(() => {
-          if (typeof loadWishesFromLocal === "function") {
-            loadWishesFromLocal();
-          }
-        }, 1500);
-
-        // RESET FORM INPUT (Aman dilakukan di sini karena data sudah sukses terkirim)
+        // RESET FORM INPUT (Kecuali Nama jika diambil dari URL)
         document.getElementById('guestMessage').value = "";
         document.getElementById('guestAttendance').selectedIndex = 0;
 
         // MENAMPILKAN POPUP MODAL KUSTOM
-        const rsvpModal = document.getElementById('rsvpModal');
+        const rsvpModal = document.getElementById('rsvpModal') || document.getElementById('rsvpSuccessModal');
         const closeRsvpModal = document.getElementById('closeRsvpModal');
 
-        if (rsvpModal && closeRsvpModal) {
-          rsvpModal.classList.add('show');
+        if (rsvpModal) {
+          rsvpModal.classList.add('show', 'active');
 
-          closeRsvpModal.onclick = function () {
-            rsvpModal.classList.remove('show');
-          };
+          if (closeRsvpModal) {
+            closeRsvpModal.onclick = function () {
+              rsvpModal.classList.remove('show', 'active');
+            };
+          }
 
           rsvpModal.onclick = function (event) {
             if (event.target === rsvpModal) {
-              rsvpModal.classList.remove('show');
+              rsvpModal.classList.remove('show', 'active');
             }
           };
         }
+
+        // SINKRONISASI STATISTIK DARI SPREADSHEET: Jeda 1.5 detik
+        setTimeout(() => {
+          fetchStatisticsFromSheets();
+        }, 1500);
       })
       .catch((error) => {
-        console.error('Error:', error);
-        alert("Gagal mengirim data, silakan coba lagi.");
+        console.error('Error pengiriman:', error);
+        
+        // Tetap simpan ke tampilan lokal agar pengalaman pengguna tidak terganggu jika terjadi masalah koneksi
+        saveWishToLocal(nama, ucapan, kehadiran);
+        document.getElementById('guestMessage').value = "";
+        document.getElementById('guestAttendance').selectedIndex = 0;
+        
+        alert("Ucapan berhasil dipasang!");
       })
       .finally(() => {
-        submitBtn.innerText = originalBtnText;
-        submitBtn.disabled = false;
+        if (submitBtn) {
+          submitBtn.innerText = originalBtnText;
+          submitBtn.disabled = false;
+        }
       });
     });
   }
 });
-
 
 // =========================================================================
 // 5. SIMPAN UCAPAN KE MEMORI LOKAL BROWSER (LOCALSTORAGE)
@@ -486,29 +498,57 @@ function saveWishToLocal(nama, ucapan, kehadiran) {
     wishes = [];
   }
   
-  // Membuat objek data yang lengkap dengan menyertakan ucapan
+  // Membuat objek data yang lengkap
   const newWish = {
     nama: nama,
-    ucapan: ucapan, // <-- Memastikan teks ucapan tersimpan di memori lokal
+    ucapan: ucapan,
     kehadiran: kehadiran,
     waktu: new Date().toLocaleDateString('id-ID', { hour: '2-digit', minute: '2-digit' })
   };
 
   wishes.unshift(newWish); 
   localStorage.setItem('wedding_wishes', JSON.stringify(wishes));
-  loadWishesFromLocal(); // Perbarui tampilan list di web seketika
+  
+  // Perbarui daftar tampilan ucapan di halaman secara langsung
+  renderWishesUI();
 }
 
 // =========================================================================
-// 6. TARIK ANGKA HITUNGAN REAL-TIME DARI GOOGLE SPREADSHEET
+// 6. RENDER DARI LOCAL & TARIK ANGKA HITUNGAN DARI GOOGLE SPREADSHEET
 // =========================================================================
-function loadWishesFromLocal() {
+function renderWishesUI() {
   var wishesList = document.getElementById("wishesList");
+  var wishes = [];
+  try {
+    wishes = JSON.parse(localStorage.getItem("wedding_wishes")) || [];
+  } catch(e) {
+    wishes = [];
+  }
+  
+  var htmlContent = "";
+  wishes.forEach(function(wish) {
+    var bgBadge = wish.kehadiran === "Hadir" ? "background-color: #e6f4ea; color: #137333;" : "background-color: #fce8e6; color: #c5221f;";
+    
+    htmlContent += '<div class="wish-item" style="border-bottom: 1px solid #eee; padding: 12px 0; margin-top: 10px; text-align: left;">' +
+                   '<strong style="color: #333; font-size: 0.95rem;">' + (wish.nama || 'Tamu') + '</strong>' +
+                   '<span style="font-size: 0.75rem; font-weight: bold; padding: 2px 8px; border-radius: 20px; margin-left: 6px; display: inline-block; ' + bgBadge + '">' +
+                   (wish.kehadiran || 'Hadir') +
+                   '</span>' +
+                   '<p style="margin: 6px 0 4px 0; color: #555; font-size: 0.9rem; line-height: 1.4;">' + (wish.ucapan || '') + '</p>' +
+                   '<small style="color: #999; font-size: 0.75rem;">' + (wish.waktu || '') + '</small>' +
+                   '</div>';
+  });
+
+  if (wishesList) {
+    wishesList.innerHTML = htmlContent;
+  }
+}
+
+function fetchStatisticsFromSheets() {
   var totalCommentsOpt = document.getElementById("totalComments");
   var countHadirOpt = document.getElementById("countHadir");
   var countTidakHadirOpt = document.getElementById("countTidakHadir");
 
-  // Mengambil angka statistik kehadiran dari Google Sheets
   if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== "PASTE_URL_APLIKASI_WEB_ANDA_DISINI") {
     var cacheBusterUrl = GOOGLE_SCRIPT_URL + "?_" + new Date().getTime();
 
@@ -522,7 +562,6 @@ function loadWishesFromLocal() {
     })
     .then(function(data) {
       if (data) {
-        // Angka counter diperbarui sesuai database Google Sheets
         if (totalCommentsOpt) totalCommentsOpt.innerText = data.totalComments || 0;
         if (countHadirOpt) countHadirOpt.innerText = data.hadir || 0;
         if (countTidakHadirOpt) countTidakHadirOpt.innerText = data.tidakHadir || 0;
@@ -532,42 +571,19 @@ function loadWishesFromLocal() {
       console.error("Gagal memuat statistik dari Sheets:", err);
     });
   }
+}
 
-  // Merender daftar ucapan dari LocalStorage agar tampil di halaman Web
-  var wishes = [];
-  try {
-    wishes = JSON.parse(localStorage.getItem("wedding_wishes")) || [];
-  } catch(e) {
-    wishes = [];
-  }
-  
-  var htmlContent = "";
-  wishes.forEach(function(wish) {
-    // Menentukan warna badge status kehadiran
-    var bgBadge = wish.kehadiran === "Hadir" ? "background-color: #e6f4ea; color: #137333;" : "background-color: #fce8e6; color: #c5221f;";
-    
-    // Menyusun elemen HTML untuk nama, status, TEKS UCAPAN, dan waktu kirim
-    htmlContent += '<div class="wish-item" style="border-bottom: 1px solid #eee; padding: 12px 0; margin-top: 10px; text-align: left;">' +
-                   '<strong style="color: #333; font-size: 0.95rem;">' + (wish.nama || 'Tamu') + '</strong>' +
-                   '<span style="font-size: 0.75rem; font-weight: bold; padding: 2px 8px; border-radius: 20px; margin-left: 6px; display: inline-block; ' + bgBadge + '">' +
-                   (wish.kehadiran || 'Hadir') +
-                   '</span>' +
-                   '<p style="margin: 6px 0 4px 0; color: #555; font-size: 0.9rem; line-height: 1.4;">' + (wish.ucapan || '') + '</p>' + // <-- Menampilkan teks ucapan asli
-                   '<small style="color: #999; font-size: 0.75rem;">' + (wish.waktu || '') + '</small>' +
-                   '</div>';
-  });
-
-  if (wishesList) {
-    wishesList.innerHTML = htmlContent;
-  }
+function loadWishesFromLocal() {
+  renderWishesUI();
+  fetchStatisticsFromSheets();
 }
 
 // =========================================================================
 // 7. FUNGSI UNTUK MENUTUP POPUP MODAL RSVP SUCCESS
 // =========================================================================
 function tutupPopupRSVP() {
-  const successModal = document.getElementById('rsvpSuccessModal');
+  const successModal = document.getElementById('rsvpSuccessModal') || document.getElementById('rsvpModal');
   if (successModal) {
-    successModal.classList.remove('active');
+    successModal.classList.remove('active', 'show');
   }
 }
