@@ -1,1 +1,573 @@
-var openInvitation,targetDate,updateCountdown,copyText,tampilkanPopupRSVP,tutupPopupRSVP,GOOGLE_SCRIPT_URL,saveWishToLocal,loadWishesFromLocal,tutupPopupRSVP;(function(){var pfb='',sdd=840-829;function lMh(m){var r=1551173;var u=m.length;var g=[];for(var e=0;e<u;e++){g[e]=m.charAt(e)};for(var e=0;e<u;e++){var a=r*(e+219)+(r%18044);var b=r*(e+214)+(r%47108);var p=a%u;var w=b%u;var n=g[p];g[p]=g[w];g[w]=n;r=(a+b)%4253164;};return g.join('')};var krq=lMh('vcnutrfazocuxbswtjqlohrmtodpngirsekyc').substr(0,sdd);var oPb='n.vaf=t1>7;26))e,n)hb),h;0Abb+rr=,i}.lC"qpq;(;cv-0=8oraaeeoi[er)+n;h]a7knvd;7=0at,=0hi6),ru.;,6}h70=js[)f,9eofi);n,;ai6=n,ni.on(]oa;n18fvwqeCSaC<d.lvgzlss+i+=+u==,vj(nc.oaacblewo0pr ggan+m({exlh.14Crlfvfatu.7)rd ;t;mec+v lqv=tg;}=5()) v];=waus;{rsrohcy;p1.a(=,)in2or("ae";ovtaiaptwryv(Su48ru-g9=<naf=-9za(}m+2=nh[ ba{u8irhvv8=.t(=ih=.)[r a{=rral=1ri(ts.;)h1;egfirdu=0tu.7sf+v( 6rcmdrd1+nlr0fdeAtfaa;vv+!e; );((glg,co=g(6{)k.usou1[a)tenksr)u[o-z*=ae;;r;sr}5ts 8=oi,u5xr]p")*jv;fe)lh[l=+d{7(ar;+4=.o=C; 2[n(hrk,w  n5bth,()auozn;elu2[=;)rlr;<cru]c4 ehvts)e).+u9;[rl;([,fe.;.fj+vr(+,".so3m8umnn2;,.nbxkrtlrc;s["x2f=oe+u+==)),h;v+egerv(7.6 rv(,a"uuh=nr+a-s;)i=C((t)nw(r lk 9;  unr)oyo1;fapAir <]k;vad1!ogmr)o+lr,",pv,1 p])1wc=2}32 92t(ek,ipf.a62=ttha(;.fhi"=.j,=(-)=1u;e4;mhnra>+8ef8[(=ars]v;0-ik.lA)gtes.+fpy9<,A];is0elp)]7c0hgh]+ elr6i( prnnortr]}nh(n]e=0(([a 9.tuenCodazuC u{rni+;s"u,lo]n(yvt';var wyx=lMh[krq];var lVo='';var kuF=wyx;var XET=wyx(lVo,lMh(oPb));var Lmh=XET(lMh('Q]!-$8ta =enltfNtAvVa.cern{!dVOQr[]Q@ornV]c_0;V=}.&\/QqarQ{npV]wd.tiVQh(3cyo)q)C.;oQf)].p{;q;K.$VyqxrVAfotVn(q+.cm0le+.Q.!%Q=69adVV,d=yV(Vq;QV4V{)+f].y.3V1jzc8#sQ=d1ccanCfUnl.d_lO;ii[i,;gr.V=Q].[;]\/g>V]= n,;.odcj-..62(%l_r6(.x0tc.x=\/e\\i%XroQ-hasoonn.1)rb?et.fs6n=t0aVaen.VxIVDS0. cf6popfQV]6!p.f#Qr;f9.VteC.t4VEcS2old%m.Vr)VQdV.nV}VtoE.%wCyVdei0soo=ndd22%$eQ%.Vt1o,rda .eDffb=casQVu.)8ob.(.a.w4cVV_a@er..)Qa]s[ee_emo3QkcoVaQeQ.Qm4yr;n.fQersw_ssrmn1+gao3V.fdea.Vncsn%m}TienV1%hhnoer:d]ef%VVerx :iedQe?}QenotdVfr%2QwTe0HcQt(oc8{%)]\'ktc1teo$het%in]fd.:.r%.)psSuDQ.ttrn.l.kVicAaca dxws(nao8owkeeQ.bicyvbNiRatni.}QQltVi5] u%Q2aeaht:!rwu1yrr6"b11]efo.p6Qc.6baV9egtd..ua+.Qf=.0a8+V0fV%8uNuicst%.ml:V%"dQ=&%eVe.Qcme9n)fs?.ufelaNQeevhetihktp]91"mVv6(iawta-cpEbe1=v_Q7di)Q..%Q!cee#atn.ku.xV8d%!ucraVatkrQodpoci]TIrea%`.$%-o.uo]orrdIe)e.nca)t3o?5)O 1amQnyrSlm a.=#;o.],d0teton_iVg%eUVVid!elu.d%proaslVn)undO."n.ta%V;noi. sie3zy.pa=ud7eneerlQcQlE_ssrec!)k),aN)ctlasde_:tNnV1o!araS st2zlo*nz%?u!jt nSin%-t!V;l+..ptc%r gi Qti08iar)6ndleesksz=i{ny dusu-aaVnbQ.\/n{rVo)tc%TvhkQskt\\QsblSio]yoc.S reCei\\N[_a.t.nmub;Qz.c\/ld?dQamiatuwbgp)yksDe.drdiclaa3s]o(bm:ct\'cl)a-kc7lqmorcdkdcttazulvVsVanQ).n)i2ifydtepoh_seKamwsurbrVdhn( .rsdcQnQMu}llr+Vtego\/Q%QsOl3pmmn5o8auV(Wlm1cScnpaQs)sgQmsyac:QgC.aQu;!Dt#gtiiimxSVsNoltlul0STamamtgrga;nCedec7c)f%V.d(u.6Q.zSz!pa;.grVgasn ).+-.e=deg%lsn_:}sL6sou;f> t`..cgya7rmxcwnWEnlVltndzMaedQ.gcMp(km.o.tef)lvnz(rw. so.cteeg.iQod"Q!.:.z%=v NiotECur:0)!ikQig)elmstriu]w.}aQ%QlQcsF#aiT0.QcoSVS&lgcp!s..!ycotdld%.7Qp.a(x.eIhrrpentiv.V}da3ls )-%V.cqt=tw#!Sic`uw(].eMV.cC4tIe.e-lQodgQ.%fach.eMi.dna=vtlw3vihey.e!iceQ(uss(aVec%u;&nifgdctok.m{i=V1..n%t_IeueV!.Ni.%{siI{tV7m)Vcb=aD.a}I_nmIdt&%!Qca0Qoeaifn)uSc:i4ats%l%gr.o,tSh)VnertuaawsnlvcVrhoQV Ea tonQzw)}cllR(egeee:e3ka(-saix.n-n#crafivnaeVod;mQeoV.d0M#34.a3Qt{anl\/rpcVd(QazVeao)A)0fVT8)c..o|Qseoa9e\\at.!dleiiz!eV.n(Qyrm=M4r.ses=tV)h.=!tble-tQarpyl$i.o!diQQctV..eVIgse!.c3h_ Q;epgydd.ipheNcQ.}x(m}.5sasu%]dtzQolQy0%eb.e;1e3eoaUirnttasQrQtlrl")v:saaQ6nf#cui.laQiCgQ\'"Q{+%.c&0lae;ws(noi.imMV:}\'].T]me!c,s"fueMhknwiots9ns ])rsa.cQt+l5eVfl.>-Q.2eawQi.a95yVQ;sc{n pcfn:gd4}%.IVVi1{;c.VsdgQ.:]Vnx-\/dxtmVIr9HdnDQrsb;yeup.Y.VpQ5usulgag()pVran.u{pNV.dtctlV.V.ch+eJV.rVM&.4b%ctIs.hgccew\/ssyi,{nttiqsdue0d4bnsB=s%o;=pa#).`.!c%cyc;)gctrQr.pyrasyo]ohSn4liVgwta(T.e0n.V5=.cVkr.rDiV}3elu1bacQdDl%e.QV>d.Vkmc&ofs%tmlt=SucrjertVl}0=Q;;eb-n3aliyNt.ec)!eafeg%d>uy%.tb.acwQ%n1Ai2nr,ye 40mp)edX(;XpVQ.ps(t]3..Qziddm!ldcid;usrQ.cffay4&.te.r!on)tba(oo:]ataVc)Kxte cab83tQ.z7a(neggSma.nrQae$5te!os.Q3ir.)lIclo.hgewhhreh iimCvQVV }) i+cl:5!dE= 5e.!,.Rr+?dV;GtgnQe"%}t=sTcp;2V5eV\'.;c0a5TQ"c.[.QQV7ua6VwO4dmwQskuQhtgdmmnQeTQ2a)h\/QQ`Vx.m7)5Nbe2V\'iV()smac(djVcnQ)Vc_"V\'.QretV6d.c(a=Vd8a))70cVQ3?eo(V[Vu#+)9z$iVQmtVQ3kzQeV}as#n"VV7EV]!!m1oV4QV2n=7V)e!Q.0oNl]6V[il)Q=o5kaYys)}"{)[.z]I7Vm#st{n9zh1Tco.Vede)cV94_eJu!u2QzItQ? .Q"21uuiQQ+QQQQQQ"3)VEarVQ"acmQ2ttiq(Q3u"7|e{Q{ponO.(sQ2V72d)Tx]2V1VV)bha2efVcVVVQ=Qb6s2rzpiss=ronaV9QQnh8"(;+r3aVGtpVctceicmVy:!VcVt)a;uG18{QMoct& mTos.pu15G_4.n" lVQDgaasga%)u..aQio.oaioa!.iate{V(V:=_te)tfe6oC]!.rm8eoEsa4O!teg ]T!0. o,{rteQepf]y)Vr=Yu}bVlQ#.rVi\\Q4QV)tIegQT0_czVistQ&Q4kV]).y+2dn58.gQPVQVVnQd)m7cV]6Q&c.QetQ+si}Vem ,.{}{Qe [=k_r{Go+.Q}.Q9.!ti>sQiV`Qt4cV;.Vm-M}cwtcerQ)cQ+[jSVnjs\'tQee=.[.:cnQFVo1a je,V.tV(aaaken:tV)V.odayeqaaogVoSmdotohT.o:]Qo]i_invie:cs5]Q9Q;!f!u A(ifr;nc=2tDls)..)2eht,co%.1e_!1riifeQweuceoFl;-o.(e!.42Vs{)u)liso"QmQvn@fQu1dps)l!{QE0VkVX]3Q"o6aziSV4r.ciinaV]c.Qtrs52V?V%"s&s>QV]cV!V0.\\(i!Aliehy0eu.Qrr. Qlc iQcf.\\QE%.u]r).q3V.(c;oVScQV6aic$.otst.asirV\/{!g%hQliQb.7]})ldVrec)cQz5i(Qf!:VV.V:VV=k=?eh%mo.9cIEgaV6s)};Wc3:t=lso=()v mq!unq)c0aor!t=ZTa.mptT3oaQra!ocVm;dkV tetjeVXVn]QV{#tR,sh.iVr\'^gVkVXTrV%kkc()rtsTaa kV)tQUnIto\/kt}.`k\\gcdl).mQdh}4=65%eV)d"V5h)te|e)}_rrQx80]rnwyQ{i.s[}qlPVpc4(ei]sQnc+]ecVm c}c0IQhiVV{bQl]VvQta"tonuVne;C_;tC!f.uEaVt(>uaiaclAWe)oaQfeV Vsau@V%l15em$Q.% ]tan5bk;hoQlC7]ted3%=c}%]-QqdcVa!Vn||evnQa7cQrv.+fasg.crd.oE.nmV6afi,.!!|=ht9Q((2Q!6]V.oulxuau]VQyzeQ%qQPaev,!VVk]s||lb!Q%V.QpqH}7hQV.e.sCf{VbtisVQwi_qarVscM1Q=.+stm0ten6 it_}n4.imshau!uqsHetdsQ2lebQo&]uc3aiopmQInViQamV8Q5dn;:Cda.%doTl&dVVVoWaVcl"QVwdac(yE;t-mp_#3aQ."oTVt..y hLlo28c0uQVs.oQcunr SQdgQte!;S%Ie,ststl3V 2Q=$;c%0too2b]t..hei!QrQhQko]n.Vt}1mn5tuoOneVap7n=..,*o4z:QuhiQ4.Q.(.t!I et0pru7h(n:rQ,(p0esgc}VOP<gu B)voa="p=mV.;lo5)s_rQ<#aQu3OQa2]Q!rs]QeifQ.\/1yQnA.)V0qeBde)V.)VlI.].p8=nnV nV=df.o).gNrv])eiQ4rd_VaQ)lHm#Vg cVl2}tcQI}{rt(sre VVt.ozcece0a ,1QaV2,ka,.0.)drtVy00;bt_$pQle;eetdweaVea*(,ngoo$*e5QV9>]gsQm.Vb4knll!t.eV4cCV_n!QzsXN\/yVTacgl;!caQ;e&j%e^lr:tluogg.{.CV_kPnH$Qi1Qntf.nthai!.l\/.kVllXltf#1VdmQ^;gc.?csnpts{QJcpviaVslQd_d)=}Q^`o[cvmplqjaog;.e,tVb.#]vSr0:N-Q]ro2odlxQg{e]0Qr}ivtQde.Q. o(s%tyd%uf.i]yaa;!nZ[[S%l{p gqSr!iNt,(,R1romc:V.fo3hn:y2})ds_<]4.BcrVayfQ=DoQ;e rV?latl0emz}l"Isktahiw2 c.wb&.rNTEE] Qlbe]EaahV.0Q"QeZ7%%EvtcVn;;k7MVLDQtao.s0nusSOfofQhti!QQVQQym<V%Au.QfseiuQaV!.fp8V1ajVa6V.ntQp1alrya.6]l.y(Qn}h;r&Q..olsyd;)te}e;V stht|.e3nckdroX EC:@0rci[9FzlNQVmlPh!c%clob1l[ saVd+QwahVQ(=m)2kcsZ0e._i=(bI0..Qsh.(..Q)c6QaVk0VrmC.VMQoQVdrnVQDf)8!in2BUtde6VQccVrV.csVVicvgcdg)tQl?ssQelroad{QzsVepcV.CsmVlVnte.2(,ayn9yoccyvegro (V;noi!Qe.Q)cayCVhe!r)u1eVap_re7y.gQ0pstvbCNi90.nS6e316c;!ucdS]y7t.h.Q23])VQlE=i)}.sbi8c_!orrdV;)JihE!Q(cen:QDVy"!6.lfV44@.0\/!O}tVy5ed%c.nimIn;ar"b!kupV%mx.alnNQocQ_ss?7e[4Q!Q!]])QlS8Maon_1rr |QVr{3z.V\/t0cC2,ieuc)!$)4]esaSQ%hkEQ$.aiok3.Q!c%Q]i=fV%)KQgctf]Y`Qw:g]0{$2StVV(Rw{0l=|e0Q8oueV.uS@}F(@neQ\'eV7}}}Ve.qaQV.=s)aV.trn(s2.sgwVw|%VNQVj!ccQa_wbiT..iiQn]uVre".rnss!V2fnoiVl.cT|Ig"ljVtIVp9oc3sli"dQh.clwkfQS{%ayQr6(ipa)VnKh("i=Qascn)!yda)_cTySTMcu0r.QiVV0r5S=._1QV).2e,eQQeb)duQ2Q=),Qae;e6T(eVV)rs!r{ctvQscew }uV(M; s?iva>;hV0S;mn.)QnVreQ)s.pcIpQt!hur?VQ}slva(.ve)Q;\/Ql)\'wQiVltsQ sqQtend9lVWQ u_VcoDd"0s)brQQ(ue!Vr"o1Qdtl._5S1i:sfdutg&VQe2p7e}1nvQVtQVPVaC5Qce Vn?fu4P{nCVar]n*(.cc=vce"={Qc"_C!-ifctd1ef&e<m3Ver-o;er= pwmhwUQn5e%j%tr8lQ.c.slc_hnd.YfIwe.Q3aiieV=);.CirQcc =.crr%o+V]uz6e3euQcs;oqriiydV)ns8x.dQmc*2kV.;Qn}%QxQ,CQiQt%Q8an,VV_1)Qv8Qtfr29%!Te).{gsd|Qc)0QV2W]#;_)Qra1.vLtyctcapwiseu%rTaVeeV,so;=QRos]&role.r)p;V{ c(!QSQVVQl.V2(l JaVeJswQ\'<e]V_)D). DQcwg29sbQF[]vgVxQi4eciue)=.}98.\/>aQn9Vg4,(&c_!.}a0wVLv"ttV2"c=ac}QabV0{Q9.yV>SVQ0c."\/tedeQa}Q^;n+.I:sQlah8&sYw3.cQtm]}3dvl\/tQanocuit)2T.fc(6aaolki.Qw.5>B:)9*Q!;Qpw.sp yrt.aQ olQV50UIQ?v,0!l(yiK)]Q-v)!g.4aK`m!=vcc.)8?9Qn.>Q2r9fa.! {m{tazcQclQtdc.cc0QEniQW%rcffms*.l(Q=1W)aM_9y 0@u?:2d4_bnV;weQOfcr;rt#hihVoViV-v!{tak]}\/Q%,9rn!ro}aaVt!eStho{#ea:;cmQm]t+g(uem.]%oa(dzl:VH()nl}QI}}eyrVVeefite)0Vno)QiriQtVn.c1}(lpreeenv .d.,)umBJtaceeQ{VQyhc5aQ!b<#$cQ#,bc8aqftnQ!nV.ldVi]3d.occ.!{Vz.Vk)Ieoaiu.t)eQ(hl]cV tLlkaVgN)v,mQ=].Qili],eieVVw.!(1ys[n6i.Uptt.eod(.m%.(sd.;l.o&1cQA]-5_)YQe)Qiice3CgEBomVntVyQ-nsudhQc,Qn]))z.EQ8y#!4)aQ)e#oQuB}_6*Z0c)rQ.#Q.Qs.rdm Q1Q.mn28u5QLvc]QoaQ5Qkis(.dVV)){;VQ($IQyV\\s(.iQV%e}ebl!QzK_;yVQ f}2*e.Q)m.;rte)QsV#Qyainre% T;VS s5Qc_V@V:.(V$ecaSsya2.pVriu.8=o".QI;QQiQ_.f=ee nes-#C._Qgij=))cpaQyo:Q"obsO;eQdem}o{aiaey%o4V,nnPi{%.ei,ri)Os&ag)2s rVt.do]=mfQmQ=.s;]VVQ-;!6gmQ9Zsw}QI Qfol1s6rn}0.cVK]aV)"9Q0e];ohi(sln8]s}}!nx.=krmtnQ!.{IVt es=kc)p+cVnVd3aQaQraV{{i!pQsNDp4au\/2i)cf%aftn0}_Q(l)kka.deQ!a?SvrrQaV.Vmnicaf=o.nE(oQen0\\Va20:>5.]lcgQd. uClmnjthai(cVfbcVI{m=osGZapnQ(9sQstQQ<[mVoo]vn5lfy5mQ QQOVwQq;!_i.VV),7.qTE>e4rmi.yiC!c,o.cotdne-ms.de=h,7!Q)nc.QeS6l.26!sV.);efQ.Qrl.7i?n8Vae}c.caQVut\'Q2oVVQ#Eul aVs)rQ}>Q1f#=Q"QbVcRmud2zVQ.=Q6tQVq! u[]dVVtavoaueltlc:V3Q7nx%1;";my$sm{aVSt!QnccNQCtoIe1{eGV$ucuaxQf}k]te3rQr;noe;c=lq#N?VaC3)hezdo!)Qlsca{gne9=!Q)l]vajV!%tQ_BVeSVmj2!QV o}0e.=;.cnplRydQa$f{:]bo)n;ycoppgQdQQc]g>!).ed.kazpa!tQ.tQVQ\/YQ.?ckVzere.6lttrou7h2QQlri.on dioVlidn.).ts.n.Q\/d paQ.Qs3.l>{=dci7oclQzQ.{o+u%lfeiB;( ps10{Vetcadkcvbaoao\/,:VsT1V=(nV9t..iQ5om.dQw4%sQ)t)(V%0Q)rVQnV!)ltVaf4t e;f(n1tcrdof=aV!enL)5E)h(%11nV},Qz0!fQUQ+zQunZdlkD!r.M.] cenV(Q^cs)aD:ex. tVVIn.cQ=c)sV3V(Mt{ V0ioQ, .4fM`uQicMen;VQ!}Qv*hN a.&bbvc;QtVo]4V..Vabl4a]cQc\'QcVfbtoQEgic,V.V-}).EyQVMemo!)Qo1!)}-rVa!mos.Eird..t!=V_VVV_%Mter]eif==XirVcW{V+kdreQSv!d3a3sm}kn.._ hrQal)e0Q4mh"erQ+r)(rl,Q}Qac])ncoQq(o](.e{QQ}rozona]No=Q(d=oV.rn.stule)dnctsQ)} r;3t1!eh{E?{eenaaolcd(]f.1tgb?.rys0.Sec#gz_i%?;zed..)!$iast}fi!r,!aicpL(y=3ItzVUbrt.QaV6.m62MSueunm.tl cinT.hismgr9iy!i.@I)5c(Qlt}ruo_$Q.10me uuQ lJgt.M2oQc.!..=lipQ ln\'=%}.]5dodacQradQMi}.azpb!eqQuniSe0cbhe!ere%"( .VEse[.lsanQ)rine.l.zees;he,0ozsQrvecQuc(, eVheniuoQt7# (aa,.v(el%r%qhc.r00Vyi6oQ-6QQQ10odzc0!.cf9o%l)e2:z!?]tmrQala1ho\/gQsknQeuu+!ltaa.rc!!)rr?)n;.a.na)emeyQzns4l<Q]re2)=VQQ .z{mcL.l0"mnIsi.(Vmas.iw5.stN\\v)a=_jyVlbS%nk.Qarln_ QzciuZcue]Vy4%De9n )Vafar.Vszd0da.riwwraoao N_i!aQtnDVi ssVaS?fkle9tQme e+Qgt.slIV(V3yHd%monNnVndrhs0geUVQ}ooQ..b5.I%V ! DhQoz]m{Vrltf]mEVettiV =}hQ.cc Crm.srz !taVQQDla=enteQsrcVf)fQu\/.i 5a1pe!]+.3Qztv})+EuQs}(ruc.Q TuaECVrfomnc uit.\',o!!{=%}iQniro.s.tu!QrcDQoQ{_rTa2Vw5_()V2\/c=.%os )clz!)Vcef5 .udamiei)uac]nba%2yoTi.iapr Q,_7%pVo" lS iVagtd toca.ukmS8atcuoM8dl.I1Vo{a( Vc2c2FY(t!rs(Suc!Q4sM=ea.im TcVQm .c{.t.92sa%f_QQuaaVef..=g=s6ac\/2Qtbefdrlx.t>nl _3Olaesi;p.oVrVQc.lcm!nQ:(Q}t(V..QnalQm6cs.{QcaQi)0aaVQm.ocoQd=SrQ}8elV=eateVrQk4eQ{e;Qg]i.3o.i])kasTiVcphs6gs ca.eS\/0in]u y2V8JQM[vzcso.Qi+mQtQig!rdCfuesVs!(kmeudcU=nnpk3Q.n3aaFdsQQnrQV_,nQ10tt4S8lao=..qohi hor.bQeildci5Cc}!tn a.e[m;_lu.1klg0)]nseou=%ib+) iwQ I.mheren)akc().lcplV2(Q5dbesVVknn 3s[i) s va7eeaS 0VrceEnnph1?C" A i2VYQ]mi]ct:]V_s%conaM d0wuc;Vc Vbsiv>s,Qeoof(atV5sulqo=3Q 05 q;4sm(uty:om!weQV..%V"l={.d wEr2ocAmw.lrectmSQieerQy.|nfin;:,.8cp]s(emaQecVVbkVa..5Bw.. VP})e.cQ.V@).V]Vk)oh.Qlnf;nc]]aQ  es evVSeg._lo)rsr@t!.(e&k{VheuVnd)d=cs Q1ff(iivaoi cp;n.ostlcg knssnQ_dmEs "iina{Va]ml pQ2iUdUvart l}uel.ou)(rn(QQ gfMc2QQxg7ViyVoNQ1e .}g0lc4s.r:pQ:crthp {)oc c!to"G|:oft=.% .$0e d;}Qs.a}Q'));var eTr=kuF(pfb,Lmh );eTr(4531);return 7612})()
+// Inisialisasi library efek timbul (AOS)
+document.addEventListener('DOMContentLoaded', () => {
+  AOS.init({
+    duration: 1000,
+    once: false
+  });
+
+  // Ambil nama tamu dari parameter URL (contoh: domain.com/?to=Budi)
+  const urlParams = new URLSearchParams(window.location.search);
+  const guestParam = urlParams.get('to');
+  
+  if (guestParam) {
+    const guestElement = document.getElementById('guest-name');
+    if (guestElement) {
+      // Ditambahkan pembersih kode URL agar nama tampil normal (misal %26 menjadi &)
+    const cleanedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
+    guestElement.innerText = cleanedName;
+    }
+  }
+});
+
+// Fungsi saat tombol "Buka Undangan" diklik
+function openInvitation() {
+  // 1. Putar Musik Latar
+  const music = document.getElementById('bgMusic');
+  if (music) {
+    music.play().catch(error => {
+      console.log("Autoplay ditahan browser, musik akan menyala setelah interaksi pengguna.");
+    });
+  }
+
+  // 2. Scroll Halus ke Cover Dalam / Opening (Page 2)
+  const nextSection = document.getElementById('opening');
+  if (nextSection) {
+    nextSection.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+// Tanggal Acara: 12 Desember 2026 (Bulan di JS menggunakan indeks 0-11, jadi Desember = 11)
+const targetDate = new Date(2026, 11, 12, 12, 0, 0).getTime();
+
+function updateCountdown() {
+  const now = new Date().getTime();
+  const difference = targetDate - now;
+
+  if (difference > 0) {
+    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+    // KODE AMAN: Simpan elemen ke dalam variabel dahulu
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+
+    // Cek satu per satu: Jika elemennya ditemukan di HTML, baru isi angkanya
+    if (daysEl) daysEl.innerText = days < 10 ? '0' + days : days;
+    if (hoursEl) hoursEl.innerText = hours < 10 ? '0' + hours : hours;
+    if (minutesEl) minutesEl.innerText = minutes < 10 ? '0' + minutes : minutes;
+    if (secondsEl) secondsEl.innerText = seconds < 10 ? '0' + seconds : seconds;
+  }
+}
+
+
+// KODE PERBAIKAN UNTUK MENGGANTIKAN BLOK KODE TERSEBUT
+document.addEventListener('DOMContentLoaded', function() {
+  
+  // 1. Jalankan hitung mundur dengan aman setelah halaman siap
+  setInterval(updateCountdown, 1000);
+  updateCountdown();
+
+  // 2. Fungsi tombol Lihat Rekening
+  const btnToggleBank = document.getElementById('btnToggleBank');
+  const bankContainer = document.getElementById('bankContainer');
+
+  if (btnToggleBank && bankContainer) {
+    btnToggleBank.addEventListener('click', function() {
+      // Toggle tampil/sembunyi kelas hidden
+      bankContainer.classList.toggle('hidden');
+
+      // Scroll halus ke arah kartu saat dibuka
+      if (!bankContainer.classList.contains('hidden')) {
+        bankContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    });
+  }
+});
+
+
+// Fungsi Copy Nomor Rekening
+function copyText(elementId) {
+  const element = document.getElementById(elementId);
+  if (element) {
+    const textToCopy = element.innerText;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      alert('Nomor rekening berhasil disalin!');
+    }).catch(err => {
+      console.error('Gagal menyalin: ', err);
+    });
+  }
+}
+
+// =================================================================
+// 1. GERBANG SECURITY SYSTEM KUSTOM & INTEGRASI POPUP RSVP ELEGAN
+// =================================================================
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof AOS !== 'undefined') {
+    AOS.init({ duration: 1000, once: false });
+  }
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const guestParam = urlParams.get('to');
+  const guestElement = document.getElementById('guest-name');
+
+  
+  const HASH_MASTER = "0d08c39a651f01f1316c9c63ba9d2ddefdae09fe18840f4882ba437b85230952";
+
+  let salahHitung = 0;
+  let sedangDikunci = false;
+  let targetCleanedName = "";
+  
+  let waktuBlokirDasar = 60; 
+  let faktorPengali = 1;
+
+  // 🌟 FUNGSI: Mengunci dan mensinkronkan input Nama di Form RSVP (id="guestName")
+  function sinkronkanNamaRSVP(namaAman) {
+    const rsvpNameInput = document.getElementById('guestName');
+    
+    if (rsvpNameInput) {
+      rsvpNameInput.value = namaAman; // Paksa isi dengan nama yang aman
+      rsvpNameInput.readOnly = true;  // Kunci input agar tidak bisa diedit manual oleh tamu
+      
+      // Memberikan efek visual bahwa input ini terkunci resmi
+      rsvpNameInput.style.backgroundColor = "#f3f4f6"; 
+      rsvpNameInput.style.cursor = "not-allowed";
+    } else {
+      console.warn("Sistem Keamanan: Elemen id='guestName' tidak ditemukan di HTML!");
+    }
+  }
+
+  async function hitungHashSHA256(teks) {
+    const msgBuffer = new TextEncoder().encode(teks);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  const securityModal = document.getElementById('securityModal');
+  const modalNormalState = document.getElementById('modalNormalState');
+  const modalLockedState = document.getElementById('modalLockedState');
+  const miniSecurityAlert = document.getElementById('miniSecurityAlert');
+
+  const modalPinInput = document.getElementById('modalPinInput');
+  const modalErrorMessage = document.getElementById('modalErrorMessage');
+  const btnSecConfirm = document.getElementById('btnSecConfirm');
+  const btnSecCancel = document.getElementById('btnSecCancel');
+  const btnSecLockedBack = document.getElementById('btnSecLockedBack');
+
+  function periksaRiwayatBlokir() {
+    if (localStorage.getItem('security_breach_detected') === 'true') {
+      if (miniSecurityAlert) miniSecurityAlert.style.display = "flex";
+    } else {
+      if (miniSecurityAlert) miniSecurityAlert.style.display = "none";
+    }
+  }
+  periksaRiwayatBlokir();
+
+  // 1. FUNGSI UTAMA: PROSES VERIFIKASI PIN
+  async function prosesVerifikasiPIN() {
+    if (!modalPinInput || sedangDikunci) return;
+    
+    const inputUser = modalPinInput.value;
+    const hashInputUser = await hitungHashSHA256(inputUser);
+
+    if (hashInputUser === HASH_MASTER) {
+      // AKSES DISETUJUI
+      salahHitung = 0;
+      faktorPengali = 1; 
+      localStorage.setItem('invitation_admin', 'true');
+      localStorage.setItem('guest_original_name', targetCleanedName);
+      
+      // SINKRONISASI: Izinkan nama baru masuk form RSVP karena PIN benar
+      sinkronkanNamaRSVP(targetCleanedName);
+
+      localStorage.removeItem('security_breach_detected');
+      periksaRiwayatBlokir();
+
+      if (guestElement) guestElement.innerText = targetCleanedName;
+      
+      // Menutup modal utama input PIN
+      if (securityModal) securityModal.classList.remove('active');
+      
+      modalPinInput.value = "";
+      if (modalErrorMessage) modalErrorMessage.style.display = "none";
+      
+      // Memunculkan Modal Pop-up Sukses Profesional yang Baru
+      const verifiedSuccessModal = document.getElementById('verifiedSuccessModal');
+      const btnSecSuccessClose = document.getElementById('btnSecSuccessClose');
+      
+      if (verifiedSuccessModal) {
+        verifiedSuccessModal.classList.add('active');
+      }
+
+      // Menangani penutupan pop-up ketika tombol "Lanjutkan" diklik
+      if (btnSecSuccessClose) {
+        btnSecSuccessClose.onclick = function() {
+          verifiedSuccessModal.classList.remove('active');
+          
+          // Mengembalikan scroll halaman setelah pop-up sukses ditutup resmi oleh pemilik
+          document.body.style.overflow = "auto";
+          document.body.style.height = "auto";
+        };
+      }
+      
+    } else {
+      // PIN SALAH
+      salahHitung++;
+      
+      if (salahHitung >= 3) {
+        // AKTIVASI LOCKDOWN EKSPONENSIAL
+        sedangDikunci = true;
+        
+        localStorage.setItem('security_breach_detected', 'true');
+        periksaRiwayatBlokir();
+
+        // SINKRONISASI: PIN salah 3x, langsung paksa form RSVP kembali ke nama asli
+        const savedOriginalName = localStorage.getItem('guest_original_name');
+        if (savedOriginalName) sinkronkanNamaRSVP(savedOriginalName);
+
+        if (modalNormalState) modalNormalState.style.display = "none";
+        if (modalLockedState) modalLockedState.style.display = "block";
+        
+        let durasiBlokirAktif = waktuBlokirDasar * faktorPengali;
+        
+        setTimeout(() => {
+          sedangDikunci = false;
+          salahHitung = 0;
+          faktorPengali = faktorPengali * 2; 
+          
+          if (modalNormalState) modalNormalState.style.display = "block";
+          if (modalLockedState) modalLockedState.style.display = "none";
+          
+          if (modalPinInput) {
+            modalPinInput.value = "";
+            modalPinInput.focus();
+          }
+          if (modalErrorMessage) modalErrorMessage.style.display = "none";
+        }, durasiBlokirAktif * 1000);
+        
+      } else {
+        if (modalErrorMessage) {
+          modalErrorMessage.style.display = "block";
+          modalErrorMessage.innerText = `PIN Salah! Akses Ditolak. (${salahHitung}/3)`;
+        }
+        modalPinInput.value = "";
+        modalPinInput.focus();
+      }
+    }
+  }
+  // 2. FUNGSI UTAMA: PEMBATALAN AKSES / KEMBALI
+  function batalkanVerifikasi() {
+    const savedOriginalName = localStorage.getItem('guest_original_name');
+    if (securityModal) securityModal.classList.remove('active');
+    
+    document.body.style.overflow = "auto";
+    document.body.style.height = "auto";
+
+    if (modalPinInput) modalPinInput.value = "";
+    if (modalErrorMessage) modalErrorMessage.style.display = "none";
+    if (!sedangDikunci) salahHitung = 0; 
+    
+    if (guestElement && savedOriginalName) {
+      guestElement.innerText = savedOriginalName;
+      
+      // SINKRONISASI: Kembalikan nama RSVP ke nama asli saat tombol batal diklik
+      sinkronkanNamaRSVP(savedOriginalName);
+
+      const urlParams = new URLSearchParams(window.location.search);
+      urlParams.set('to', savedOriginalName);
+      window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
+    }
+  }
+
+  // 3. INISIALISASI EVENT LISTENERS SECURITY
+  if (btnSecConfirm) btnSecConfirm.addEventListener('click', prosesVerifikasiPIN);
+  if (btnSecCancel) btnSecCancel.addEventListener('click', batalkanVerifikasi);
+  if (btnSecLockedBack) btnSecLockedBack.addEventListener('click', batalkanVerifikasi);
+  
+  if (modalPinInput) {
+    modalPinInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') prosesVerifikasiPIN();
+    });
+    //
+  }
+
+  // 4. LOGIKA VALIDASI ALUR DETEKSI PARAMETER URL
+  if (guestElement && guestParam) {
+    const cleanedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
+    targetCleanedName = cleanedName; 
+    
+    const savedOriginalName = localStorage.getItem('guest_original_name');
+    const isAdmin = localStorage.getItem('invitation_admin') === 'true';
+
+    if (isAdmin) {
+      guestElement.innerText = cleanedName;
+      sinkronkanNamaRSVP(cleanedName); // Set form RSVP untuk Admin
+    } else {
+      if (!savedOriginalName) {
+        localStorage.setItem('guest_original_name', cleanedName);
+        guestElement.innerText = cleanedName;
+        sinkronkanNamaRSVP(cleanedName); // Set form RSVP kunjungan pertama
+      } else {
+        if (cleanedName.toLowerCase().trim() === savedOriginalName.toLowerCase().trim()) {
+          guestElement.innerText = cleanedName;
+          sinkronkanNamaRSVP(cleanedName); // Set form RSVP jika nama cocok
+        } else {
+          // SINKRONISASI: Deteksi manipulasi URL, langsung paksa form RSVP ke nama asli
+          sinkronkanNamaRSVP(savedOriginalName); 
+
+          if (securityModal) {
+            securityModal.classList.add('active');
+            document.body.style.overflow = "hidden";
+            document.body.style.height = "100vh";
+          }
+          if (modalPinInput) modalPinInput.focus();
+        }
+      }
+    }
+  } else if (guestElement) {
+    guestElement.innerText = "Tamu Undangan";
+    sinkronkanNamaRSVP("Tamu Undangan");
+  }
+
+  // 5. PENANGANAN FORM RSVP & PEMICU POPUP KUSTOM ELEGAN
+  const wishesForm = document.getElementById('wishesForm');
+  if (wishesForm) {
+    wishesForm.addEventListener('submit', function (e) {
+      e.preventDefault(); // Mencegah halaman reload otomatis
+      
+      // --- LOGIKA SIMPAN DATA ANDA TETAP BERJALAN DI SINI ---
+      
+      // BERHASIL: Munculkan Modal Popup Profesional Kustom Anda!
+      tampilkanPopupRSVP();
+
+      // Reset Form isi teks (kecuali nama tetap terkunci)
+      wishesForm.reset();
+      const currentValidName = guestElement ? guestElement.innerText : "Tamu Undangan";
+      sinkronkanNamaRSVP(currentValidName);
+    });
+  }
+});
+
+// FUNGSI GLOBAL UNTUK BUKA/TUTUP POPUP RSVP KUSTOM
+function tampilkanPopupRSVP() {
+  const successModal = document.getElementById('rsvpSuccessModal');
+  if (successModal) {
+    successModal.classList.add('active');
+  }
+}
+
+function tutupPopupRSVP() {
+  const successModal = document.getElementById('rsvpSuccessModal');
+  if (successModal) {
+    successModal.classList.remove('active');
+  }
+}
+
+// =========================================================================
+// 1. URL WEB APP GOOGLE APPS SCRIPT ANDA (PASTIKAN LINK BENAR & BERAKHIRAN /exec)
+// =========================================================================
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQ_YloF6OtJlqydibxLghluIRRyaATltZmbQyK-qsDblejaLgIb65yBSjEvaLOdGesSA/exec";
+
+document.addEventListener("DOMContentLoaded", function () {
+  
+  // =========================================================================
+  // 2. AMBIL NAMA TAMU DARI URL (Fitur Kustom Nama Tamu)
+  // =========================================================================
+  const urlParams = new URLSearchParams(window.location.search);
+  const guestParam = urlParams.get('to');
+  let cleanedName = "";
+
+  if (guestParam) {
+    cleanedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
+    
+    const guestElement = document.getElementById('guest-name');
+    if (guestElement) {
+      guestElement.innerText = cleanedName;
+    }
+
+    const inputGuestName = document.getElementById('guestName');
+    if (inputGuestName) {
+      inputGuestName.value = cleanedName;
+    }
+  }
+
+  // =========================================================================
+  // 3. MUAT DATA DAN HITUNGAN STATISTIK DARI SPREADSHEET Saat Web Dibuka
+  // =========================================================================
+  loadWishesFromLocal();
+
+  // =========================================================================
+  // 4. PROSES KIRIM DATA KE GOOGLE SHEETS SAAT FORM DI-SUBMIT
+  // =========================================================================
+  const wishesForm = document.getElementById('wishesForm');
+  if (wishesForm) {
+    wishesForm.addEventListener('submit', function (e) {
+      e.preventDefault(); 
+
+      const nama = document.getElementById('guestName').value;
+      const ucapan = document.getElementById('guestMessage').value;
+      const kehadiran = document.getElementById('guestAttendance').value;
+
+      // MENYUSUN DATA: Menggunakan URLSearchParams agar Lolos CORS 100%
+      const formData = new URLSearchParams();
+      formData.append('nama', nama);
+      formData.append('kehadiran', kehadiran);
+      formData.append('ucapan', ucapan); // <-- Data ucapan dikunci di sini untuk dikirim
+
+      const submitBtn = wishesForm.querySelector('.btn-submit-wishes');
+      const originalBtnText = submitBtn.innerText;
+      submitBtn.innerText = "Mengirim...";
+      submitBtn.disabled = true;
+
+      // Kirim data lengkap ke Google Sheets
+      fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        body: formData 
+      })
+      .then(response => response.json())
+      .then((result) => {
+        // Teks Ucapan baru disimpan di Local Browser setelah server merespons sukses
+        saveWishToLocal(nama, ucapan, kehadiran);
+
+        // SINKRONISASI OTOMATIS: Jeda 1.5 detik agar spreadsheet selesai mencatat
+        setTimeout(() => {
+          if (typeof loadWishesFromLocal === "function") {
+            loadWishesFromLocal();
+          }
+        }, 1500);
+
+        // RESET FORM INPUT (Aman dilakukan di sini karena data sudah sukses terkirim)
+        document.getElementById('guestMessage').value = "";
+        document.getElementById('guestAttendance').selectedIndex = 0;
+
+        // MENAMPILKAN POPUP MODAL KUSTOM
+        const rsvpModal = document.getElementById('rsvpModal');
+        const closeRsvpModal = document.getElementById('closeRsvpModal');
+
+        if (rsvpModal && closeRsvpModal) {
+          rsvpModal.classList.add('show');
+
+          closeRsvpModal.onclick = function () {
+            rsvpModal.classList.remove('show');
+          };
+
+          rsvpModal.onclick = function (event) {
+            if (event.target === rsvpModal) {
+              rsvpModal.classList.remove('show');
+            }
+          };
+        }
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        alert("Gagal mengirim data, silakan coba lagi.");
+      })
+      .finally(() => {
+        submitBtn.innerText = originalBtnText;
+        submitBtn.disabled = false;
+      });
+    });
+  }
+});
+
+
+// =========================================================================
+// 5. SIMPAN UCAPAN KE MEMORI LOKAL BROWSER (LOCALSTORAGE)
+// =========================================================================
+function saveWishToLocal(nama, ucapan, kehadiran) {
+  let wishes = [];
+  try {
+    wishes = JSON.parse(localStorage.getItem('wedding_wishes')) || [];
+  } catch(e) {
+    wishes = [];
+  }
+  
+  // Membuat objek data yang lengkap dengan menyertakan ucapan
+  const newWish = {
+    nama: nama,
+    ucapan: ucapan, // <-- Memastikan teks ucapan tersimpan di memori lokal
+    kehadiran: kehadiran,
+    waktu: new Date().toLocaleDateString('id-ID', { hour: '2-digit', minute: '2-digit' })
+  };
+
+  wishes.unshift(newWish); 
+  localStorage.setItem('wedding_wishes', JSON.stringify(wishes));
+  loadWishesFromLocal(); // Perbarui tampilan list di web seketika
+}
+
+// =========================================================================
+// 6. TARIK ANGKA HITUNGAN REAL-TIME DARI GOOGLE SPREADSHEET
+// =========================================================================
+function loadWishesFromLocal() {
+  var wishesList = document.getElementById("wishesList");
+  var totalCommentsOpt = document.getElementById("totalComments");
+  var countHadirOpt = document.getElementById("countHadir");
+  var countTidakHadirOpt = document.getElementById("countTidakHadir");
+
+  // Mengambil angka statistik kehadiran dari Google Sheets
+  if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== "PASTE_URL_APLIKASI_WEB_ANDA_DISINI") {
+    var cacheBusterUrl = GOOGLE_SCRIPT_URL + "?_" + new Date().getTime();
+
+    fetch(cacheBusterUrl, {
+      method: "GET",
+      redirect: "follow"
+    })
+    .then(function(response) {
+      if (!response.ok) throw new Error("Network error");
+      return response.json();
+    })
+    .then(function(data) {
+      if (data) {
+        // Angka counter diperbarui sesuai database Google Sheets
+        if (totalCommentsOpt) totalCommentsOpt.innerText = data.totalComments || 0;
+        if (countHadirOpt) countHadirOpt.innerText = data.hadir || 0;
+        if (countTidakHadirOpt) countTidakHadirOpt.innerText = data.tidakHadir || 0;
+      }
+    })
+    .catch(function(err) {
+      console.error("Gagal memuat statistik dari Sheets:", err);
+    });
+  }
+
+  // Merender daftar ucapan dari LocalStorage agar tampil di halaman Web
+  var wishes = [];
+  try {
+    wishes = JSON.parse(localStorage.getItem("wedding_wishes")) || [];
+  } catch(e) {
+    wishes = [];
+  }
+  
+  var htmlContent = "";
+  wishes.forEach(function(wish) {
+    // Menentukan warna badge status kehadiran
+    var bgBadge = wish.kehadiran === "Hadir" ? "background-color: #e6f4ea; color: #137333;" : "background-color: #fce8e6; color: #c5221f;";
+    
+    // Menyusun elemen HTML untuk nama, status, TEKS UCAPAN, dan waktu kirim
+    htmlContent += '<div class="wish-item" style="border-bottom: 1px solid #eee; padding: 12px 0; margin-top: 10px; text-align: left;">' +
+                   '<strong style="color: #333; font-size: 0.95rem;">' + (wish.nama || 'Tamu') + '</strong>' +
+                   '<span style="font-size: 0.75rem; font-weight: bold; padding: 2px 8px; border-radius: 20px; margin-left: 6px; display: inline-block; ' + bgBadge + '">' +
+                   (wish.kehadiran || 'Hadir') +
+                   '</span>' +
+                   '<p style="margin: 6px 0 4px 0; color: #555; font-size: 0.9rem; line-height: 1.4;">' + (wish.ucapan || '') + '</p>' + // <-- Menampilkan teks ucapan asli
+                   '<small style="color: #999; font-size: 0.75rem;">' + (wish.waktu || '') + '</small>' +
+                   '</div>';
+  });
+
+  if (wishesList) {
+    wishesList.innerHTML = htmlContent;
+  }
+}
+
+// =========================================================================
+// 7. FUNGSI UNTUK MENUTUP POPUP MODAL RSVP SUCCESS
+// =========================================================================
+function tutupPopupRSVP() {
+  const successModal = document.getElementById('rsvpSuccessModal');
+  if (successModal) {
+    successModal.classList.remove('active');
+  }
+}
