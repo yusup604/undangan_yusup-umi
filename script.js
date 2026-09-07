@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const guestElement = document.getElementById('guest-name');
 
   
-  const HASH_MASTER = "8407450e795002048146eec75447a60ee3771f642e145251a154ad6c6d4ad2e3";
+  const HASH_MASTER = "68d66df2bfb3e64f1bc09320667a42bbbc28bf75be72b7f00f074d0a9b6c0757";
 
   let salahHitung = 0;
   let sedangDikunci = false;
