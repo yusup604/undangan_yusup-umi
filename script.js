@@ -400,7 +400,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // =========================================================================
   loadWishesFromLocal();
 
-    // =========================================================================
+      // =========================================================================
   // 4. PROSES KIRIM DATA KE GOOGLE SHEETS SAAT FORM DI-SUBMIT
   // =========================================================================
   const wishesForm = document.getElementById('wishesForm');
@@ -408,58 +408,61 @@ document.addEventListener("DOMContentLoaded", function () {
     wishesForm.addEventListener('submit', function (e) {
       e.preventDefault(); 
 
-      const nama = document.getElementById('guestName').value;
-      const ucapan = document.getElementById('guestMessage').value;
-      const kehadiran = document.getElementById('guestAttendance').value;
+      const namaInput = document.getElementById('guestName');
+      const ucapanInput = document.getElementById('guestMessage');
+      const kehadiranInput = document.getElementById('guestAttendance');
 
-      // MENYUSUN DATA: Menggunakan URLSearchParams asli Anda
-      const formData = new URLSearchParams();
-      formData.append('nama', nama);
-      formData.append('kehadiran', kehadiran);
-      formData.append('ucapan', ucapan); // <-- Mengunci teks ucapan sebelum di-reset
+      if (!namaInput || !ucapanInput || !kehadiranInput) {
+        console.error("Elemen form input tidak ditemukan!");
+        return;
+      }
+
+      const nama = namaInput.value;
+      const ucapan = ucapanInput.value;
+      const kehadiran = kehadiranInput.value;
+
+      // 🟢 LANGSUNG TAMPIL DI LOKAL: Simpan dulu ke memori lokal HP/Laptop tamu
+      saveWishToLocal(nama, ucapan, kehadiran);
+
+      // MENYUSUN DATA: Menggunakan format JSON murni agar sinkron dengan Apps Script Anda
+      const dataKeSheets = {
+        nama: nama,
+        kehadiran: kehadiran,
+        ucapan: ucapan
+      };
 
       const submitBtn = wishesForm.querySelector('.btn-submit-wishes');
       const originalBtnText = submitBtn.innerText;
       submitBtn.innerText = "Mengirim...";
       submitBtn.disabled = true;
 
-      // Kirim data ke Google Sheets
+      // Kirim data ke Google Sheets dengan format JSON Payload
       fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
-        body: formData 
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8' // Menghindari isu CORS pada Google Apps Script
+        },
+        body: JSON.stringify(dataKeSheets) // Mengubah objek menjadi string JSON murni
       })
       .then(response => response.json())
       .then((result) => {
-        // Amankan data ucapan ke local storage SEBELUM form dikosongkan
-        saveWishToLocal(nama, ucapan, kehadiran);
+        console.log("Respon sukses dari Sheets:", result);
 
-        // RESET FORM INPUT
-        document.getElementById('guestMessage').value = "";
-        document.getElementById('guestAttendance').selectedIndex = 0;
+        // RESET FORM INPUT setelah sukses terkirim
+        ucapanInput.value = "";
+        kehadiranInput.selectedIndex = 0;
 
-        // SINKRONISASI OTOMATIS: Jeda 1.5 detik agar spreadsheet selesai mencatat
+        // SINKRONISASI COUTNER: Ambil angka terbaru dari spreadsheet setelah jeda 1.5 detik
         setTimeout(() => {
           if (typeof loadWishesFromLocal === "function") {
             loadWishesFromLocal();
           }
         }, 1500);
 
-        // MENAMPILKAN POPUP MODAL KUSTOM
-        const rsvpModal = document.getElementById('rsvpModal') || document.getElementById('rsvpSuccessModal');
-        const closeRsvpModal = document.getElementById('closeRsvpModal') || document.getElementById('btnSecSuccessClose');
-
-        if (rsvpModal) {
-          rsvpModal.classList.add('show', 'active');
-          if (closeRsvpModal) {
-            closeRsvpModal.onclick = function () {
-              rsvpModal.classList.remove('show', 'active');
-            };
-          }
-        }
+        tampilkanPopupRSVP();
       })
       .catch((error) => {
-        console.error('Error:', error);
-        alert("Gagal mengirim data, silakan coba lagi.");
+        console.error('Error saat kirim ke Sheets:', error);
       })
       .finally(() => {
         submitBtn.innerText = originalBtnText;
@@ -467,7 +470,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
   }
-}); // <-- Penutup DOMContentLoaded utama dari bagian atas script Anda
 
 // =========================================================================
 // 5. SIMPAN UCAPAN KE MEMORI LOKAL BROWSER (LOCALSTORAGE)
