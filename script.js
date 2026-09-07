@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const guestParam = urlParams.get('to');
   const guestElement = document.getElementById('guest-name');
 
-  // HASH MASTER TELAH DIPERBAIKI UNTUK PIN "010625"
+  
   const HASH_MASTER = "8407450e795002048146eec75447a60ee3771f642e145251a154ad6c6d4ad2e3";
 
   let salahHitung = 0;
