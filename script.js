@@ -400,8 +400,8 @@ document.addEventListener("DOMContentLoaded", function () {
   // =========================================================================
   loadWishesFromLocal();
 
-    // =========================================================================
-  // 4. PROSES KIRIM DATA KE GOOGLE SHEETS SAAT FORM DI-SUBMIT
+      // =========================================================================
+  // 4. PROSES TERPADU: AMANKAN LOKAL & KIRIM DATA JSON KE GOOGLE SHEETS
   // =========================================================================
   const wishesForm = document.getElementById('wishesForm');
   if (wishesForm) {
@@ -421,10 +421,10 @@ document.addEventListener("DOMContentLoaded", function () {
       const ucapan = ucapanInput.value;
       const kehadiran = kehadiranInput.value;
 
-      // 🟢 LANGSUNG TAMPIL DI LOKAL: Amankan ke memori lokal browser tamu terlebih dahulu
+      // 🟢 1. LANGSUNG SIMPAN LOKAL: Teks ucapan langsung muncul di layar tamu tanpa delay
       saveWishToLocal(nama, ucapan, kehadiran);
 
-      // SINKRONISASI FORMAT: Kirim sebagai teks murni string JSON agar dibaca Apps Script Anda
+      // 🟢 2. SINRKONISASI FORMAT JSON: Dicocokkan dengan JSON.parse di Apps Script Anda
       const dataKeSheets = {
         nama: nama,
         kehadiran: kehadiran,
@@ -436,33 +436,35 @@ document.addEventListener("DOMContentLoaded", function () {
       submitBtn.innerText = "Mengirim...";
       submitBtn.disabled = true;
 
-      // Kirim data ke Google Sheets dengan format JSON string murni
+      // Kirim paket JSON Payload murni ke Google Sheets
       fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'text/plain;charset=utf-8' // Aman dari pemblokiran CORS oleh browser
+          'Content-Type': 'text/plain;charset=utf-8' // Menghindari batasan CORS browser
         },
         body: JSON.stringify(dataKeSheets)
       })
       .then(response => response.json())
       .then((result) => {
-        console.log("Respon dari Sheets:", result);
+        console.log("Respon Sukses Sheets:", result);
 
-        // RESET FORM INPUT setelah sukses terkirim
+        // 🟢 3. PEMBERSIHAN FORM AMAN: Reset dilakukan di sini setelah data sukses terkirim
         ucapanInput.value = "";
         kehadiranInput.selectedIndex = 0;
 
-        // SINKRONISASI UPDATE: Jeda 1.5 detik untuk memperbarui total counter
+        // 🟢 4. REFRESH COUNTER: Perbarui statistik angka counter dari database utama
         setTimeout(() => {
           if (typeof loadWishesFromLocal === "function") {
             loadWishesFromLocal();
           }
         }, 1500);
 
+        // 🟢 5. SELESAI: Munculkan popup sukses
         tampilkanPopupRSVP();
       })
       .catch((error) => {
         console.error('Error saat kirim ke Sheets:', error);
+        alert("Gagal sinkronisasi data ke cloud, tetapi ucapan Anda sudah tersimpan di lokal.");
       })
       .finally(() => {
         submitBtn.innerText = originalBtnText;
@@ -470,7 +472,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
   }
-}); // 🔴 PENTING: Penutup tanda kurung DOMContentLoaded utama dari script bagian atas Anda
+}); // 🔴 PENUTUP DOMContentLoaded UTAMA DARI FUNGSI BAGIAN ATAS SCRIPT ANDA
 
 // =========================================================================
 // 5. SIMPAN UCAPAN KE MEMORI LOKAL BROWSER (LOCALSTORAGE)
@@ -492,7 +494,7 @@ function saveWishToLocal(nama, ucapan, kehadiran) {
 
   wishes.unshift(newWish); 
   localStorage.setItem('wedding_wishes', JSON.stringify(wishes));
-  loadWishesFromLocal(); // Langsung perbarui tampilan list ucapan di layar bawah web
+  loadWishesFromLocal(); // Render ulang daftar kotak ucapan di bawah form seketika
 }
 
 // =========================================================================
@@ -519,7 +521,9 @@ function loadWishesFromLocal() {
       if (data) {
         if (totalCommentsOpt) totalCommentsOpt.innerText = data.totalComments || 0;
         if (countHadirOpt) countHadirOpt.innerText = data.hadir || 0;
-        if (countTidakHadirOpt) countTidakHadirOpt.innerText = data.tidakHadir || 0;
+        if (countWithoutAttendanceOpt = document.getElementById("countTidakHadir")) {
+          countWithoutAttendanceOpt.innerText = data.tidakHadir || 0;
+        }
       }
     })
     .catch(function(err) {
@@ -560,5 +564,12 @@ function tutupPopupRSVP() {
   const successModal = document.getElementById('rsvpSuccessModal') || document.getElementById('rsvpModal');
   if (successModal) {
     successModal.classList.remove('active', 'show');
+  }
+}
+
+function tampilkanPopupRSVP() {
+  const successModal = document.getElementById('rsvpSuccessModal') || document.getElementById('rsvpModal');
+  if (successModal) {
+    successModal.classList.add('active', 'show');
   }
 }
