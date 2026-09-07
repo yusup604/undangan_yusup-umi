@@ -400,7 +400,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // =========================================================================
   loadWishesFromLocal();
 
-      // =========================================================================
+    // =========================================================================
   // 4. PROSES KIRIM DATA KE GOOGLE SHEETS SAAT FORM DI-SUBMIT
   // =========================================================================
   const wishesForm = document.getElementById('wishesForm');
@@ -421,10 +421,10 @@ document.addEventListener("DOMContentLoaded", function () {
       const ucapan = ucapanInput.value;
       const kehadiran = kehadiranInput.value;
 
-      // 🟢 LANGSUNG TAMPIL DI LOKAL: Simpan dulu ke memori lokal HP/Laptop tamu
+      // 🟢 LANGSUNG TAMPIL DI LOKAL: Amankan ke memori lokal browser tamu terlebih dahulu
       saveWishToLocal(nama, ucapan, kehadiran);
 
-      // MENYUSUN DATA: Menggunakan format JSON murni agar sinkron dengan Apps Script Anda
+      // SINKRONISASI FORMAT: Kirim sebagai teks murni string JSON agar dibaca Apps Script Anda
       const dataKeSheets = {
         nama: nama,
         kehadiran: kehadiran,
@@ -436,23 +436,23 @@ document.addEventListener("DOMContentLoaded", function () {
       submitBtn.innerText = "Mengirim...";
       submitBtn.disabled = true;
 
-      // Kirim data ke Google Sheets dengan format JSON Payload
+      // Kirim data ke Google Sheets dengan format JSON string murni
       fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'text/plain;charset=utf-8' // Menghindari isu CORS pada Google Apps Script
+          'Content-Type': 'text/plain;charset=utf-8' // Aman dari pemblokiran CORS oleh browser
         },
-        body: JSON.stringify(dataKeSheets) // Mengubah objek menjadi string JSON murni
+        body: JSON.stringify(dataKeSheets)
       })
       .then(response => response.json())
       .then((result) => {
-        console.log("Respon sukses dari Sheets:", result);
+        console.log("Respon dari Sheets:", result);
 
         // RESET FORM INPUT setelah sukses terkirim
         ucapanInput.value = "";
         kehadiranInput.selectedIndex = 0;
 
-        // SINKRONISASI COUTNER: Ambil angka terbaru dari spreadsheet setelah jeda 1.5 detik
+        // SINKRONISASI UPDATE: Jeda 1.5 detik untuk memperbarui total counter
         setTimeout(() => {
           if (typeof loadWishesFromLocal === "function") {
             loadWishesFromLocal();
@@ -470,6 +470,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
   }
+}); // 🔴 PENTING: Penutup tanda kurung DOMContentLoaded utama dari script bagian atas Anda
 
 // =========================================================================
 // 5. SIMPAN UCAPAN KE MEMORI LOKAL BROWSER (LOCALSTORAGE)
@@ -484,18 +485,18 @@ function saveWishToLocal(nama, ucapan, kehadiran) {
   
   const newWish = {
     nama: nama,
-    ucapan: ucapan, // <-- Memastikan ucapan ikut masuk ke dalam array lokal
+    ucapan: ucapan, 
     kehadiran: kehadiran,
     waktu: new Date().toLocaleDateString('id-ID', { hour: '2-digit', minute: '2-digit' })
   };
 
   wishes.unshift(newWish); 
   localStorage.setItem('wedding_wishes', JSON.stringify(wishes));
-  loadWishesFromLocal(); // Perbarui list di web seketika
+  loadWishesFromLocal(); // Langsung perbarui tampilan list ucapan di layar bawah web
 }
 
 // =========================================================================
-// 6. TARIK ANGKA HITUNGAN REAL-TIME DARI GOOGLE SPREADSHEET
+// 6. TARIK ANGKA HITUNGAN REAL-TIME DARI GOOGLE SPREADSHEET & RENDER LOCAL
 // =========================================================================
 function loadWishesFromLocal() {
   var wishesList = document.getElementById("wishesList");
