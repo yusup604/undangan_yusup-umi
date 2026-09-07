@@ -412,33 +412,32 @@ if (wishesForm) {
     const ucapan = document.getElementById('guestMessage').value;
     const kehadiran = document.getElementById('guestAttendance').value;
 
-    // MENYUSUN DATA: Menggunakan format JSON murni agar masuk 100% ke Apps Script
-    const dataKeSheets = {
-      nama: nama,
-      kehadiran: kehadiran,
-      ucapan: ucapan
-    };
+    // MENYUSUN DATA: Menggunakan URLSearchParams asli Anda agar cocok dengan Google Sheet awal
+    const formData = new URLSearchParams();
+    formData.append('nama', nama);
+    formData.append('kehadiran', kehadiran);
+    formData.append('ucapan', ucapan); // <-- Ucapan dikunci di sini sebelum form di-reset
 
     const submitBtn = wishesForm.querySelector('.btn-submit-wishes');
     const originalBtnText = submitBtn.innerText;
     submitBtn.innerText = "Mengirim...";
     submitBtn.disabled = true;
 
-    // Kirim data lengkap ke Google Sheets menggunakan metode JSON payload
+    // Kirim data ke Google Sheets
     fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
-      body: JSON.stringify(dataKeSheets)
+      body: formData 
     })
     .then(response => response.json())
     .then((result) => {
-      // Amankan data ke Local Storage TERLEBIH DAHULU menggunakan variabel konstan
+      // 🟢 PERBAIKAN UTAMA: Amankan ke memori lokal SEBELUM form dikosongkan
       saveWishToLocal(nama, ucapan, kehadiran);
 
-      // RESET FORM INPUT setelah data sukses diamankan di lokal browser
+      // RESET FORM INPUT setelah data sukses diamankan di memori lokal browser
       document.getElementById('guestMessage').value = "";
       document.getElementById('guestAttendance').selectedIndex = 0;
 
-      // SINKRONISASI OTOMATIS: Ambil hitungan angka terbaru dari spreadsheet
+      // SINKRONISASI OTOMATIS: Jeda 1.5 detik agar spreadsheet selesai mencatat
       setTimeout(() => {
         if (typeof loadWishesFromLocal === "function") {
           loadWishesFromLocal();
@@ -471,7 +470,9 @@ if (wishesForm) {
       submitBtn.innerText = originalBtnText;
       submitBtn.disabled = false;
     });
-  });
+  }); // <-- Penutup addEventListener yang benar
+} // <-- Penutup blok if (wishesForm) yang benar
+
 
 
 // =========================================================================
