@@ -292,9 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modalPinInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') prosesVerifikasiPIN();
     });
-    modalPinInput.addEventListener('input', function() {
-      this.value = this.value.replace(/[^0-9]/g, '');
-    });
+    //
   }
 
   // 4. LOGIKA VALIDASI ALUR DETEKSI PARAMETER URL
