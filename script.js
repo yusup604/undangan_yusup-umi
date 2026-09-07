@@ -401,78 +401,78 @@ document.addEventListener("DOMContentLoaded", function () {
   loadWishesFromLocal();
 
   // =========================================================================
-  // 4. PROSES KIRIM DATA KE GOOGLE SHEETS SAAT FORM DI-SUBMIT
-  // =========================================================================
-  const wishesForm = document.getElementById('wishesForm');
-  if (wishesForm) {
-    wishesForm.addEventListener('submit', function (e) {
-      e.preventDefault(); 
+// 4. PROSES KIRIM DATA KE GOOGLE SHEETS SAAT FORM DI-SUBMIT
+// =========================================================================
+const wishesForm = document.getElementById('wishesForm');
+if (wishesForm) {
+  wishesForm.addEventListener('submit', function (e) {
+    e.preventDefault(); 
 
-      const nama = document.getElementById('guestName').value;
-      const ucapan = document.getElementById('guestMessage').value;
-      const kehadiran = document.getElementById('guestAttendance').value;
+    const nama = document.getElementById('guestName').value;
+    const ucapan = document.getElementById('guestMessage').value;
+    const kehadiran = document.getElementById('guestAttendance').value;
 
-      // MENYUSUN DATA: Menggunakan URLSearchParams agar Lolos CORS 100%
-      const formData = new URLSearchParams();
-      formData.append('nama', nama);
-      formData.append('kehadiran', kehadiran);
-      formData.append('ucapan', ucapan); // <-- Data ucapan dikunci di sini untuk dikirim
+    // MENYUSUN DATA: Menggunakan format JSON murni agar masuk 100% ke Apps Script
+    const dataKeSheets = {
+      nama: nama,
+      kehadiran: kehadiran,
+      ucapan: ucapan
+    };
 
-      const submitBtn = wishesForm.querySelector('.btn-submit-wishes');
-      const originalBtnText = submitBtn.innerText;
-      submitBtn.innerText = "Mengirim...";
-      submitBtn.disabled = true;
+    const submitBtn = wishesForm.querySelector('.btn-submit-wishes');
+    const originalBtnText = submitBtn.innerText;
+    submitBtn.innerText = "Mengirim...";
+    submitBtn.disabled = true;
 
-      // Kirim data lengkap ke Google Sheets
-      fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        body: formData 
-      })
-      .then(response => response.json())
-      .then((result) => {
-        // Teks Ucapan baru disimpan di Local Browser setelah server merespons sukses
-        saveWishToLocal(nama, ucapan, kehadiran);
+    // Kirim data lengkap ke Google Sheets menggunakan metode JSON payload
+    fetch(GOOGLE_SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(dataKeSheets)
+    })
+    .then(response => response.json())
+    .then((result) => {
+      // Amankan data ke Local Storage TERLEBIH DAHULU menggunakan variabel konstan
+      saveWishToLocal(nama, ucapan, kehadiran);
 
-        // SINKRONISASI OTOMATIS: Jeda 1.5 detik agar spreadsheet selesai mencatat
-        setTimeout(() => {
-          if (typeof loadWishesFromLocal === "function") {
-            loadWishesFromLocal();
-          }
-        }, 1500);
+      // RESET FORM INPUT setelah data sukses diamankan di lokal browser
+      document.getElementById('guestMessage').value = "";
+      document.getElementById('guestAttendance').selectedIndex = 0;
 
-        // RESET FORM INPUT (Aman dilakukan di sini karena data sudah sukses terkirim)
-        document.getElementById('guestMessage').value = "";
-        document.getElementById('guestAttendance').selectedIndex = 0;
-
-        // MENAMPILKAN POPUP MODAL KUSTOM
-        const rsvpModal = document.getElementById('rsvpModal');
-        const closeRsvpModal = document.getElementById('closeRsvpModal');
-
-        if (rsvpModal && closeRsvpModal) {
-          rsvpModal.classList.add('show');
-
-          closeRsvpModal.onclick = function () {
-            rsvpModal.classList.remove('show');
-          };
-
-          rsvpModal.onclick = function (event) {
-            if (event.target === rsvpModal) {
-              rsvpModal.classList.remove('show');
-            }
-          };
+      // SINKRONISASI OTOMATIS: Ambil hitungan angka terbaru dari spreadsheet
+      setTimeout(() => {
+        if (typeof loadWishesFromLocal === "function") {
+          loadWishesFromLocal();
         }
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        alert("Gagal mengirim data, silakan coba lagi.");
-      })
-      .finally(() => {
-        submitBtn.innerText = originalBtnText;
-        submitBtn.disabled = false;
-      });
+      }, 1500);
+
+      // MENAMPILKAN POPUP MODAL KUSTOM
+      const rsvpModal = document.getElementById('rsvpModal');
+      const closeRsvpModal = document.getElementById('closeRsvpModal');
+
+      if (rsvpModal && closeRsvpModal) {
+        rsvpModal.classList.add('show');
+
+        closeRsvpModal.onclick = function () {
+          rsvpModal.classList.remove('show');
+        };
+
+        rsvpModal.onclick = function (event) {
+          if (event.target === rsvpModal) {
+            rsvpModal.classList.remove('show');
+          }
+        };
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      alert("Gagal mengirim data, silakan coba lagi.");
+    })
+    .finally(() => {
+      submitBtn.innerText = originalBtnText;
+      submitBtn.disabled = false;
     });
-  }
-});
+  });
+}
 
 
 // =========================================================================
