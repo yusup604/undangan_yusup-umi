@@ -408,16 +408,24 @@ document.addEventListener("DOMContentLoaded", function () {
     wishesForm.addEventListener('submit', function (e) {
       e.preventDefault(); 
 
-      const nama = document.getElementById('guestName').value;
-      const ucapan = document.getElementById('guestMessage').value;
-      const kehadiran = document.getElementById('guestAttendance').value;
+      // 1. Ambil elemen input secara presisi
+      const inputNama = document.getElementById('guestName');
+      const inputUcapan = document.getElementById('guestMessage');
+      const inputKehadiran = document.getElementById('guestAttendance');
 
-      // MENYUSUN DATA: Menggunakan URLSearchParams
-      const formData = new URLSearchParams();
-      formData.append('nama', nama);
-      formData.append('kehadiran', kehadiran);
-      formData.append('ucapan', ucapan);
+      // 2. Baca nilainya (gunakan fallback jika elemen bernilai null)
+      const nama = inputNama ? inputNama.value.trim() : "";
+      const ucapan = inputUcapan ? inputUcapan.value.trim() : "";
+      const kehadiran = inputKehadiran ? inputKehadiran.value : "Hadir";
 
+      // 3. Validasi: Cegah kirim jika textarea ucapan belum diisi
+      if (!ucapan) {
+        alert("Silakan tulis pesan ucapan terlebih dahulu sebelum mengirim.");
+        if (inputUcapan) inputUcapan.focus();
+        return;
+      }
+
+      // 4. Atur status tombol kirim
       const submitBtn = wishesForm.querySelector('.btn-submit-wishes');
       const originalBtnText = submitBtn ? submitBtn.innerText : "Kirim";
       if (submitBtn) {
@@ -425,7 +433,13 @@ document.addEventListener("DOMContentLoaded", function () {
         submitBtn.disabled = true;
       }
 
-      // Kirim data lengkap ke Google Sheets
+      // 5. Susun parameter data untuk Google Sheets
+      const formData = new URLSearchParams();
+      formData.append('nama', nama || "Tamu Tanpa Nama");
+      formData.append('kehadiran', kehadiran);
+      formData.append('ucapan', ucapan); // <-- Dipastikan terisi teks ucapan
+
+      // 6. Kirim data via fetch POST
       fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         headers: {
@@ -435,47 +449,31 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .then(response => response.json())
       .then((result) => {
-        // Teks Ucapan disimpan di Local Browser & tampilan diperbarui
+        // Simpan ke LocalStorage dan langsung perbarui tampilan web
         saveWishToLocal(nama, ucapan, kehadiran);
 
-        // RESET FORM INPUT (Kecuali Nama jika diambil dari URL)
-        document.getElementById('guestMessage').value = "";
-        document.getElementById('guestAttendance').selectedIndex = 0;
+        // Reset input ucapan & dropdown kehadiran saja (biarkan nama tetap terisi)
+        if (inputUcapan) inputUcapan.value = "";
+        if (inputKehadiran) inputKehadiran.selectedIndex = 0;
 
-        // MENAMPILKAN POPUP MODAL KUSTOM
+        // Tampilkan modal konfirmasi sukses jika ada
         const rsvpModal = document.getElementById('rsvpModal') || document.getElementById('rsvpSuccessModal');
-        const closeRsvpModal = document.getElementById('closeRsvpModal');
-
         if (rsvpModal) {
           rsvpModal.classList.add('show', 'active');
-
-          if (closeRsvpModal) {
-            closeRsvpModal.onclick = function () {
-              rsvpModal.classList.remove('show', 'active');
-            };
-          }
-
-          rsvpModal.onclick = function (event) {
-            if (event.target === rsvpModal) {
-              rsvpModal.classList.remove('show', 'active');
-            }
-          };
         }
 
-        // SINKRONISASI STATISTIK DARI SPREADSHEET: Jeda 1.5 detik
+        // Minta statistik terbaru dari Google Sheets setelah jeda 1.5 detik
         setTimeout(() => {
           fetchStatisticsFromSheets();
         }, 1500);
       })
       .catch((error) => {
-        console.error('Error pengiriman:', error);
+        console.error('Error saat pengiriman:', error);
         
-        // Tetap simpan ke tampilan lokal agar pengalaman pengguna tidak terganggu jika terjadi masalah koneksi
+        // Cadangan: Tetap simpan ke LocalStorage agar input pengguna tidak hilang
         saveWishToLocal(nama, ucapan, kehadiran);
-        document.getElementById('guestMessage').value = "";
-        document.getElementById('guestAttendance').selectedIndex = 0;
-        
-        alert("Ucapan berhasil dipasang!");
+        if (inputUcapan) inputUcapan.value = "";
+        if (inputKehadiran) inputKehadiran.selectedIndex = 0;
       })
       .finally(() => {
         if (submitBtn) {
@@ -485,7 +483,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
   }
-});
 
 // =========================================================================
 // 5. SIMPAN UCAPAN KE MEMORI LOKAL BROWSER (LOCALSTORAGE)
