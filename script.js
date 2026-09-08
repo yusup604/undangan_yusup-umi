@@ -373,107 +373,90 @@ function tutupPopupRSVP() {
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyQ_YloF6OtJlqydibxLghluIRRyaATltZmbQyK-qsDblejaLgIb65yBSjEvaLOdGesSA/exec";
 
 document.addEventListener("DOMContentLoaded", function () {
-  
-  // =========================================================================
-  // 2. AMBIL NAMA TAMU DARI URL (Fitur Kustom Nama Tamu)
-  // =========================================================================
+  // AMBIL NAMA TAMU DARI URL PARAMETER DENGAN AMAN (?to=Nama+Tamu)
   const urlParams = new URLSearchParams(window.location.search);
   const guestParam = urlParams.get('to');
-  let cleanedName = "";
-
   if (guestParam) {
-    cleanedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
-    
+    const cleanedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
     const guestElement = document.getElementById('guest-name');
-    if (guestElement) {
-      guestElement.innerText = cleanedName;
-    }
+    if (guestElement) guestElement.innerText = cleanedName;
 
     const inputGuestName = document.getElementById('guestName');
-    if (inputGuestName) {
-      inputGuestName.value = cleanedName;
+    if (inputGuestName) inputGuestName.value = cleanedName;
+  }
+
+  // Muat data lokal saat web pertama kali dibuka
+  loadWishesFromLocal();
+});
+
+// =========================================================================
+// 4. PROSES UTAMA AMBIL DATA & KIRIM (METODE LANGSUNG FORM ELEMENT)
+// =========================================================================
+function kirimRsvpData(event, formElement) {
+  event.preventDefault(); // Cegah reload halaman
+
+  // MENGAMBIL DATA LANGSUNG DARI ELEMEN INPUT (Anti Gagal / Anti Kosong)
+  const nama = formElement.querySelector('[name="nama"]').value;
+  const ucapan = formElement.querySelector('[name="ucapan"]').value;
+  const kehadiran = formElement.querySelector('[name="kehadiran"]').value;
+
+  // --- UTAMAKAN PROSES LOKAL: TAMPILKAN SEKETIKA ---
+  saveWishToLocal(nama, ucapan, kehadiran);
+
+  // Menyusun objek JSON murni dari hasil tangkapan formulir
+  const payloadData = {
+    nama: nama,
+    kehadiran: kehadiran,
+    ucapan: ucapan
+  };
+
+  // Ubah status tombol menjadi loading
+  const submitBtn = formElement.querySelector('.btn-submit-wishes');
+  let originalBtnText = "Kirim";
+  if (submitBtn) {
+    originalBtnText = submitBtn.innerText;
+    submitBtn.innerText = "Mengirim...";
+    submitBtn.disabled = true;
+  }
+
+  // Bersihkan kolom ucapan & select kehadiran agar siap diisi tamu lain
+  formElement.querySelector('[name="ucapan"]').value = "";
+  formElement.querySelector('[name="kehadiran"]').selectedIndex = 0;
+
+  // Menampilkan popup modal sukses sesuai dengan class CSS modal Anda
+  const rsvpModal = document.querySelector('.rsvp-modal-overlay');
+  const closeRsvpModal = document.querySelector('.rsvp-modal-btn');
+  if (rsvpModal) {
+    rsvpModal.classList.add('show'); 
+    if (closeRsvpModal) {
+      closeRsvpModal.onclick = function () {
+        rsvpModal.classList.remove('show');
+      };
     }
   }
 
-  // =========================================================================
-  // 3. MUAT DATA DAN HITUNGAN STATISTIK DARI SPREADSHEET Saat Web Dibuka
-  // =========================================================================
-  loadWishesFromLocal();
-
-  // =========================================================================
-  // 4. PROSES KIRIM DATA KE GOOGLE SHEETS SAAT FORM DI-SUBMIT
-  // =========================================================================
-  const wishesForm = document.getElementById('wishesForm');
-  if (wishesForm) {
-    wishesForm.addEventListener('submit', function (e) {
-      e.preventDefault(); 
-
-      const nama = document.getElementById('guestName').value;
-      const ucapan = document.getElementById('guestMessage').value;
-      const kehadiran = document.getElementById('guestAttendance').value;
-
-      // MENYUSUN DATA: Menggunakan URLSearchParams agar Lolos CORS 100%
-      const formData = new URLSearchParams();
-      formData.append('nama', nama);
-      formData.append('kehadiran', kehadiran);
-      formData.append('ucapan', ucapan); // <-- Data ucapan dikunci di sini untuk dikirim
-
-      const submitBtn = wishesForm.querySelector('.btn-submit-wishes');
-      const originalBtnText = submitBtn.innerText;
-      submitBtn.innerText = "Mengirim...";
-      submitBtn.disabled = true;
-
-      // Kirim data lengkap ke Google Sheets
-      fetch(GOOGLE_SCRIPT_URL, {
-        method: 'POST',
-        body: formData 
-      })
-      .then(response => response.json())
-      .then((result) => {
-        // Teks Ucapan baru disimpan di Local Browser setelah server merespons sukses
-        saveWishToLocal(nama, ucapan, kehadiran);
-
-        // SINKRONISASI OTOMATIS: Jeda 1.5 detik agar spreadsheet selesai mencatat
-        setTimeout(() => {
-          if (typeof loadWishesFromLocal === "function") {
-            loadWishesFromLocal();
-          }
-        }, 1500);
-
-        // RESET FORM INPUT (Aman dilakukan di sini karena data sudah sukses terkirim)
-        document.getElementById('guestMessage').value = "";
-        document.getElementById('guestAttendance').selectedIndex = 0;
-
-        // MENAMPILKAN POPUP MODAL KUSTOM
-        const rsvpModal = document.getElementById('rsvpModal');
-        const closeRsvpModal = document.getElementById('closeRsvpModal');
-
-        if (rsvpModal && closeRsvpModal) {
-          rsvpModal.classList.add('show');
-
-          closeRsvpModal.onclick = function () {
-            rsvpModal.classList.remove('show');
-          };
-
-          rsvpModal.onclick = function (event) {
-            if (event.target === rsvpModal) {
-              rsvpModal.classList.remove('show');
-            }
-          };
-        }
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        alert("Gagal mengirim data, silakan coba lagi.");
-      })
-      .finally(() => {
-        submitBtn.innerText = originalBtnText;
-        submitBtn.disabled = false;
-      });
-    });
-  }
-});
-
+  // --- KIRIM KE SPREADSHEET DI LATAR BELAKANG ---
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'text/plain;charset=utf-8'
+    },
+    body: JSON.stringify(payloadData)
+  })
+  .then(() => {
+    console.log("Berhasil terkirim ke Spreadsheet.");
+    setTimeout(() => { loadWishesFromLocal(); }, 2000);
+  })
+  .catch((error) => {
+    console.error('Koneksi latar belakang terhambat:', error);
+  })
+  .finally(() => {
+    if (submitBtn) {
+      submitBtn.innerText = originalBtnText;
+      submitBtn.disabled = false;
+    }
+  });
+}
 
 // =========================================================================
 // 5. SIMPAN UCAPAN KE MEMORI LOKAL BROWSER (LOCALSTORAGE)
@@ -486,88 +469,76 @@ function saveWishToLocal(nama, ucapan, kehadiran) {
     wishes = [];
   }
   
-  // Membuat objek data yang lengkap dengan menyertakan ucapan
   const newWish = {
     nama: nama,
-    ucapan: ucapan, // <-- Memastikan teks ucapan tersimpan di memori lokal
+    ucapan: ucapan, 
     kehadiran: kehadiran,
     waktu: new Date().toLocaleDateString('id-ID', { hour: '2-digit', minute: '2-digit' })
   };
 
   wishes.unshift(newWish); 
   localStorage.setItem('wedding_wishes', JSON.stringify(wishes));
-  loadWishesFromLocal(); // Perbarui tampilan list di web seketika
+  renderWishesHTML(wishes);
 }
 
 // =========================================================================
-// 6. TARIK ANGKA HITUNGAN REAL-TIME DARI GOOGLE SPREADSHEET
+// 6. FUNGSI UNTUK MERENDER DAFTAR UCAPAN KE HTML ELEMEN #wishesList
+// =========================================================================
+function renderWishesHTML(wishes) {
+  const wishesList = document.getElementById("wishesList");
+  if (!wishesList) return;
+
+  if (wishes.length === 0) {
+    wishesList.innerHTML = '<p style="color: #888; text-align: center; font-size: 0.9rem; padding: 15px 0;">Belum ada ucapan. Silakan tulis ucapan pertama Anda!</p>';
+    return;
+  }
+
+  let htmlContent = "";
+  wishes.forEach(function(wish) {
+    const bgBadge = wish.kehadiran === "Hadir" ? "background-color: #e6f4ea; color: #137333;" : "background-color: #fce8e6; color: #c5221f;";
+    
+    htmlContent += '<div class="wish-item" style="border-bottom: 1px solid #eee; padding: 12px 0; margin-top: 10px; text-align: left;">' +
+                   '<strong style="color: #333 !important; font-size: 0.95rem; display: inline-block;">' + (wish.nama || 'Tamu') + '</strong>' +
+                   '<span style="font-size: 0.75rem; font-weight: bold; padding: 2px 8px; border-radius: 20px; margin-left: 6px; display: inline-block; ' + bgBadge + '">' +
+                   (wish.kehadiran || 'Hadir') +
+                   '</span>' +
+                   '<div class="teks-ucapan-tamu" style="margin: 8px 0 !important; color: #1e293b !important; font-size: 0.9rem !important; line-height: 1.5 !important; display: block !important; visibility: visible !important; opacity: 1 !important; font-weight: normal !important; word-break: break-word;">' + 
+                     (wish.ucapan || 'Teks ucapan terdeteksi kosong') + 
+                   '</div>' + 
+                   '<small style="color: #999; font-size: 0.75rem; display: block; margin-top: 4px;">' + (wish.waktu || '') + '</small>' +
+                   '</div>';
+  });
+
+  wishesList.innerHTML = htmlContent;
+}
+
+// =========================================================================
+// 7. TARIK ANGKA HITUNGAN STATISTIK DARI SPREADSHEET
 // =========================================================================
 function loadWishesFromLocal() {
-  var wishesList = document.getElementById("wishesList");
-  var totalCommentsOpt = document.getElementById("totalComments");
-  var countHadirOpt = document.getElementById("countHadir");
-  var countTidakHadirOpt = document.getElementById("countTidakHadir");
+  const totalCommentsOpt = document.getElementById("totalComments");
+  const countHadirOpt = document.getElementById("countHadir");
+  const countTidakHadirOpt = document.getElementById("countTidakHadir");
 
-  // Mengambil angka statistik kehadiran dari Google Sheets
-  if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL !== "PASTE_URL_APLIKASI_WEB_ANDA_DISINI") {
-    var cacheBusterUrl = GOOGLE_SCRIPT_URL + "?_" + new Date().getTime();
-
-    fetch(cacheBusterUrl, {
-      method: "GET",
-      redirect: "follow"
-    })
-    .then(function(response) {
-      if (!response.ok) throw new Error("Network error");
-      return response.json();
-    })
-    .then(function(data) {
+  if (GOOGLE_SCRIPT_URL) {
+    const cacheBusterUrl = GOOGLE_SCRIPT_URL + "?_" + new Date().getTime();
+    fetch(cacheBusterUrl, { method: "GET", redirect: "follow" })
+    .then(res => res.json())
+    .then(data => {
       if (data) {
-        // Angka counter diperbarui sesuai database Google Sheets
         if (totalCommentsOpt) totalCommentsOpt.innerText = data.totalComments || 0;
         if (countHadirOpt) countHadirOpt.innerText = data.hadir || 0;
         if (countTidakHadirOpt) countTidakHadirOpt.innerText = data.tidakHadir || 0;
       }
     })
-    .catch(function(err) {
-      console.error("Gagal memuat statistik dari Sheets:", err);
-    });
+    .catch(err => console.error("Gagal memperbarui counter dashboard dari Sheets:", err));
   }
 
-  // Merender daftar ucapan dari LocalStorage agar tampil di halaman Web
-  var wishes = [];
+  let wishes = [];
   try {
     wishes = JSON.parse(localStorage.getItem("wedding_wishes")) || [];
   } catch(e) {
     wishes = [];
   }
-  
-  var htmlContent = "";
-  wishes.forEach(function(wish) {
-    // Menentukan warna badge status kehadiran
-    var bgBadge = wish.kehadiran === "Hadir" ? "background-color: #e6f4ea; color: #137333;" : "background-color: #fce8e6; color: #c5221f;";
-    
-    // Menyusun elemen HTML untuk nama, status, TEKS UCAPAN, dan waktu kirim
-    htmlContent += '<div class="wish-item" style="border-bottom: 1px solid #eee; padding: 12px 0; margin-top: 10px; text-align: left;">' +
-                   '<strong style="color: #333; font-size: 0.95rem;">' + (wish.nama || 'Tamu') + '</strong>' +
-                   '<span style="font-size: 0.75rem; font-weight: bold; padding: 2px 8px; border-radius: 20px; margin-left: 6px; display: inline-block; ' + bgBadge + '">' +
-                   (wish.kehadiran || 'Hadir') +
-                   '</span>' +
-                   '<p style="margin: 6px 0 4px 0; color: #555; font-size: 0.9rem; line-height: 1.4;">' + (wish.ucapan || '') + '</p>' + // <-- Menampilkan teks ucapan asli
-                   '<small style="color: #999; font-size: 0.75rem;">' + (wish.waktu || '') + '</small>' +
-                   '</div>';
-  });
-
-  if (wishesList) {
-    wishesList.innerHTML = htmlContent;
-  }
-}
-
-// =========================================================================
-// 7. FUNGSI UNTUK MENUTUP POPUP MODAL RSVP SUCCESS
-// =========================================================================
-function tutupPopupRSVP() {
-  const successModal = document.getElementById('rsvpSuccessModal');
-  if (successModal) {
-    successModal.classList.remove('active');
-  }
+  renderWishesHTML(wishes);
 }
