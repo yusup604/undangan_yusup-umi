@@ -445,19 +445,19 @@
       </div>
     </div>
 
-    <!-- Form Input Ucapan & RSVP -->
-    <form class="wishes-form" id="wishesForm">
+    <!-- Form Input Ucapan & RSVP (VERSI UPDATE ONSUBMIT) -->
+    <form class="wishes-form" id="wishesForm" onsubmit="kirimRsvpData(event, this)">
       
       <div class="form-group">
-        <input type="text" id="guestName" class="form-input" placeholder="Nama" required />
+        <input type="text" id="guestName" name="nama" class="form-input" placeholder="Nama" required />
       </div>
 
       <div class="form-group">
-        <textarea id="guestMessage" class="form-input form-textarea" placeholder="Ucapan" rows="3" required></textarea>
+        <textarea id="guestMessage" name="ucapan" class="form-input form-textarea" placeholder="Ucapan" rows="3" required></textarea>
       </div>
 
       <div class="form-group">
-        <select id="guestAttendance" class="form-input form-select" required>
+        <select id="guestAttendance" name="kehadiran" class="form-input form-select" required>
           <option value="" disabled selected hidden>Konfirmasi Kehadiran</option>
           <option value="Hadir">Hadir</option>
           <option value="Tidak Hadir">Tidak Hadir</option>
