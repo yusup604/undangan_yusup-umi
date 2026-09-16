@@ -542,3 +542,62 @@ function loadWishesFromLocal() {
   }
   renderWishesHTML(wishes);
 }
+
+// Fungsi untuk membuka & menutup menu melayang drop-down pilih kehadiran
+// Fungsi untuk membuka & menutup menu melayang
+function toggleCustomSelect(element) {
+  const wrapper = element.parentElement;
+  wrapper.classList.toggle('open');
+}
+
+// Fungsi untuk memilih opsi kehadiran
+function selectOption(element) {
+  const value = element.getAttribute('data-value');
+  const wrapper = element.closest('.custom-select-wrapper');
+  
+  // 1. Update teks di tombol utama
+  const triggerText = wrapper.querySelector('.trigger-text');
+  triggerText.textContent = element.textContent.trim();
+  
+  // 2. Masukkan nilai ke input hidden agar bisa dikirim saat submit form
+  const hiddenInput = document.getElementById('guestAttendance');
+  hiddenInput.value = value;
+  
+  // 3. Tutup kembali menu dropdown
+  wrapper.classList.remove('open');
+}
+
+// Menutup dropdown otomatis jika user mengklik di luar area dropdown
+window.addEventListener('click', function(e) {
+  const dropdown = document.getElementById('customDropdown');
+  if (dropdown && !dropdown.contains(e.target)) {
+    dropdown.classList.remove('open');
+  }
+});
+
+
+// Fungsi ketika salah satu opsi (Hadir / Tidak Hadir) dipilih tamu
+function selectCustomOption(optionElement) {
+  const val = optionElement.getAttribute('data-value');
+  const wrapper = optionElement.closest('.custom-select-wrapper');
+  
+  // 1. Ambil elemen input hidden dan ganti nilainya
+  const inputHidden = wrapper.querySelector('#guestAttendance');
+  inputHidden.value = val;
+  
+  // 2. Ganti teks tampilan utama box sesuai pilihan
+  const triggerText = wrapper.querySelector('#selectedText');
+  triggerText.innerText = val;
+  triggerText.style.color = "#0f172a"; // Ubah teks menjadi warna gelap solid
+  
+  // 3. Tutup kembali dropdown melayang
+  wrapper.classList.remove('open');
+}
+
+// Otomatis menutup dropdown jika tamu tidak sengaja mengeklik area luar form
+window.addEventListener('click', function(e) {
+  const wrapper = document.querySelector('.custom-select-wrapper');
+  if (wrapper && !wrapper.contains(e.target)) {
+    wrapper.classList.remove('open');
+  }
+});
