@@ -2316,30 +2316,47 @@ section:has(+ #quote-section) {
   font-size: 16px;
 }
 
-/* Container Utama Pop-up Melayang popup copy rekening */
+/* Container Utama Pop-up Melayang */
 .toast-popup {
   position: fixed;
-  bottom: 40px; /* Jarak dari bawah layar handphone */
+  bottom: 40px; 
   left: 50%;
-  transform: translateX(-50%) translateY(100px); /* Posisi awal tersembunyi di bawah luar layar */
-  background: rgba(33, 37, 41, 0.9); /* Warna latar gelap elegan sedikit transparan */
-  color: #ffffff; /* Warna teks putih bersih */
+  transform: translateX(-50%) translateY(100px); 
+  background: rgba(33, 37, 41, 0.95); 
+  color: #ffffff; 
   padding: 12px 24px;
-  border-radius: 25px; /* Membuat sudut membulat lonjong seperti kapsul */
+  border-radius: 25px; 
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   font-family: inherit;
   font-size: 14px;
   font-weight: 500;
-  z-index: 99999; /* Memastikan pop-up berada di lapisan paling atas */
+  z-index: 99999; 
   opacity: 0;
   pointer-events: none;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Animasi memantul halus */
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  
+  /* KODE BARU: Mengatur posisi ikon dan teks agar sejajar di tengah */
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 /* Class Pemicu Saat Tombol Disalin Ditekan */
 .toast-popup.show-toast {
-  transform: translateX(-50%) translateY(0); /* Bergerak naik ke atas */
-  opacity: 1; /* Terlihat utuh */
+  transform: translateX(-50%) translateY(0); 
+  opacity: 1; 
 }
 
+/* KODE BARU: Mengatur tampilan warna hijau terang pada ikon ceklist */
+.toast-icon-check {
+  color: #2ec4b6; /* Warna hijau toska/mint cerah yang kontras di latar gelap */
+  flex-shrink: 0;
+  animation: popCheck 0.3s ease-in-out; /* Efek animasi kecil saat muncul */
+}
 
+/* Animasi kejutan kecil untuk ikon ceklist */
+@keyframes popCheck {
+  0% { transform: scale(0); }
+  70% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
