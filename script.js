@@ -89,18 +89,45 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// Fungsi Copy Nomor Rekening
+// Fungsi Copy Nomor Rekening Versi Profesional (Tanpa Alert)
 function copyText(elementId) {
   const element = document.getElementById(elementId);
   if (element) {
     const textToCopy = element.innerText;
     navigator.clipboard.writeText(textToCopy).then(() => {
-      alert('Nomor rekening berhasil disalin!');
+      
+      // KODE PERBAIKAN: Memanggil fungsi notifikasi melayang
+      showToastNotification('Nomor rekening berhasil disalin!');
+      
     }).catch(err => {
       console.error('Gagal menyalin: ', err);
     });
   }
 }
+
+// Fungsi Tambahan untuk Membuat Efek Pop-up Melayang Elegan
+function showToastNotification(message) {
+  // 1. Cek apakah elemen toast sudah ada di halaman, jika belum buat baru
+  let toast = document.getElementById('customToastNotification');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'customToastNotification';
+    toast.className = 'toast-popup';
+    document.body.appendChild(toast);
+  }
+
+  // 2. Isi teks teks pesan
+  toast.innerText = message;
+  
+  // 3. Tambahkan class untuk memicu animasi muncul
+  toast.classList.add('show-toast');
+
+  // 4. Hilangkan kembali secara otomatis setelah 2 detik
+  setTimeout(() => {
+    toast.classList.remove('show-toast');
+  }, 2000);
+}
+
 
 // =================================================================
 // 1. GERBANG SECURITY SYSTEM KUSTOM & INTEGRASI POPUP RSVP ELEGAN
