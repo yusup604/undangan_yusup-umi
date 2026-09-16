@@ -740,9 +740,47 @@
   </div>
 </div>
 
+<!-- KODE PROTEKSI  -->
+<script>
+  // 1. Matikan Klik Kanan di Seluruh Halaman
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+  });
 
+  // 2. Matikan Shortcut Keyboard untuk Inspect Element (F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U)
+  document.addEventListener('keydown', function(e) {
+    // Matikan F12
+    if (e.keyCode === 123) {
+      e.preventDefault();
+      return false;
+    }
+    // Matikan Ctrl+Shift+I (Chrome/Edge Inspect)
+    if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+      e.preventDefault();
+      return false;
+    }
+    // Matikan Ctrl+Shift+J (Chrome/Edge Console)
+    if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+      e.preventDefault();
+      return false;
+    }
+    // Matikan Ctrl+U (View Source / Lihat Kode Sumber)
+    if (e.ctrlKey && e.keyCode === 85) {
+      e.preventDefault();
+      return false;
+    }
+  });
+</script>
 
-
+<!-- CSS PENDUKUNG: Matikan Blok Teks Global -->
+<style>
+  body {
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none;    /* Firefox */
+    -ms-user-select: none;     /* IE10+ */
+    user-select: none;         /* Standard */
+  }
+</style>
       
 </body>
 </html>
