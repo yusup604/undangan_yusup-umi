@@ -105,7 +105,7 @@ function copyText(elementId) {
   }
 }
 
-// Fungsi Tambahan untuk Membuat Efek Pop-up Melayang Elegan
+// Fungsi Tambahan untuk Membuat Efek Pop-up Melayang Elegan dengan Ikon
 function showToastNotification(message) {
   // 1. Cek apakah elemen toast sudah ada di halaman, jika belum buat baru
   let toast = document.getElementById('customToastNotification');
@@ -116,8 +116,13 @@ function showToastNotification(message) {
     document.body.appendChild(toast);
   }
 
-  // 2. Isi teks teks pesan
-  toast.innerText = message;
+  // 2. Isi dengan ikon ceklist hijau (SVG) dan teks pesan
+  toast.innerHTML = `
+    <svg class="toast-icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+    <span>${message}</span>
+  `;
   
   // 3. Tambahkan class untuk memicu animasi muncul
   toast.classList.add('show-toast');
