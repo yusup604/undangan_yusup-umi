@@ -457,12 +457,26 @@
       </div>
 
       <div class="form-group">
-        <select id="guestAttendance" name="kehadiran" class="form-input form-select" required>
-          <option value="" disabled selected hidden>Konfirmasi Kehadiran</option>
-          <option value="Hadir">Hadir</option>
-          <option value="Tidak Hadir">Tidak Hadir</option>
-        </select>
-      </div>
+          <!-- Input hidden untuk tetap menyimpan data yang akan dikirim oleh form -->
+          <input type="hidden" id="guestAttendance" name="kehadiran" required />
+          
+          <!-- Struktur Custom Dropdown -->
+          <div class="custom-select-wrapper" id="customDropdown">
+            <div class="custom-select-trigger" onclick="toggleCustomSelect(this)">
+              <span class="trigger-text">Konfirmasi Kehadiran</span>
+              <span class="arrow-icon">▼</span>
+            </div>
+            <div class="custom-options">
+              <div class="custom-option" data-value="Hadir" onclick="selectOption(this)">
+                <span class="option-icon">✨</span> Hadir
+              </div>
+              <div class="custom-option" data-value="Tidak Hadir" onclick="selectOption(this)">
+                <span class="option-icon">✉️</span> Tidak Hadir
+              </div>
+            </div>
+          </div>
+        </div>
+
 
       <button type="submit" class="btn-submit-wishes">Kirim</button>
 
