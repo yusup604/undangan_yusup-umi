@@ -2316,7 +2316,7 @@ section:has(+ #quote-section) {
   font-size: 16px;
 }
 
-/* Container Utama Pop-up Melayang */
+/* Container Utama Pop-up Melayang opup Copy Rekening */
 .toast-popup {
   position: fixed;
   bottom: 40px; 
@@ -2339,6 +2339,13 @@ section:has(+ #quote-section) {
   display: flex;
   align-items: center;
   gap: 10px;
+
+  /* ======================================================== */
+  /* KODE PERBAIKAN UTAMA: Tambahkan 3 baris ini di bawah gap */
+  /* ======================================================== */
+  width: max-content;    /* Memaksa lebar kotak melebar mengikuti tulisan */
+  max-width: 90vw;      /* Membatasi agar tidak meluber keluar layar HP */
+  white-space: nowrap;  /* Mengunci teks agar tidak bisa patah ke bawah */
 }
 
 /* Class Pemicu Saat Tombol Disalin Ditekan */
@@ -2360,3 +2367,4 @@ section:has(+ #quote-section) {
   70% { transform: scale(1.2); }
   100% { transform: scale(1); }
 }
+
