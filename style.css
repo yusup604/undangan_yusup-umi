@@ -2294,6 +2294,7 @@ section:has(+ #quote-section) {
   align-items: center;
   gap: 10px;
   transition: background 0.2s ease;
+  color: #333333 !important;
 }
 
 .custom-option:first-child {
