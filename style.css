@@ -2224,3 +2224,95 @@ section:has(+ #quote-section) {
   transform: scale(0.98); /* Efek membal saat ditekan jempol */
 }
 
+/* Container Utama Custom Dropdown */
+.custom-select-wrapper {
+  position: relative;
+  user-select: none;
+  width: 100%;
+}
+
+/* Tombol Pemicu / Kolom Utama */
+.custom-select-trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.custom-select-trigger:hover {
+  border-color: #708090; /* Sesuaikan warna tema pernikahan Anda */
+}
+
+.arrow-icon {
+  font-size: 10px;
+  transition: transform 0.3s ease;
+}
+
+/* Menu Pilihan Melayang */
+.custom-options {
+  position: absolute;
+  display: block;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-top: 5px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+/* POPup kehadiran */
+/* Ketika Dropdown Terbuka */
+.custom-select-wrapper.open .custom-options {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.custom-select-wrapper.open .arrow-icon {
+  transform: rotate(180deg);
+}
+
+/* Item Pilihan Di Dalam Dropdown */
+.custom-option {
+  padding: 12px 15px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: background 0.2s ease;
+}
+
+.custom-option:first-child {
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.custom-option:last-child {
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.custom-option:hover {
+  background: #f5f7fa; /* Warna hover abu-abu terang premium */
+  color: #333;
+}
+
+.option-icon {
+  font-size: 16px;
+}
+
+
