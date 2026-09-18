@@ -742,6 +742,12 @@
 
 <!-- KODE PROTEKSI  -->
 <script>
+  // === TARUH DI SINI (Paling Atas) ===
+  // Anti-DevTools: Memaksa browser berhenti jika F12 terbuka duluan
+  setInterval(function() {
+    debugger;
+  }, 100);
+
   // 1. Matikan Klik Kanan di Seluruh Halaman
   document.addEventListener('contextmenu', function(e) {
     e.preventDefault();
@@ -781,6 +787,7 @@
     user-select: none;         /* Standard */
   }
 </style>
+
       
 </body>
 </html>
