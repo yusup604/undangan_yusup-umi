@@ -236,7 +236,7 @@
         const teksPesan = "Halo " + nama + ", kami mengundang Anda ke acara pernikahan kami. Silakan buka tautan resmi Anda di sini untuk melihat detail acara dan konfirmasi kehadiran: " + linkLengkap;
         
         // 🔥 PERBAIKAN TOTAL: Ditambahkan tanda / setelah wa.me dan diarahkan natural via atribut .href
-        btnAction.href = "https://wa.me" + nomorValid + "?text=" + encodeURIComponent(teksPesan);
+        btnAction.href = "https://wa.me/" + nomorValid + "?text=" + encodeURIComponent(teksPesan);
         btnAction.target = "_blank"; // Membuka aplikasi WhatsApp / tab baru tanpa terblokir pop-up browser
         
       } else {
