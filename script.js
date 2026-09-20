@@ -342,9 +342,8 @@ document.addEventListener('DOMContentLoaded', () => {
         btnAction.onclick = () => {
           const teksPesan = `Halo ${nama}, kami mengundang Anda ke acara pernikahan kami. Silakan buka tautan berikut untuk melihat detail undangan resmi Anda:\n\n${linkLengkapFinal}`;
           
-          // Perbaikan interpolasi variabel nomor HP dengan benar
           window.open(`https://wa.me{angkaSaja}?text=${encodeURIComponent(teksPesan)}`, '_blank');
-        };
+
       } else {
         // JALUR CETAK
         hasilLinkBelakang = `index.html?to=${urlFormat}&type=cetak`;
