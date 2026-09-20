@@ -133,8 +133,297 @@ function showToastNotification(message) {
   }, 2000);
 }
 
+// =================================================================
+// KODE SECURITY SYSTEM 100% LOKAL (DUAL-MODE ADMIN: WA & CETAK QR)
+// =================================================================
 
-const _0xd8bdf2=_0x1942;function _0x1942(_0x5930a7,_0x58ee2e){_0x5930a7=_0x5930a7-0xd5;const _0x49311f=_0x4931();let _0x194258=_0x49311f[_0x5930a7];return _0x194258;}(function(_0xa30b3b,_0xbfbc23){const _0x10f920=_0x1942,_0x200d18=_0xa30b3b();while(!![]){try{const _0x25abe5=parseInt(_0x10f920(0xf4))/0x1*(-parseInt(_0x10f920(0x11d))/0x2)+-parseInt(_0x10f920(0xe2))/0x3*(-parseInt(_0x10f920(0x115))/0x4)+-parseInt(_0x10f920(0x120))/0x5*(-parseInt(_0x10f920(0xeb))/0x6)+parseInt(_0x10f920(0x10c))/0x7*(-parseInt(_0x10f920(0x117))/0x8)+-parseInt(_0x10f920(0xf3))/0x9*(-parseInt(_0x10f920(0xf9))/0xa)+parseInt(_0x10f920(0xfc))/0xb+-parseInt(_0x10f920(0x11c))/0xc;if(_0x25abe5===_0xbfbc23)break;else _0x200d18['push'](_0x200d18['shift']());}catch(_0x8f65d2){_0x200d18['push'](_0x200d18['shift']());}}}(_0x4931,0x53a1a),document[_0xd8bdf2(0xf7)](_0xd8bdf2(0x108),()=>{const _0x277b92=_0xd8bdf2;typeof AOS!==_0x277b92(0x125)&&AOS[_0x277b92(0xe0)]({'duration':0x3e8,'once':![]});const _0xdb67e8=new URLSearchParams(window['location'][_0x277b92(0xd7)]),_0x2cac0e=_0xdb67e8[_0x277b92(0x118)]('to'),_0x22eaaa=document['getElementById'](_0x277b92(0xe3)),_0x560cf6=_0x277b92(0xfd);let _0x51f6bf=0x0,_0x10bc89=![],_0x160fc4='',_0x4543d4=0x3c,_0x57f44e=0x1;function _0x3a2dd3(_0x40e0d6){const _0x3ccfd1=_0x277b92,_0x4b3c34=document[_0x3ccfd1(0xe8)](_0x3ccfd1(0xda));_0x4b3c34?(_0x4b3c34['value']=_0x40e0d6,_0x4b3c34[_0x3ccfd1(0xe7)]=!![],_0x4b3c34[_0x3ccfd1(0xe1)][_0x3ccfd1(0xd8)]='#f3f4f6',_0x4b3c34['style'][_0x3ccfd1(0xdc)]=_0x3ccfd1(0xf6)):console[_0x3ccfd1(0x121)](_0x3ccfd1(0x10b));}async function _0x151c30(_0x4e3c08){const _0x18edb8=_0x277b92,_0x382976=new TextEncoder()[_0x18edb8(0xf8)](_0x4e3c08),_0x1eacac=await crypto['subtle'][_0x18edb8(0x11f)](_0x18edb8(0xff),_0x382976),_0x4ec653=Array['from'](new Uint8Array(_0x1eacac));return _0x4ec653[_0x18edb8(0xed)](_0xcc7f75=>_0xcc7f75[_0x18edb8(0x11a)](0x10)['padStart'](0x2,'0'))[_0x18edb8(0x10a)]('');}const _0x4749d7=document[_0x277b92(0xe8)](_0x277b92(0x112)),_0x3c575b=document['getElementById']('modalNormalState'),_0x299212=document['getElementById'](_0x277b92(0x114)),_0x52781c=document[_0x277b92(0xe8)](_0x277b92(0x113)),_0x3ae0a0=document[_0x277b92(0xe8)](_0x277b92(0x102)),_0x2c92a2=document[_0x277b92(0xe8)](_0x277b92(0xf1)),_0x582447=document[_0x277b92(0xe8)]('btnSecConfirm'),_0x45f2db=document[_0x277b92(0xe8)](_0x277b92(0xd5)),_0x26b8f8=document[_0x277b92(0xe8)](_0x277b92(0x104));function _0x2169c6(){const _0x5d59c1=_0x277b92;if(localStorage[_0x5d59c1(0xfa)](_0x5d59c1(0x105))==='true'){if(_0x52781c)_0x52781c[_0x5d59c1(0xe1)][_0x5d59c1(0xf2)]=_0x5d59c1(0x116);}else{if(_0x52781c)_0x52781c[_0x5d59c1(0xe1)][_0x5d59c1(0xf2)]=_0x5d59c1(0x10d);}}_0x2169c6();async function _0x2b6c72(){const _0x3109f5=_0x277b92;if(!_0x3ae0a0||_0x10bc89)return;const _0x4dbc20=_0x3ae0a0[_0x3109f5(0xd9)],_0x6ba682=await _0x151c30(_0x4dbc20);if(_0x6ba682===_0x560cf6){_0x51f6bf=0x0,_0x57f44e=0x1,localStorage[_0x3109f5(0xfe)]('invitation_admin',_0x3109f5(0xee)),localStorage[_0x3109f5(0xfe)](_0x3109f5(0xe6),_0x160fc4),_0x3a2dd3(_0x160fc4),localStorage['removeItem'](_0x3109f5(0x105)),_0x2169c6();if(_0x22eaaa)_0x22eaaa[_0x3109f5(0xec)]=_0x160fc4;if(_0x4749d7)_0x4749d7[_0x3109f5(0x119)][_0x3109f5(0x126)]('active');_0x3ae0a0[_0x3109f5(0xd9)]='';if(_0x2c92a2)_0x2c92a2[_0x3109f5(0xe1)]['display']='none';const _0x264992=document[_0x3109f5(0xe8)](_0x3109f5(0x110)),_0x21c372=document[_0x3109f5(0xe8)](_0x3109f5(0xdf));_0x264992&&_0x264992[_0x3109f5(0x119)]['add'](_0x3109f5(0xe5)),_0x21c372&&(_0x21c372[_0x3109f5(0x127)]=function(){const _0x161549=_0x3109f5;_0x264992[_0x161549(0x119)][_0x161549(0x126)](_0x161549(0xe5)),document[_0x161549(0xdd)][_0x161549(0xe1)][_0x161549(0x101)]=_0x161549(0x10f),document[_0x161549(0xdd)][_0x161549(0xe1)][_0x161549(0x11e)]=_0x161549(0x10f);});}else{_0x51f6bf++;if(_0x51f6bf>=0x3){_0x10bc89=!![],localStorage['setItem'](_0x3109f5(0x105),_0x3109f5(0xee)),_0x2169c6();const _0x5d40db=localStorage[_0x3109f5(0xfa)](_0x3109f5(0xe6));if(_0x5d40db)_0x3a2dd3(_0x5d40db);if(_0x3c575b)_0x3c575b[_0x3109f5(0xe1)]['display']=_0x3109f5(0x10d);if(_0x299212)_0x299212['style'][_0x3109f5(0xf2)]=_0x3109f5(0x123);let _0x33a38d=_0x4543d4*_0x57f44e;setTimeout(()=>{const _0x34e181=_0x3109f5;_0x10bc89=![],_0x51f6bf=0x0,_0x57f44e=_0x57f44e*0x2;if(_0x3c575b)_0x3c575b[_0x34e181(0xe1)][_0x34e181(0xf2)]=_0x34e181(0x123);if(_0x299212)_0x299212['style'][_0x34e181(0xf2)]=_0x34e181(0x10d);_0x3ae0a0&&(_0x3ae0a0['value']='',_0x3ae0a0[_0x34e181(0x109)]());if(_0x2c92a2)_0x2c92a2[_0x34e181(0xe1)][_0x34e181(0xf2)]=_0x34e181(0x10d);},_0x33a38d*0x3e8);}else _0x2c92a2&&(_0x2c92a2[_0x3109f5(0xe1)][_0x3109f5(0xf2)]=_0x3109f5(0x123),_0x2c92a2[_0x3109f5(0xec)]=_0x3109f5(0xea)+_0x51f6bf+_0x3109f5(0x124)),_0x3ae0a0[_0x3109f5(0xd9)]='',_0x3ae0a0[_0x3109f5(0x109)]();}}function _0x3e3677(){const _0x38e11e=_0x277b92,_0x14ceb3=localStorage[_0x38e11e(0xfa)](_0x38e11e(0xe6));if(_0x4749d7)_0x4749d7[_0x38e11e(0x119)][_0x38e11e(0x126)]('active');document[_0x38e11e(0xdd)][_0x38e11e(0xe1)][_0x38e11e(0x101)]='auto',document['body'][_0x38e11e(0xe1)][_0x38e11e(0x11e)]=_0x38e11e(0x10f);if(_0x3ae0a0)_0x3ae0a0[_0x38e11e(0xd9)]='';if(_0x2c92a2)_0x2c92a2[_0x38e11e(0xe1)][_0x38e11e(0xf2)]=_0x38e11e(0x10d);if(!_0x10bc89)_0x51f6bf=0x0;if(_0x22eaaa&&_0x14ceb3){_0x22eaaa[_0x38e11e(0xec)]=_0x14ceb3,_0x3a2dd3(_0x14ceb3);const _0x51d2b7=new URLSearchParams(window[_0x38e11e(0xfb)][_0x38e11e(0xd7)]);_0x51d2b7[_0x38e11e(0x106)]('to',_0x14ceb3),window[_0x38e11e(0xe9)][_0x38e11e(0xd6)]({},'',window[_0x38e11e(0xfb)][_0x38e11e(0xdb)]+'?'+_0x51d2b7[_0x38e11e(0x11a)]());}}if(_0x582447)_0x582447['addEventListener'](_0x277b92(0x100),_0x2b6c72);if(_0x45f2db)_0x45f2db['addEventListener'](_0x277b92(0x100),_0x3e3677);if(_0x26b8f8)_0x26b8f8['addEventListener'](_0x277b92(0x100),_0x3e3677);_0x3ae0a0&&_0x3ae0a0[_0x277b92(0xf7)](_0x277b92(0x111),_0x4d419c=>{const _0xd455bc=_0x277b92;if(_0x4d419c['key']===_0xd455bc(0xf0))_0x2b6c72();});if(_0x22eaaa&&_0x2cac0e){const _0x250b6e=decodeURIComponent(_0x2cac0e['replace'](/\+/g,'\x20'));_0x160fc4=_0x250b6e;const _0x2218df=localStorage[_0x277b92(0xfa)](_0x277b92(0xe6)),_0x56a336=localStorage[_0x277b92(0xfa)](_0x277b92(0x107))===_0x277b92(0xee);if(_0x56a336)_0x22eaaa[_0x277b92(0xec)]=_0x250b6e,_0x3a2dd3(_0x250b6e);else{if(!_0x2218df)localStorage[_0x277b92(0xfe)](_0x277b92(0xe6),_0x250b6e),_0x22eaaa[_0x277b92(0xec)]=_0x250b6e,_0x3a2dd3(_0x250b6e);else{if(_0x250b6e[_0x277b92(0x122)]()['trim']()===_0x2218df[_0x277b92(0x122)]()['trim']())_0x22eaaa[_0x277b92(0xec)]=_0x250b6e,_0x3a2dd3(_0x250b6e);else{_0x3a2dd3(_0x2218df);_0x4749d7&&(_0x4749d7['classList'][_0x277b92(0xef)](_0x277b92(0xe5)),document[_0x277b92(0xdd)][_0x277b92(0xe1)][_0x277b92(0x101)]=_0x277b92(0x10e),document[_0x277b92(0xdd)][_0x277b92(0xe1)][_0x277b92(0x11e)]='100vh');if(_0x3ae0a0)_0x3ae0a0[_0x277b92(0x109)]();}}}}else _0x22eaaa&&(_0x22eaaa[_0x277b92(0xec)]='Tamu\x20Undangan',_0x3a2dd3(_0x277b92(0xde)));const _0x105703=document['getElementById'](_0x277b92(0xf5));_0x105703&&_0x105703[_0x277b92(0xf7)]('submit',function(_0x4d2686){const _0x289aac=_0x277b92;_0x4d2686[_0x289aac(0xe4)](),tampilkanPopupRSVP(),_0x105703[_0x289aac(0x11b)]();const _0x36acb1=_0x22eaaa?_0x22eaaa['innerText']:'Tamu\x20Undangan';_0x3a2dd3(_0x36acb1);});}));function tampilkanPopupRSVP(){const _0x53faca=_0xd8bdf2,_0x4d8cd8=document['getElementById'](_0x53faca(0x103));_0x4d8cd8&&_0x4d8cd8['classList'][_0x53faca(0xef)](_0x53faca(0xe5));}function tutupPopupRSVP(){const _0x4225c7=_0xd8bdf2,_0x305323=document['getElementById'](_0x4225c7(0x103));_0x305323&&_0x305323['classList']['remove'](_0x4225c7(0xe5));}function _0x4931(){const _0x3a37ca=['Enter','modalErrorMessage','display','9VBfxIc','2MwHbWa','wishesForm','not-allowed','addEventListener','encode','4212790HvLsin','getItem','location','6754242FmJSyZ','0d08c39a651f01f1316c9c63ba9d2ddefdae09fe18840f4882ba437b85230952','setItem','SHA-256','click','overflow','modalPinInput','rsvpSuccessModal','btnSecLockedBack','security_breach_detected','set','invitation_admin','DOMContentLoaded','focus','join','Sistem\x20Keamanan:\x20Elemen\x20id=\x27guestName\x27\x20tidak\x20ditemukan\x20di\x20HTML!','14357snKCPC','none','hidden','auto','verifiedSuccessModal','keypress','securityModal','miniSecurityAlert','modalLockedState','124OrcgTf','flex','1656BYodEe','get','classList','toString','reset','8108364hurEwe','320528zVkCJq','height','digest','5RkiXSc','warn','toLowerCase','block','/3)','undefined','remove','onclick','btnSecCancel','replaceState','search','backgroundColor','value','guestName','pathname','cursor','body','Tamu\x20Undangan','btnSecSuccessClose','init','style','58434hBrxjU','guest-name','preventDefault','active','guest_original_name','readOnly','getElementById','history','PIN\x20Salah!\x20Akses\x20Ditolak.\x20(','745302dBHweP','innerText','map','true','add'];_0x4931=function(){return _0x3a37ca;};return _0x4931();}
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof AOS !== 'undefined') {
+    AOS.init({ duration: 1000, once: false });
+  }
+
+  // 1. KONFIGURASI KUNCI MASTER UTAMA
+  const HASH_MASTER = "0d08c39a651f01f1316c9c63ba9d2ddefdae09fe18840f4882ba437b85230952";
+
+  let salahHitung = 0;
+  let sedangDikunci = false;
+  let targetCleanedName = "";
+  let waktuBlokirDasar = 60; 
+  let faktorPengali = 1;
+
+  // Elemen HTML Security Modal Anda
+  const securityModal = document.getElementById('securityModal');
+  const modalNormalState = document.getElementById('modalNormalState');
+  const modalLockedState = document.getElementById('modalLockedState');
+  const modalPinInput = document.getElementById('modalPinInput');
+  const modalErrorMessage = document.getElementById('modalErrorMessage');
+  const btnSecConfirm = document.getElementById('btnSecConfirm');
+  const btnSecCancel = document.getElementById('btnSecCancel');
+  const btnSecLockedBack = document.getElementById('btnSecLockedBack');
+  const guestElement = document.getElementById('guest-name');
+
+  // A. FUNGSI HASH SHA-256 (Untuk Verifikasi PIN Admin & Proteksi WA)
+  async function hitungHashSHA256(teks) {
+    const msgBuffer = new TextEncoder().encode(teks);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+    // B. PENGUNCIAN INPUT FORM RSVP
+  function sinkronkanNamaRSVP(namaAman) {
+    const rsvpNameInput = document.getElementById('guestName');
+    if (rsvpNameInput) {
+      rsvpNameInput.value = namaAman;
+      rsvpNameInput.readOnly = true; 
+      rsvpNameInput.style.backgroundColor = "#f3f4f6"; 
+      rsvpNameInput.style.cursor = "not-allowed";
+    }
+  }
+
+  // C. LOCKDOWN TOTAL (Anti-Bypass Layar)
+  function aktifkanLockdownTotal() {
+    if (securityModal) {
+      securityModal.classList.add('active');
+      document.body.style.overflow = "hidden";
+      document.body.style.height = "100vh";
+    }
+    if (modalPinInput) modalPinInput.focus();
+  }
+
+  // D. PERBAIKAN TOMBOL BATAL YANG BOCOR (100% DIKUNCI MATI)
+  function batalkanVerifikasi() {
+    alert("Akses Ditolak! Tautan ini dilindungi keamanan enkripsi. Anda tidak bisa keluar tanpa PIN resmi.");
+    aktifkanLockdownTotal(); 
+  }
+
+  // E. VERIFIKASI PIN ADMIN JIKA TERJADI LOCKDOWN
+  async function prosesVerifikasiPIN() {
+    if (!modalPinInput || sedangDikunci) return;
+    const inputUser = modalPinInput.value;
+    const hashInputUser = await hitungHashSHA256(inputUser);
+
+    if (hashInputUser === HASH_MASTER) {
+      salahHitung = 0;
+      faktorPengali = 1;
+      localStorage.setItem('akses_sah_lokal', 'TOKEN_BYPASS_ADMIN');
+      if (modalErrorMessage) modalErrorMessage.style.display = "none";
+      if (securityModal) securityModal.classList.remove('active');
+      document.body.style.overflow = "auto";
+      document.body.style.height = "auto";
+      
+      const verifiedSuccessModal = document.getElementById('verifiedSuccessModal');
+      if (verifiedSuccessModal) verifiedSuccessModal.classList.add('active');
+    } else {
+      salahHitung++;
+      if (salahHitung >= 3) {
+        sedangDikunci = true;
+        if (modalNormalState) modalNormalState.style.display = "none";
+        if (modalLockedState) modalLockedState.style.display = "block";
+        
+        let durasiBlokirAktif = waktuBlokirDasar * faktorPengali;
+        setTimeout(() => {
+          sedangDikunci = false;
+          salahHitung = 0;
+          faktorPengali *= 2;
+          if (modalNormalState) modalNormalState.style.display = "block";
+          if (modalLockedState) modalLockedState.style.display = "none";
+          modalPinInput.value = "";
+          modalPinInput.focus();
+        }, durasiBlokirAktif * 1000);
+      } else {
+        if (modalErrorMessage) {
+          modalErrorMessage.style.display = "block";
+          modalErrorMessage.innerText = `PIN Salah! Akses Ditolak. (${salahHitung}/3)`;
+        }
+        modalPinInput.value = "";
+      }
+    }
+  }
+
+  // F. EVALUASI PARAMETER URL & DUO MODE VALIDASI
+  const urlParams = new URLSearchParams(window.location.search);
+  const guestParam = urlParams.get('to');
+  const vParam = urlParams.get('v'); 
+  const typeParam = urlParams.get('type') || 'pribadi';
+  const modeParam = urlParams.get('mode');
+
+    // 🌟 MODUL PANEL GENERATOR INTERAKTIF BARU KHUSUS ADMIN (Akses via /index.html?mode=admin)
+  if (modeParam === 'admin') {
+    document.body.innerHTML = `
+      <div style="font-family:sans-serif; padding:40px; background:#f0f2f5; min-height:100vh; display:flex; justify-content:center; align-items:center;">
+        <div style="background:white; padding:35px; border-radius:14px; box-shadow:0 15px 35px rgba(0,0,0,0.08); width:100%; max-width:480px;">
+          <h2 style="margin-top:0; color:#1e293b; text-align:center; border-bottom:2px solid #f1f5f9; padding-bottom:15px;">Admin URL Generator Control Panel</h2>
+          <div style="margin:20px 0;">
+            <label style="font-weight:bold; font-size:14px; color:#475569;">1. Pilih Jalur Distribusi Undangan:</label>
+            <div style="display:flex; gap:10px; margin-top:8px;">
+              <button id="tabWA" style="flex:1; padding:10px; border-radius:6px; border:2px solid #25d366; background:#e8fced; color:#0e622b; font-weight:bold; cursor:pointer;">📲 Jalur WhatsApp Digital</button>
+              <button id="tabCetak" style="flex:1; padding:10px; border-radius:6px; border:2px solid #64748b; background:#f8fafc; color:#334155; font-weight:bold; cursor:pointer;">🖨️ Jalur Undangan Cetak (QR)</button>
+            </div>
+          </div>
+          <label style="font-weight:bold; font-size:14px; color:#475569;">2. Nama Tamu / Komunitas:</label>
+          <input type="text" id="admNama" placeholder="Contoh: Yuliana Putri" style="width:100%; padding:12px; margin:8px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;">
+          <div id="wrapperWAInput">
+            <label style="font-weight:bold; font-size:14px; color:#475569;">3. Tempel Kontak / Nomor HP WhatsApp:</label>
+            <input type="text" id="admWA" placeholder="Contoh: 081234567890 atau tempel profil WA" style="width:100%; padding:12px; margin:8px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;">
+          </div>
+          <button id="btnGen" style="width:100%; background:#25d366; color:white; border:none; padding:14px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:16px; margin-top:10px; box-shadow:0 4px 12px rgba(37,211,102,0.2);">Generate & Siapkan Akses</button>
+          <div id="admHasil" style="margin-top:25px; background:#f8fafc; padding:15px; border-left:4px solid #25d366; word-break:break-all; display:none; border-radius:0 8px 8px 0;">
+            <strong id="labelHasil" style="font-size:13px; color:#334155;">Link Belakang Berhasil Dibuat:</strong><br>
+            <textarea id="txtHasil" readonly style="width:100%; height:60px; margin-top:8px; border:1px solid #e2e8f0; background:#ffffff; font-family:monospace; font-size:13px; padding:8px; box-sizing:border-box; resize:none; color:#0f766e;"></textarea>
+            <button id="btnActionEkstra" style="width:100%; margin-top:10px; padding:8px; border-radius:4px; border:none; font-weight:bold; cursor:pointer; display:none;"></button>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    let activeMode = "wa";
+    const tabWA = document.getElementById('tabWA');
+    const tabCetak = document.getElementById('tabCetak');
+    const wrapperWAInput = document.getElementById('wrapperWAInput');
+    const btnGen = document.getElementById('btnGen');
+
+    tabWA.onclick = () => {
+      activeMode = "wa";
+      tabWA.style.background = "#e8fced"; tabWA.style.color = "#0e622b"; tabWA.style.borderColor = "#25d366";
+      tabCetak.style.background = "#f8fafc"; tabCetak.style.color = "#334155"; tabCetak.style.borderColor = "#64748b";
+      wrapperWAInput.style.display = "block";
+      btnGen.style.background = "#25d366"; btnGen.style.boxShadow = "0 4px 12px rgba(37,211,102,0.2)";
+    };
+
+    tabCetak.onclick = () => {
+      activeMode = "cetak";
+      tabCetak.style.background = "#f1f5f9"; tabCetak.style.color = "#0f172a"; tabCetak.style.borderColor = "#1e293b";
+      tabWA.style.background = "#f8fafc"; tabWA.style.color = "#334155"; tabWA.style.borderColor = "#64748b";
+      wrapperWAInput.style.display = "none";
+      btnGen.style.background = "#1e293b"; btnGen.style.boxShadow = "0 4px 12px rgba(30,41,59,0.2)";
+    };
+
+    btnGen.onclick = async () => {
+      const nama = document.getElementById('admNama').value.trim();
+      const rawWA = document.getElementById('admWA').value.trim();
+      if (!nama) return alert("Nama tamu tidak boleh kosong!");
+      
+      const urlFormat = encodeURIComponent(nama).replace(/%20/g, '+');
+      let hasilLinkBelakang = "";
+      const btnAction = document.getElementById('btnActionEkstra');
+      
+      if (activeMode === "wa") {
+        const angkaSaja = rawWA.replace(/\D/g, ''); 
+        if (angkaSaja.length < 4) return alert("Nomor WA tidak valid untuk ekstraksi! Masukkan minimal 4 angka.");
+        const empatAngkaTerakhir = angkaSaja.slice(-4);
+        const hashWA = await hitungHashSHA256(empatAngkaTerakhir);
+        
+        hasilLinkBelakang = `/index.html?to=${urlFormat}&v=${hashWA}&type=wa`;
+        document.getElementById('labelHasil').innerText = "Link Belakang Akses WhatsApp:";
+        document.getElementById('txtHasil').value = hasilLinkBelakang;
+        
+        btnAction.style.display = "block";
+        btnAction.style.background = "#25d366";
+        btnAction.style.color = "white";
+        btnAction.innerText = "🚀 Klik Untuk Langsung Kirim Ke WhatsApp Tamu";
+        btnAction.onclick = () => {
+          const domainAsli = window.location.origin + window.location.pathname.replace('index.html', '');
+          const linkLengkapUntukKirim = domainAsli + hasilLinkBelakang.substring(1);
+          const teksPesan = `Halo ${nama}, kami mengundang Anda ke acara kami. Buka tautan berikut untuk melihat undangan resmi Anda: ${linkLengkapUntukKirim}`;
+          window.open(`https://wa.me{angkaSaja}?text=${encodeURIComponent(teksPesan)}`, '_blank');
+        };
+      } else {
+        hasilLinkBelakang = `/index.html?to=${urlFormat}&type=cetak`;
+        document.getElementById('labelHasil').innerText = "Link Belakang Khusus Cetak QR Code Kertas:";
+        document.getElementById('txtHasil').value = hasilLinkBelakang;
+        
+        btnAction.style.display = "block";
+        btnAction.style.background = "#475569";
+        btnAction.style.color = "white";
+        btnAction.innerText = "📋 Salin Teks Link Untuk Generator QR Code";
+        btnAction.onclick = () => {
+          navigator.clipboard.writeText(hasilLinkBelakang);
+          alert("Link cetak berhasil disalin!");
+        };
+      }
+      
+      document.getElementById('admHasil').style.display = "block";
+      navigator.clipboard.writeText(hasilLinkBelakang);
+      alert("Proses berhasil! Link belakang otomatis disalin ke clipboard Anda.");
+    };
+    return;
+  }
+  // ALUR DETEKSI VALIDASI TAMU SAAT LINK DIBUKA
+  if (guestParam) {
+    const decodedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
+    targetCleanedName = decodedName;
+
+    if (typeParam === 'cetak') {
+      // --- PROSES KONDISI JALUR UNDANGAN CETAK KERTAS ---
+      localStorage.setItem('akses_sah_lokal', 'CETAK_QR_MEMBER');
+      bukaUndanganNormal(decodedName);
+    } else if (typeParam === 'wa' && vParam) {
+      // --- PROSES KONDISI JALUR DIGITAL WHATSAPP ---
+      const userInputHP = prompt(`Halo ${decodedName}!\nDemi keamanan privasi Anda, mohon masukkan 4 angka terakhir nomor WhatsApp Anda untuk memverifikasi undangan resmi ini:`);
+      
+      if (!userInputHP) {
+        aktifkanLockdownTotal();
+        return;
+      }
+
+      hitungHashSHA256(userInputHP.trim()).then(hashInputUser => {
+        if (hashInputUser === vParam) {
+          localStorage.setItem('akses_sah_lokal', 'USER_VALIDATED');
+          bukaUndanganNormal(decodedName);
+        } else {
+          alert("Verifikasi Gagal! Angka identitas perangkat tidak sesuai.");
+          aktifkanLockdownTotal();
+        }
+      });
+    } else {
+      aktifkanLockdownTotal();
+    }
+
+  } else {
+    // KONDISI JIKA DI AKSES LEWAT LINK BERSIH / TANPA PARAMETER
+    const tokenLokal = localStorage.getItem('akses_sah_lokal');
+    if (tokenLokal) {
+      guestElement.innerText = targetCleanedName || "Tamu Undangan";
+      sinkronkanNamaRSVP(targetCleanedName || "Tamu Undangan");
+      document.body.style.overflow = "auto";
+      document.body.style.height = "auto";
+    } else {
+      aktifkanLockdownTotal(); // HP Tedy menyalin link bersih tanpa punya token -> LOCKDOWN PIN!
+    }
+  }
+
+  function bukaUndanganNormal(namaTamu) {
+    if (guestElement) guestElement.innerText = namaTamu;
+    sinkronkanNamaRSVP(namaTamu);
+    // 🔥 INSTAN PARAMETER SELF-DESTRUCT (Ubah URL Bar menjadi bersih kembali)
+    window.history.replaceState({}, document.title, window.location.pathname);
+    document.body.style.overflow = "auto";
+    document.body.style.height = "auto";
+  }
+
+  // BINDING EVENT LISTENERS SECURITY MODAL
+  if (btnSecConfirm) btnSecConfirm.addEventListener('click', prosesVerifikasiPIN);
+  if (btnSecCancel) btnSecCancel.addEventListener('click', batalkanVerifikasi);
+  if (btnSecLockedBack) btnSecLockedBack.addEventListener('click', batalkanVerifikasi);
+  if (modalPinInput) {
+    modalPinInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') prosesVerifikasiPIN();
+    });
+  }
+
+  // RSVP SUBMIT HANDLING
+  const wishesForm = document.getElementById('wishesForm');
+  if (wishesForm) {
+    wishesForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const successModal = document.getElementById('rsvpSuccessModal');
+      if (successModal) successModal.classList.add('active');
+      wishesForm.reset();
+      sinkronkanNamaRSVP(guestElement ? guestElement.innerText : "Tamu Undangan");
+    });
+  }
+});
+
 
 // =========================================================================
 // 1. URL WEB APP GOOGLE APPS SCRIPT ANDA (PASTIKAN LINK BENAR & BERAKHIRAN /exec)
