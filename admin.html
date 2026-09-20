@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: #0f172a; /* Warna Navy Peat khas Keamanan */
+      background: #0f172a; 
       display: flex;
       justify-content: center;
       align-items: center;
@@ -19,7 +19,7 @@
     .admin-card {
       background: #ffffff;
       padding: 30px;
-      border-radius: 20px; /* Melengkung rapi sesuai gambar modal */
+      border-radius: 20px; 
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
       width: 100%;
       max-width: 440px;
@@ -129,6 +129,83 @@
     }
     .wa-action { background: #25d366; }
     .cetak-action { background: #475569; }
+
+    /* ================================================================= */
+    /* 🌟 POP-UP SUKSES KUSTOM - TEMA CERIA & ELEGAN MODAL              */
+    /* ================================================================= */
+    .popup-success-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.7); 
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999999;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .popup-success-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .popup-success-card {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 24px;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+      transform: scale(0.8);
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .popup-success-overlay.active .popup-success-card {
+      transform: scale(1);
+    }
+    .popup-celebrate-icon {
+      font-size: 50px;
+      margin-bottom: 15px;
+      display: inline-block;
+      animation: bounceCelebration 1s infinite alternate;
+    }
+    @keyframes bounceCelebration {
+      from { transform: translateY(0) scale(1); }
+      to { transform: translateY(-8px) scale(1.05); }
+    }
+    .popup-success-card h3 {
+      margin: 0 0 8px 0;
+      color: #1e3a8a;
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .popup-success-card p {
+      margin: 0 0 22px 0;
+      color: #475569;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .popup-btn-close {
+      background: #1e3a8a;
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 50px; 
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
+      transition: background 0.2s;
+      width: 100%;
+    }
+    .popup-btn-close:hover {
+      background: #1d4ed8;
+    }
   </style>
 </head>
 <body>
@@ -163,13 +240,20 @@
     <div id="admHasil" class="admin-result-box" style="display:none;">
       <strong>Link Akses Hasil Generator:</strong>
       <textarea id="txtHasil" readonly class="admin-textarea"></textarea>
-      <!-- 🔥 PERBAIKAN UTAMA: Menggunakan tag <a> link langsung agar kebal blokir browser HP -->
       <a id="btnActionEkstra" class="admin-btn-action" style="display:none; text-align:center; text-decoration:none; box-sizing:border-box;"></a>
     </div>
   </div>
 
+  <!-- STRUKTUR MODAL POPUP KUSTOM BARU -->
+  <div id="customSuccessPopup" class="popup-success-overlay">
+    <div class="popup-success-card">
+      <div class="popup-celebrate-icon">🎉</div>
+      <h3>Proses Berhasil!</h3>
+      <p>Tautan lengkap undangan resmi telah otomatis disalin ke clipboard perangkat Anda.</p>
+      <button id="btnCustomPopupClose" class="popup-btn-close">Siap, Lanjutkan</button>
+    </div>
+  </div>
   <script>
-    // 🛡️ SECURITY CHECK: Mencegah orang asing masuk tanpa izin lewat file index.html
     const tokenLokal = localStorage.getItem('akses_sah_lokal');
     if (tokenLokal !== 'TOKEN_BYPASS_ADMIN') {
       alert("Akses Terbatas! Silakan buka halaman utama dan verifikasi PIN Admin Anda terlebih dahulu.");
@@ -187,6 +271,15 @@
     const tabCetak = document.getElementById('tabCetak');
     const wrapperWAInput = document.getElementById('wrapperWAInput');
     const btnGen = document.getElementById('btnGen');
+    
+    const customSuccessPopup = document.getElementById('customSuccessPopup');
+    const btnCustomPopupClose = document.getElementById('btnCustomPopupClose');
+
+    if (btnCustomPopupClose) {
+      btnCustomPopupClose.onclick = () => {
+        customSuccessPopup.classList.remove('active');
+      };
+    }
 
     tabWA.onclick = () => {
       activeMode = "wa";
@@ -209,14 +302,14 @@
       
       const urlFormat = encodeURIComponent(nama).replace(/%20/g, '+');
       const btnAction = document.getElementById('btnActionEkstra');
-
-      // Ambil domain dasar secara dinamis (Otomatis mendeteksi localhost atau GitHub Pages)
       const domainAsli = window.location.origin + window.location.pathname.replace('admin.html', '');
       
       if (activeMode === "wa") {
         const angkaSaja = rawWA.replace(/\D/g, ''); 
         if (angkaSaja.length < 4) return alert("Nomor WA harus menyertakan minimal 4 angka terakhir!");
-        const empatAngkaTerakhir = angkaSaja.slice(-4);
+        
+        // 🔥 PERBAIKAN: Menggunakan .trim() bawaan Vanilla JS asli agar bebas crash eror
+        const empatAngkaTerakhir = angkaSaja.trim().slice(-4);
         const hashWA = await hitungHashSHA256(empatAngkaTerakhir);
         
         const linkLengkap = domainAsli + "index.html?to=" + urlFormat + "&v=" + hashWA + "&type=wa";
@@ -231,7 +324,6 @@
           nomorValid = "62" + nomorValid.slice(1);
         }
         
-        // 🔥 PERBAIKAN BAHASA: Format teks disesuaikan persis seperti contoh gambar Anda
         const teksPesan = "Assalamu'alaikum Warahmatullahi Wabarakatuh\n\n" +
                           "Yth. Bapak/Ibu/Saudara/i\n" +
                           "*" + nama + "*\n" +
@@ -250,10 +342,8 @@
         
         btnAction.href = "https://wa.me/" + nomorValid + "?text=" + encodeURIComponent(teksPesan);
         btnAction.target = "_blank";
-      }
         
-         else {
-        // Jalur undangan cetak kertas / QR Code
+      } else {
         const linkLengkapCetak = domainAsli + "index.html?to=" + urlFormat + "&type=cetak";
         document.getElementById('txtHasil').value = linkLengkapCetak;
         
@@ -265,13 +355,15 @@
         
         btnAction.onclick = () => {
           navigator.clipboard.writeText(linkLengkapCetak);
-          alert("Tautan cetak berhasil disalin!");
+          customSuccessPopup.classList.add('active');
         };
       }
       
       document.getElementById('admHasil').style.display = "block";
       navigator.clipboard.writeText(document.getElementById('txtHasil').value);
-      alert("Proses berhasil! Tautan lengkap otomatis disalin ke clipboard Anda.");
+      
+      // Membuka modal kustom ceria pengganti alert bawaan browser
+      customSuccessPopup.classList.add('active');
     };
   </script>
 </body>
