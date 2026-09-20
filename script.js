@@ -134,7 +134,7 @@ function showToastNotification(message) {
 }
 
 // =================================================================
-// KODE SECURITY SYSTEM 100% LOKAL (DUAL-MODE ADMIN: WA & CETAK QR)
+// KODE SECURITY SYSTEM 100% LOKAL (DUAL-MODE ADMIN & TAMU VERIFIED)
 // =================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
     AOS.init({ duration: 1000, once: false });
   }
 
-  // 1. KONFIGURASI KUNCI MASTER UTAMA
+  // 1. KONFIGURASI KUNCI MASTER UTAMA (SHA-256 Pilihan Anda)
   const HASH_MASTER = "0d08c39a651f01f1316c9c63ba9d2ddefdae09fe18840f4882ba437b85230952";
 
   let salahHitung = 0;
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
     aktifkanLockdownTotal(); 
   }
 
-  // E. VERIFIKASI PIN ADMIN JIKA TERJADI LOCKDOWN
+  // E. VERIFIKASI PIN JIKA TERJADI LOCKDOWN (BISA UNTUK AKSES ADMIN JUTAAN TAMU)
   async function prosesVerifikasiPIN() {
     if (!modalPinInput || sedangDikunci) return;
     const inputUser = modalPinInput.value;
@@ -205,6 +205,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (hashInputUser === HASH_MASTER) {
       salahHitung = 0;
       faktorPengali = 1;
+      
+      // Jika yang memicu lockdown adalah halaman admin, berikan token login admin
+      const currentParams = new URLSearchParams(window.location.search);
+      if (currentParams.get('mode') === 'admin') {
+        localStorage.setItem('admin_verified_device', 'SAH_STATUS_ADMIN');
+        alert("Akses Admin Diterima! Perangkat Anda berhasil diingat oleh sistem.");
+        window.location.reload(); // Muat ulang untuk masuk ke Control Panel Admin
+        return;
+      }
+
       localStorage.setItem('akses_sah_lokal', 'TOKEN_BYPASS_ADMIN');
       if (modalErrorMessage) modalErrorMessage.style.display = "none";
       if (securityModal) securityModal.classList.remove('active');
@@ -240,15 +250,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // F. EVALUASI PARAMETER URL & DUO MODE VALIDASI
+  // F. EVALUASI PARAMETER URL
   const urlParams = new URLSearchParams(window.location.search);
   const guestParam = urlParams.get('to');
   const vParam = urlParams.get('v'); 
   const typeParam = urlParams.get('type') || 'pribadi';
   const modeParam = urlParams.get('mode');
 
-      // 🌟 MODUL PANEL GENERATOR INTERAKTIF BARU KHUSUS ADMIN (Akses via /index.html?mode=admin)
+    // 🌟 MODUL PANEL GENERATOR INTERAKTIF BARU KHUSUS ADMIN (Akses via /index.html?mode=admin)
   if (modeParam === 'admin') {
+    // PROTEKSI: Cek apakah perangkat ini sudah pernah sukses memasukkan PIN Admin
+    const isAlreadyAdmin = localStorage.getItem('admin_verified_device');
+    if (isAlreadyAdmin !== 'SAH_STATUS_ADMIN') {
+      alert("Akses Khusus Pengembang! Silakan masukkan PIN Keamanan Admin Anda pada kotak layar yang muncul.");
+      aktifkanLockdownTotal(); // Jika belum pernah login, langsung paksa hadang dengan kotak PIN Anda
+      return;
+    }
+
     document.body.innerHTML = `
       <div style="font-family:sans-serif; padding:40px; background:#f0f2f5; min-height:100vh; display:flex; justify-content:center; align-items:center;">
         <div style="background:white; padding:35px; border-radius:14px; box-shadow:0 15px 35px rgba(0,0,0,0.08); width:100%; max-width:480px;">
@@ -269,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <button id="btnGen" style="width:100%; background:#25d366; color:white; border:none; padding:14px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:16px; margin-top:10px; box-shadow:0 4px 12px rgba(37,211,102,0.2);">Generate & Siapkan Akses</button>
           <div id="admHasil" style="margin-top:25px; background:#f8fafc; padding:15px; border-left:4px solid #25d366; word-break:break-all; display:none; border-radius:0 8px 8px 0;">
             <strong id="labelHasil" style="font-size:13px; color:#334155;">Link Lengkap Berhasil Dibuat:</strong><br>
-            <textarea id="txtHasil" readonly style="width:100%; height:80px; margin-top:8px; border:1px solid #e2e8f0; background:#ffffff; font-family:monospace; font-size:13px; padding:8px; box-sizing:border-box; resize:none; color:#0f766e;"></textarea>
+            <textarea id="txtHasil" readonly style="width:100%; height:60px; margin-top:8px; border:1px solid #e2e8f0; background:#ffffff; font-family:monospace; font-size:13px; padding:8px; box-sizing:border-box; resize:none; color:#0f766e;"></textarea>
             <button id="btnActionEkstra" style="width:100%; margin-top:10px; padding:8px; border-radius:4px; border:none; font-weight:bold; cursor:pointer; display:none;"></button>
           </div>
         </div>
@@ -306,16 +324,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const urlFormat = encodeURIComponent(nama).replace(/%20/g, '+');
       let hasilLinkBelakang = "";
       const btnAction = document.getElementById('btnActionEkstra');
-
-      // 🔥 OTOMATISASI DOMAIN: Mendapatkan alamat asli internet (GitHub / Domain Pribadi)
       const domainAsli = window.location.origin + window.location.pathname.replace('index.html', '');
       
       if (activeMode === "wa") {
-        // Bersihkan input nomor HP dari teks tak dikenal
         let waBersih = rawWA.replace(/\{angkasaja\}/gi, ''); 
         let angkaSaja = waBersih.replace(/\D/g, ''); 
         
-        // Jika nomor diawali angka 0, otomatis ubah ke format kode negara Indonesia (62)
         if (angkaSaja.startsWith('0')) {
           angkaSaja = '62' + angkaSaja.slice(1);
         }
@@ -325,16 +339,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const hashWA = await hitungHashSHA256(empatAngkaTerakhir);
         
         hasilLinkBelakang = `index.html?to=${urlFormat}&v=${hashWA}&type=wa`;
-        
-        // 🔥 FITUR 1: Membuat isi Textarea memuat LINK LENGKAP INTERNET (Siap di-copy manual)
         const linkLengkapFinal = domainAsli + hasilLinkBelakang;
+        
         document.getElementById('labelHasil').innerText = "Link Internet Lengkap Akses WhatsApp (Siap Copy):";
         document.getElementById('txtHasil').value = linkLengkapFinal;
-        
-        // Salin otomatis link lengkap internet ke Clipboard
         navigator.clipboard.writeText(linkLengkapFinal);
         
-        // 🔥 FITUR 2: Perbaikan tombol langsung kirim ke WhatsApp tanpa eror kurung kurawal
         btnAction.style.display = "block";
         btnAction.style.background = "#25d366";
         btnAction.style.color = "white";
@@ -342,18 +352,15 @@ document.addEventListener('DOMContentLoaded', () => {
         btnAction.onclick = () => {
           const teksPesan = `Halo ${nama}, kami mengundang Anda ke acara pernikahan kami. Silakan buka tautan berikut untuk melihat detail undangan resmi Anda:\n\n${linkLengkapFinal}`;
           
-          // Perbaikan interpolasi variabel nomor HP dengan benar
+          // 🔥 BEBAS EROR BROWSER: Menggabungkan variabel string nomor HP tradisional yang super aman
           window.open('https://wa.me' + angkaSaja + '?text=' + encodeURIComponent(teksPesan), '_blank');
-
         };
       } else {
-        // JALUR CETAK
         hasilLinkBelakang = `index.html?to=${urlFormat}&type=cetak`;
         const linkLengkapCetak = domainAsli + hasilLinkBelakang;
         
         document.getElementById('labelHasil').innerText = "Link Internet Lengkap Khusus QR Cetak (Siap Copy):";
         document.getElementById('txtHasil').value = linkLengkapCetak;
-        
         navigator.clipboard.writeText(linkLengkapCetak);
         
         btnAction.style.display = "block";
@@ -371,7 +378,86 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     return;
   }
+  // ALUR DETEKSI VALIDASI TAMU SAAT LINK DIBUKA
+  if (guestParam) {
+    const decodedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
+    targetCleanedName = decodedName;
 
+    if (typeParam === 'cetak') {
+      // --- PROSES KONDISI JALUR UNDANGAN CETAK KERTAS ---
+      localStorage.setItem('akses_sah_lokal', 'CETAK_QR_MEMBER');
+      bukaUndanganNormal(decodedName);
+    } else if (typeParam === 'wa' && vParam) {
+      // --- PROSES KONDISI JALUR DIGITAL WHATSAPP ---
+      const userInputHP = prompt(`Halo ${decodedName}!\nDemi keamanan privasi Anda, mohon masukkan 4 angka terakhir nomor WhatsApp Anda untuk memverifikasi undangan resmi ini:`);
+      
+      if (!userInputHP) {
+        aktifkanLockdownTotal();
+        return;
+      }
+
+      hitungHashSHA256(userInputHP.trim()).then(hashInputUser => {
+        if (hashInputUser === vParam) {
+          localStorage.setItem('akses_sah_lokal', 'USER_VALIDATED');
+          bukaUndanganNormal(decodedName);
+        } else {
+          alert("Verifikasi Gagal! Angka identitas perangkat tidak sesuai.");
+          aktifkanLockdownTotal();
+        }
+      });
+    } else {
+      aktifkanLockdownTotal();
+    }
+
+  } else {
+    // KONDISI JIKA DI AKSES LEWAT LINK BERSIH / TANPA PARAMETER
+    const tokenLokal = localStorage.getItem('akses_sah_lokal');
+    if (tokenLokal) {
+      guestElement.innerText = targetCleanedName || "Tamu Undangan";
+      sinkronkanNamaRSVP(targetCleanedName || "Tamu Undangan");
+      document.body.style.overflow = "auto";
+      document.body.style.height = "auto";
+    } else {
+      aktifkanLockdownTotal(); // HP Tedy menyalin link bersih tanpa punya token -> LOCKDOWN PIN!
+    }
+  }
+
+  // 🔥 PERBAIKAN UTAMA: Penundaan jeda 1,2 detik agar tulisan teks di web tidak hilang/kosong
+  function bukaUndanganNormal(namaTamu) {
+    if (guestElement) guestElement.innerText = namaTamu;
+    sinkronkanNamaRSVP(namaTamu);
+    
+    setTimeout(() => {
+      // Parameter URL bar baru dibersihkan setelah teks selesai ter-render di layar browser
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }, 1200);
+    
+    document.body.style.overflow = "auto";
+    document.body.style.height = "auto";
+  }
+
+  // BINDING EVENT LISTENERS SECURITY MODAL
+  if (btnSecConfirm) btnSecConfirm.addEventListener('click', prosesVerifikasiPIN);
+  if (btnSecCancel) btnSecCancel.addEventListener('click', batalkanVerifikasi);
+  if (btnSecLockedBack) btnSecLockedBack.addEventListener('click', batalkanVerifikasi);
+  if (modalPinInput) {
+    modalPinInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') prosesVerifikasiPIN();
+    });
+  }
+
+  // RSVP SUBMIT HANDLING
+  const wishesForm = document.getElementById('wishesForm');
+  if (wishesForm) {
+    wishesForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const successModal = document.getElementById('rsvpSuccessModal');
+      if (successModal) successModal.classList.add('active');
+      wishesForm.reset();
+      sinkronkanNamaRSVP(guestElement ? guestElement.innerText : "Tamu Undangan");
+    });
+  }
+});
 
 
 // =========================================================================
