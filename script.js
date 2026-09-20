@@ -134,15 +134,11 @@ function showToastNotification(message) {
 }
 
 // =================================================================
-// KODE SECURITY SYSTEM 100% LOKAL (DUAL-MODE ADMIN & TAMU VERIFIED)
+// KODE UTAMA SECURITY SYSTEM ANTI-FORWARD LOKAL (MUTAKHIR & STABIL)
 // =================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (typeof AOS !== 'undefined') {
-    AOS.init({ duration: 1000, once: false });
-  }
-
-  // 1. KONFIGURASI KUNCI MASTER UTAMA (SHA-256 Pilihan Anda)
+  // 1. DOCKING INTEGRASI KUNCI MASTER UTAMA (SHA-256)
   const HASH_MASTER = "0d08c39a651f01f1316c9c63ba9d2ddefdae09fe18840f4882ba437b85230952";
 
   let salahHitung = 0;
@@ -151,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let waktuBlokirDasar = 60; 
   let faktorPengali = 1;
 
-  // Elemen HTML Security Modal Anda
+  // Binding Seluruh Dokumen Elemen Modal & Tamu
   const securityModal = document.getElementById('securityModal');
   const modalNormalState = document.getElementById('modalNormalState');
   const modalLockedState = document.getElementById('modalLockedState');
@@ -162,14 +158,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnSecLockedBack = document.getElementById('btnSecLockedBack');
   const guestElement = document.getElementById('guest-name');
 
-  // A. FUNGSI HASH SHA-256 (Untuk Verifikasi PIN Admin & Proteksi WA)
+  // A. FUNGSI HASH SHA-256 MURNI
   async function hitungHashSHA256(teks) {
     const msgBuffer = new TextEncoder().encode(teks);
     const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
     return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
   }
 
-    // B. PENGUNCIAN INPUT FORM RSVP
+  // B. RE-FRESH FUNGSI PENYEGAR ANIMASI AOS (Solusi Utama Teks Hilang)
+  function segarkanAnimasiVisual() {
+    if (typeof AOS !== 'undefined') {
+      AOS.init({ duration: 1000, once: false });
+      AOS.refresh(); // Paksa AOS menghitung ulang posisi elemen agar tidak transparan
+    }
+  }
+  // C. PENGUNCIAN INPUT FORM RSVP
   function sinkronkanNamaRSVP(namaAman) {
     const rsvpNameInput = document.getElementById('guestName');
     if (rsvpNameInput) {
@@ -180,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // C. LOCKDOWN TOTAL (Anti-Bypass Layar)
+  // D. LOCKDOWN TOTAL AKURAT
   function aktifkanLockdownTotal() {
     if (securityModal) {
       securityModal.classList.add('active');
@@ -190,13 +193,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modalPinInput) modalPinInput.focus();
   }
 
-  // D. PERBAIKAN TOMBOL BATAL YANG BOCOR (100% DIKUNCI MATI)
+  // E. PENANGANAN TEGAS TOMBOL BATAL BYPASS (DIKUNCI MATI)
   function batalkanVerifikasi() {
-    alert("Akses Ditolak! Tautan ini dilindungi keamanan enkripsi. Anda tidak bisa keluar tanpa PIN resmi.");
+    alert("Akses Ditolak! Halaman dilindungi sistem enkripsi privasi.");
     aktifkanLockdownTotal(); 
   }
 
-  // E. VERIFIKASI PIN JIKA TERJADI LOCKDOWN (BISA UNTUK AKSES ADMIN JUTAAN TAMU)
+  // F. EVALUASI VERIFIKASI PIN MASTER (ADMIN & TAMU)
   async function prosesVerifikasiPIN() {
     if (!modalPinInput || sedangDikunci) return;
     const inputUser = modalPinInput.value;
@@ -206,12 +209,11 @@ document.addEventListener('DOMContentLoaded', () => {
       salahHitung = 0;
       faktorPengali = 1;
       
-      // Jika yang memicu lockdown adalah halaman admin, berikan token login admin
       const currentParams = new URLSearchParams(window.location.search);
       if (currentParams.get('mode') === 'admin') {
         localStorage.setItem('admin_verified_device', 'SAH_STATUS_ADMIN');
-        alert("Akses Admin Diterima! Perangkat Anda berhasil diingat oleh sistem.");
-        window.location.reload(); // Muat ulang untuk masuk ke Control Panel Admin
+        alert("Akses Admin Terverifikasi! Sistem akan mengingat perangkat Anda.");
+        window.location.reload(); 
         return;
       }
 
@@ -221,6 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.style.overflow = "auto";
       document.body.style.height = "auto";
       
+      segarkanAnimasiVisual();
       const verifiedSuccessModal = document.getElementById('verifiedSuccessModal');
       if (verifiedSuccessModal) verifiedSuccessModal.classList.add('active');
     } else {
@@ -250,20 +253,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // F. EVALUASI PARAMETER URL
   const urlParams = new URLSearchParams(window.location.search);
   const guestParam = urlParams.get('to');
   const vParam = urlParams.get('v'); 
   const typeParam = urlParams.get('type') || 'pribadi';
   const modeParam = urlParams.get('mode');
-
-    // 🌟 MODUL PANEL GENERATOR INTERAKTIF BARU KHUSUS ADMIN (Akses via /index.html?mode=admin)
+  // 🌟 MODUL PANEL GENERATOR INTERAKTIF BARU KHUSUS ADMIN (Akses via /index.html?mode=admin)
   if (modeParam === 'admin') {
-    // PROTEKSI: Cek apakah perangkat ini sudah pernah sukses memasukkan PIN Admin
     const isAlreadyAdmin = localStorage.getItem('admin_verified_device');
     if (isAlreadyAdmin !== 'SAH_STATUS_ADMIN') {
-      alert("Akses Khusus Pengembang! Silakan masukkan PIN Keamanan Admin Anda pada kotak layar yang muncul.");
-      aktifkanLockdownTotal(); // Jika belum pernah login, langsung paksa hadang dengan kotak PIN Anda
+      alert("Akses Terbatas! Mohon masukkan PIN Keamanan Admin Anda untuk memverifikasi perangkat.");
+      aktifkanLockdownTotal(); 
       return;
     }
 
@@ -334,7 +334,7 @@ document.addEventListener('DOMContentLoaded', () => {
           angkaSaja = '62' + angkaSaja.slice(1);
         }
         
-        if (angkaSaja.length < 4) return alert("Nomor WA tidak valid untuk ekstraksi! Masukkan minimal 4 angka.");
+        if (angkaSaja.length < 4) return alert("Nomor WA tidak valid! Masukkan minimal 4 angka.");
         const empatAngkaTerakhir = angkaSaja.slice(-4);
         const hashWA = await hitungHashSHA256(empatAngkaTerakhir);
         
@@ -351,8 +351,6 @@ document.addEventListener('DOMContentLoaded', () => {
         btnAction.innerText = "🚀 Klik Untuk Langsung Kirim Ke WhatsApp Tamu";
         btnAction.onclick = () => {
           const teksPesan = `Halo ${nama}, kami mengundang Anda ke acara pernikahan kami. Silakan buka tautan berikut untuk melihat detail undangan resmi Anda:\n\n${linkLengkapFinal}`;
-          
-          // 🔥 BEBAS EROR BROWSER: Menggabungkan variabel string nomor HP tradisional yang super aman
           window.open('https://wa.me' + angkaSaja + '?text=' + encodeURIComponent(teksPesan), '_blank');
         };
       } else {
@@ -374,7 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       
       document.getElementById('admHasil').style.display = "block";
-      alert("Proses sukses! Link internet LENGKAP sudah berhasil dibuat dan otomatis disalin ke clipboard Anda.");
+      alert("Proses sukses! Link LENGKAP otomatis disalin ke clipboard Anda.");
     };
     return;
   }
@@ -384,11 +382,10 @@ document.addEventListener('DOMContentLoaded', () => {
     targetCleanedName = decodedName;
 
     if (typeParam === 'cetak') {
-      // --- PROSES KONDISI JALUR UNDANGAN CETAK KERTAS ---
       localStorage.setItem('akses_sah_lokal', 'CETAK_QR_MEMBER');
+      localStorage.setItem('guest_original_name', decodedName); // Simpan backup lokal permanen
       bukaUndanganNormal(decodedName);
     } else if (typeParam === 'wa' && vParam) {
-      // --- PROSES KONDISI JALUR DIGITAL WHATSAPP ---
       const userInputHP = prompt(`Halo ${decodedName}!\nDemi keamanan privasi Anda, mohon masukkan 4 angka terakhir nomor WhatsApp Anda untuk memverifikasi undangan resmi ini:`);
       
       if (!userInputHP) {
@@ -399,6 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
       hitungHashSHA256(userInputHP.trim()).then(hashInputUser => {
         if (hashInputUser === vParam) {
           localStorage.setItem('akses_sah_lokal', 'USER_VALIDATED');
+          localStorage.setItem('guest_original_name', decodedName); // Simpan backup lokal permanen
           bukaUndanganNormal(decodedName);
         } else {
           alert("Verifikasi Gagal! Angka identitas perangkat tidak sesuai.");
@@ -412,31 +410,40 @@ document.addEventListener('DOMContentLoaded', () => {
   } else {
     // KONDISI JIKA DI AKSES LEWAT LINK BERSIH / TANPA PARAMETER
     const tokenLokal = localStorage.getItem('akses_sah_lokal');
+    const savedNameBackup = localStorage.getItem('guest_original_name');
+    
     if (tokenLokal) {
-      guestElement.innerText = targetCleanedName || "Tamu Undangan";
-      sinkronkanNamaRSVP(targetCleanedName || "Tamu Undangan");
+      // Ambil nama dari memori jangka panjang agar tulisan tidak hilang saat url bar bersih
+      const namaValid = savedNameBackup || "Tamu Undangan";
+      if (guestElement) guestElement.innerText = namaValid;
+      sinkronkanNamaRSVP(namaValid);
+      
       document.body.style.overflow = "auto";
       document.body.style.height = "auto";
+      segarkanAnimasiVisual(); // Panggil paksa penyegar AOS
     } else {
-      aktifkanLockdownTotal(); // HP Tedy menyalin link bersih tanpa punya token -> LOCKDOWN PIN!
+      aktifkanLockdownTotal(); 
     }
   }
 
-  // 🔥 PERBAIKAN UTAMA: Penundaan jeda 1,2 detik agar tulisan teks di web tidak hilang/kosong
+  // FUNGSI UTAMA: PENYAJIAN IDENTITAS & PEMBERSIHAN URL SECARA HALUS TANPA MERUSAK RENDERING BROWSER
   function bukaUndanganNormal(namaTamu) {
     if (guestElement) guestElement.innerText = namaTamu;
     sinkronkanNamaRSVP(namaTamu);
     
-    setTimeout(() => {
-      // Parameter URL bar baru dibersihkan setelah teks selesai ter-render di layar browser
-      window.history.replaceState({}, document.title, window.location.pathname);
-    }, 1200);
-    
     document.body.style.overflow = "auto";
     document.body.style.height = "auto";
+    
+    // Segarkan AOS sesaat setelah data nama disuntikkan ke HTML
+    segarkanAnimasiVisual();
+    
+    // Lakukan pembersihan parameter URL bar secara halus tanpa memicu freeze visual DOM
+    if (window.history.replaceState) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
   }
 
-  // BINDING EVENT LISTENERS SECURITY MODAL
+  // BINDING EVENT LISTENERS KE SECURITY MODAL LOCKDOWN PIN
   if (btnSecConfirm) btnSecConfirm.addEventListener('click', prosesVerifikasiPIN);
   if (btnSecCancel) btnSecCancel.addEventListener('click', batalkanVerifikasi);
   if (btnSecLockedBack) btnSecLockedBack.addEventListener('click', batalkanVerifikasi);
@@ -446,7 +453,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // RSVP SUBMIT HANDLING
+  // PENANGANAN AKSI SUBMIT FORM RSVP
   const wishesForm = document.getElementById('wishesForm');
   if (wishesForm) {
     wishesForm.addEventListener('submit', function (e) {
@@ -454,10 +461,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const successModal = document.getElementById('rsvpSuccessModal');
       if (successModal) successModal.classList.add('active');
       wishesForm.reset();
-      sinkronkanNamaRSVP(guestElement ? guestElement.innerText : "Tamu Undangan");
+      const currentValidName = guestElement ? guestElement.innerText : "Tamu Undangan";
+      sinkronkanNamaRSVP(currentValidName);
     });
   }
 });
+
 
 
 // =========================================================================
