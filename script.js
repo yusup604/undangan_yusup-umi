@@ -165,14 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
   }
 
-  // B. RE-FRESH FUNGSI PENYEGAR ANIMASI AOS (Solusi Utama Teks Hilang)
-  function segarkanAnimasiVisual() {
-    if (typeof AOS !== 'undefined') {
-      AOS.init({ duration: 1000, once: false });
-      AOS.refresh(); // Paksa AOS menghitung ulang posisi elemen agar tidak transparan
-    }
-  }
-  // C. PENGUNCIAN INPUT FORM RSVP
+    // B. PENGUNCIAN INPUT FORM RSVP
   function sinkronkanNamaRSVP(namaAman) {
     const rsvpNameInput = document.getElementById('guestName');
     if (rsvpNameInput) {
@@ -183,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // D. LOCKDOWN TOTAL AKURAT
+  // C. LOCKDOWN TOTAL AKURAT
   function aktifkanLockdownTotal() {
     if (securityModal) {
       securityModal.classList.add('active');
@@ -193,13 +186,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modalPinInput) modalPinInput.focus();
   }
 
-  // E. PENANGANAN TEGAS TOMBOL BATAL BYPASS (DIKUNCI MATI)
+  // D. PENANGANAN TEGAS TOMBOL BATAL BYPASS (DIKUNCI MATI)
   function batalkanVerifikasi() {
     alert("Akses Ditolak! Halaman dilindungi sistem enkripsi privasi.");
     aktifkanLockdownTotal(); 
   }
 
-  // F. EVALUASI VERIFIKASI PIN MASTER (ADMIN & TAMU)
+  // E. EVALUASI VERIFIKASI PIN MASTER (ADMIN & TAMU) - FIXED LOGIC
   async function prosesVerifikasiPIN() {
     if (!modalPinInput || sedangDikunci) return;
     const inputUser = modalPinInput.value;
@@ -217,15 +210,30 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      localStorage.setItem('akses_sah_lokal', 'TOKEN_BYPASS_ADMIN');
+      // 🔥 PERBAIKAN UTAMA: Amankan dan bersihkan modal secara instan dan agresif terlebih dahulu
       if (modalErrorMessage) modalErrorMessage.style.display = "none";
       if (securityModal) securityModal.classList.remove('active');
+      
+      // Kembalikan fungsi scroll layar secara mutlak
       document.body.style.overflow = "auto";
       document.body.style.height = "auto";
       
-      segarkanAnimasiVisual();
+      // Simpan status kelulusan lokal tamu
+      localStorage.setItem('akses_sah_lokal', 'TOKEN_BYPASS_ADMIN');
+      
+      // Picu pop-up sukses kustom bawaan Anda jika ada elemennya di HTML
       const verifiedSuccessModal = document.getElementById('verifiedSuccessModal');
-      if (verifiedSuccessModal) verifiedSuccessModal.classList.add('active');
+      if (verifiedSuccessModal) {
+        verifiedSuccessModal.classList.add('active');
+      }
+      
+      // Terakhir, jalankan penyegar animasi secara aman tanpa memblokir alur penutupan modal
+      try {
+        segarkanAnimasiVisual();
+      } catch(e) {
+        console.warn("AOS refresh tertunda, namun akses tetap dibuka.");
+      }
+      
     } else {
       salahHitung++;
       if (salahHitung >= 3) {
@@ -258,6 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const vParam = urlParams.get('v'); 
   const typeParam = urlParams.get('type') || 'pribadi';
   const modeParam = urlParams.get('mode');
+
   // 🌟 MODUL PANEL GENERATOR INTERAKTIF BARU KHUSUS ADMIN (Akses via /index.html?mode=admin)
   if (modeParam === 'admin') {
     const isAlreadyAdmin = localStorage.getItem('admin_verified_device');
