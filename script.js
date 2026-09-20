@@ -89,18 +89,34 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// Fungsi Copy Nomor Rekening
-function copyText(elementId) {
-  const element = document.getElementById(elementId);
-  if (element) {
-    const textToCopy = element.innerText;
-    navigator.clipboard.writeText(textToCopy).then(() => {
-      alert('Nomor rekening berhasil disalin!');
-    }).catch(err => {
-      console.error('Gagal menyalin: ', err);
-    });
+// Fungsi Tambahan untuk Membuat Efek Pop-up Melayang Elegan dengan Ikon
+function showToastNotification(message) {
+  // 1. Cek apakah elemen toast sudah ada di halaman, jika belum buat baru
+  let toast = document.getElementById('customToastNotification');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'customToastNotification';
+    toast.className = 'toast-popup';
+    document.body.appendChild(toast);
   }
+
+  // 2. Isi dengan ikon ceklist hijau (SVG) dan teks pesan
+  toast.innerHTML = `
+    <svg class="toast-icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+    <span>${message}</span>
+  `;
+  
+  // 3. Tambahkan class untuk memicu animasi muncul
+  toast.classList.add('show-toast');
+
+  // 4. Hilangkan kembali secara otomatis setelah 2 detik
+  setTimeout(() => {
+    toast.classList.remove('show-toast');
+  }, 2000);
 }
+
 
 // =================================================================
 // 1. GERBANG SECURITY SYSTEM KUSTOM & INTEGRASI POPUP RSVP ELEGAN
