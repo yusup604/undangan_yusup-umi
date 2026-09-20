@@ -308,7 +308,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const btnAction = document.getElementById('btnActionEkstra');
       
       if (activeMode === "wa") {
-        const angkaSaja = rawWA.replace(/\D/g, ''); 
+        // Pembersihan otomatis jika ada teks placeholder tersisa dari pengujian
+        let waBersih = rawWA.replace(/\{angkasaja\}/gi, ''); 
+        const angkaSaja = waBersih.replace(/\D/g, ''); 
+        
         if (angkaSaja.length < 4) return alert("Nomor WA tidak valid untuk ekstraksi! Masukkan minimal 4 angka.");
         const empatAngkaTerakhir = angkaSaja.slice(-4);
         const hashWA = await hitungHashSHA256(empatAngkaTerakhir);
@@ -325,6 +328,8 @@ document.addEventListener('DOMContentLoaded', () => {
           const domainAsli = window.location.origin + window.location.pathname.replace('index.html', '');
           const linkLengkapUntukKirim = domainAsli + hasilLinkBelakang.substring(1);
           const teksPesan = `Halo ${nama}, kami mengundang Anda ke acara kami. Buka tautan berikut untuk melihat undangan resmi Anda: ${linkLengkapUntukKirim}`;
+          
+          // 🔥 PERBAIKAN UTAMA: Mengganti tanda kurung kurawal bawaan dari teks menjadi variabel interpolasi string JS yang valid
           window.open(`https://wa.me{angkaSaja}?text=${encodeURIComponent(teksPesan)}`, '_blank');
         };
       } else {
