@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Control Panel - Umi & Yusup Wedding</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: #0f172a; /* Warna Navy Peat khas Keamanan */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .admin-card {
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 20px; /* Melengkung rapi sesuai gambar modal */
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+      width: 100%;
+      max-width: 440px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+    .admin-header h2 {
+      margin: 0;
+      color: #0f172a;
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .admin-header p {
+      margin: 4px 0 20px 0;
+      color: #64748b;
+      font-size: 13px;
+    }
+    .admin-form-group {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+    .admin-form-group label {
+      font-weight: 600;
+      font-size: 13px;
+      color: #334155;
+      display: block;
+      margin-bottom: 6px;
+    }
+    .admin-tabs {
+      display: flex;
+      gap: 8px;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      background: #ffffff;
+      color: #64748b;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      background: #f0f4ff;
+      color: #1e3a8a;
+      border: 2px solid #1e3a8a;
+    }
+    .admin-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      box-sizing: border-box;
+      font-size: 14px;
+      outline: none;
+    }
+    .admin-input:focus {
+      border-color: #1e3a8a;
+    }
+    .admin-textarea {
+      width: 100%;
+      height: 60px;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      font-family: monospace;
+      font-size: 12px;
+      padding: 8px;
+      box-sizing: border-box;
+      resize: none;
+      color: #1e3a8a;
+      border-radius: 8px;
+      margin-top: 5px;
+      outline: none;
+    }
+    .admin-btn-primary {
+      width: 100%;
+      background: #1e3a8a;
+      color: #ffffff;
+      border: none;
+      padding: 13px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2);
+    }
+    .admin-result-box {
+      margin-top: 18px;
+      background: #ffffff;
+      padding: 12px;
+      border: 1px solid #e2e8f0;
+      border-left: 4px solid #1e3a8a;
+      border-radius: 8px;
+      text-align: left;
+    }
+    .admin-btn-action {
+      width: 100%;
+      margin-top: 8px;
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+      color: white;
+    }
+    .wa-action { background: #25d366; }
+    .cetak-action { background: #475569; }
+  </style>
+</head>
+<body>
+
+  <div class="admin-card">
+    <div class="admin-header">
+      <div style="font-size: 38px; margin-bottom: 8px;">🔒</div>
+      <h2>Admin Control Panel</h2>
+      <p>URL Generator Undangan Umi & Yusup</p>
+    </div>
+    
+    <div class="admin-form-group">
+      <label>1. Jalur Distribusi Undangan:</label>
+      <div class="admin-tabs">
+        <button id="tabWA" class="tab-btn active">📲 Jalur WhatsApp</button>
+        <button id="tabCetak" class="tab-btn">🖨️ Undangan Cetak (QR)</button>
+      </div>
+    </div>
+
+    <div class="admin-form-group">
+      <label>2. Nama Tamu / Komunitas:</label>
+      <input type="text" id="admNama" placeholder="Contoh: Yuliana Putri" class="admin-input">
+    </div>
+
+    <div id="wrapperWAInput" class="admin-form-group">
+      <label>3. Nomor Kontak WhatsApp:</label>
+      <input type="text" id="admWA" placeholder="Contoh: 081234567890" class="admin-input">
+    </div>
+
+    <button id="btnGen" class="admin-btn-primary">Generate & Siapkan Akses</button>
+
+    <div id="admHasil" class="admin-result-box" style="display:none;">
+      <strong>Link Akses Hasil Generator:</strong>
+      <textarea id="txtHasil" readonly class="admin-textarea"></textarea>
+      <button id="btnActionEkstra" class="admin-btn-action"></button>
+    </div>
+  </div>
+
+  <script>
+    // 🛡️ SECURITY CHECK: Mencegah orang asing masuk tanpa izin lewat file index.html
+    const tokenLokal = localStorage.getItem('akses_sah_lokal');
+    if (tokenLokal !== 'TOKEN_BYPASS_ADMIN') {
+      alert("Akses Terbatas! Silakan buka halaman utama dan verifikasi PIN Admin Anda terlebih dahulu.");
+      window.location.href = "index.html";
+    }
+
+    async function hitungHashSHA256(teks) {
+      const msgBuffer = new TextEncoder().encode(teks);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('').toLowerCase();
+    }
+
+    let activeMode = "wa";
+    const tabWA = document.getElementById('tabWA');
+    const tabCetak = document.getElementById('tabCetak');
+    const wrapperWAInput = document.getElementById('wrapperWAInput');
+    const btnGen = document.getElementById('btnGen');
+
+    tabWA.onclick = () => {
+      activeMode = "wa";
+      tabWA.classList.add('active');
+      tabCetak.classList.remove('active');
+      wrapperWAInput.style.display = "block";
+    };
+
+    tabCetak.onclick = () => {
+      activeMode = "cetak";
+      tabCetak.classList.add('active');
+      tabWA.classList.remove('active');
+      wrapperWAInput.style.display = "none";
+    };
+
+       btnGen.onclick = async () => {
+      const nama = document.getElementById('admNama').value.trim();
+      const rawWA = document.getElementById('admWA').value.trim();
+      if (!nama) return alert("Nama tamu tidak boleh kosong!");
+      
+      const urlFormat = encodeURIComponent(nama).replace(/%20/g, '+');
+      let hasilLinkBelakang = "";
+      const btnAction = document.getElementById('btnActionEkstra');
+
+      // Ambil domain dasar secara dinamis (Otomatis mendeteksi localhost / github pages / domain pribadi)
+      const domainAsli = window.location.origin + window.location.pathname.replace('admin.html', '');
+      
+      if (activeMode === "wa") {
+        const angkaSaja = rawWA.replace(/\D/g, ''); 
+        if (angkaSaja.length < 4) return alert("Nomor WA harus menyertakan minimal 4 angka terakhir!");
+        const empatAngkaTerakhir = angkaSaja.slice(-4);
+        const hashWA = await hitungHashSHA256(empatAngkaTerakhir);
+        
+        // Gabungkan domain asli langsung ke dalam teks hasil generator
+        const linkLengkap = domainAsli + `index.html?to=${urlFormat}&v=${hashWA}&type=wa`;
+        document.getElementById('txtHasil').value = linkLengkap;
+        
+        btnAction.style.display = "block";
+        btnAction.className = "admin-btn-action wa-action";
+        btnAction.innerText = "🚀 Klik Untuk Langsung Kirim Ke WhatsApp Tamu";
+        btnAction.onclick = () => {
+          const teksPesan = `Halo ${nama}, kami mengundang Anda ke acara pernikahan kami. Silakan buka tautan resmi Anda di sini untuk melihat detail acara dan konfirmasi kehadiran: ${linkLengkap}`;
+          window.open(`https://wa.me{angkaSaja}?text=${encodeURIComponent(teksPesan)}`, '_blank');
+        };
+      } else {
+        // Gabungkan domain asli untuk jalur undangan cetak kertas / QR Code
+        const linkLengkapCetak = domainAsli + `index.html?to=${urlFormat}&type=cetak`;
+        document.getElementById('txtHasil').value = linkLengkapCetak;
+        
+        btnAction.style.display = "block";
+        btnAction.className = "admin-btn-action cetak-action";
+        btnAction.innerText = "📋 Salin Teks Link Untuk Generator QR Code";
+        btnAction.onclick = () => {
+          navigator.clipboard.writeText(linkLengkapCetak);
+          alert("Tautan cetak berhasil disalin!");
+        };
+      }
+      
+      document.getElementById('admHasil').style.display = "block";
+      navigator.clipboard.writeText(document.getElementById('txtHasil').value);
+      alert("Proses berhasil! Tautan lengkap otomatis disalin ke clipboard Anda.");
+    };
+
+  </script>
+</body>
+</html>
+
