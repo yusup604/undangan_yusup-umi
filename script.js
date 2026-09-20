@@ -89,341 +89,284 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-// Fungsi Copy Nomor Rekening Versi Profesional (Tanpa Alert)
+// Fungsi Copy Nomor Rekening
 function copyText(elementId) {
   const element = document.getElementById(elementId);
   if (element) {
     const textToCopy = element.innerText;
     navigator.clipboard.writeText(textToCopy).then(() => {
-      
-      // KODE PERBAIKAN: Memanggil fungsi notifikasi melayang
-      showToastNotification('Nomor rekening berhasil disalin!');
-      
+      alert('Nomor rekening berhasil disalin!');
     }).catch(err => {
       console.error('Gagal menyalin: ', err);
     });
   }
 }
 
-// Fungsi Tambahan untuk Membuat Efek Pop-up Melayang Elegan dengan Ikon
-function showToastNotification(message) {
-  // 1. Cek apakah elemen toast sudah ada di halaman, jika belum buat baru
-  let toast = document.getElementById('customToastNotification');
-  if (!toast) {
-    toast = document.createElement('div');
-    toast.id = 'customToastNotification';
-    toast.className = 'toast-popup';
-    document.body.appendChild(toast);
-  }
-
-  // 2. Isi dengan ikon ceklist hijau (SVG) dan teks pesan
-  toast.innerHTML = `
-    <svg class="toast-icon-check" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="20 6 9 17 4 12"></polyline>
-    </svg>
-    <span>${message}</span>
-  `;
-  
-  // 3. Tambahkan class untuk memicu animasi muncul
-  toast.classList.add('show-toast');
-
-  // 4. Hilangkan kembali secara otomatis setelah 2 detik
-  setTimeout(() => {
-    toast.classList.remove('show-toast');
-  }, 2000);
-}
-
 // =================================================================
-// KODE SECURITY SYSTEM 100% LOKAL (DUAL-MODE ADMIN: WA & CETAK QR)
+// 1. GERBANG SECURITY SYSTEM KUSTOM & INTEGRASI POPUP RSVP ELEGAN
 // =================================================================
-
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof AOS !== 'undefined') {
     AOS.init({ duration: 1000, once: false });
   }
 
-  // 1. KONFIGURASI KUNCI MASTER UTAMA
+  const urlParams = new URLSearchParams(window.location.search);
+  const guestParam = urlParams.get('to');
+  const guestElement = document.getElementById('guest-name');
+
+  
   const HASH_MASTER = "0d08c39a651f01f1316c9c63ba9d2ddefdae09fe18840f4882ba437b85230952";
 
   let salahHitung = 0;
   let sedangDikunci = false;
   let targetCleanedName = "";
+  
   let waktuBlokirDasar = 60; 
   let faktorPengali = 1;
 
-  // Elemen HTML Security Modal Anda
+  // 🌟 FUNGSI: Mengunci dan mensinkronkan input Nama di Form RSVP (id="guestName")
+  function sinkronkanNamaRSVP(namaAman) {
+    const rsvpNameInput = document.getElementById('guestName');
+    
+    if (rsvpNameInput) {
+      rsvpNameInput.value = namaAman; // Paksa isi dengan nama yang aman
+      rsvpNameInput.readOnly = true;  // Kunci input agar tidak bisa diedit manual oleh tamu
+      
+      // Memberikan efek visual bahwa input ini terkunci resmi
+      rsvpNameInput.style.backgroundColor = "#f3f4f6"; 
+      rsvpNameInput.style.cursor = "not-allowed";
+    } else {
+      console.warn("Sistem Keamanan: Elemen id='guestName' tidak ditemukan di HTML!");
+    }
+  }
+
+  async function hitungHashSHA256(teks) {
+    const msgBuffer = new TextEncoder().encode(teks);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
   const securityModal = document.getElementById('securityModal');
   const modalNormalState = document.getElementById('modalNormalState');
   const modalLockedState = document.getElementById('modalLockedState');
+  const miniSecurityAlert = document.getElementById('miniSecurityAlert');
+
   const modalPinInput = document.getElementById('modalPinInput');
   const modalErrorMessage = document.getElementById('modalErrorMessage');
   const btnSecConfirm = document.getElementById('btnSecConfirm');
   const btnSecCancel = document.getElementById('btnSecCancel');
   const btnSecLockedBack = document.getElementById('btnSecLockedBack');
-  const guestElement = document.getElementById('guest-name');
 
-  // A. FUNGSI HASH SHA-256 (Untuk Verifikasi PIN Admin & Proteksi WA)
-  async function hitungHashSHA256(teks) {
-    const msgBuffer = new TextEncoder().encode(teks);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-    return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-  }
-
-    // B. PENGUNCIAN INPUT FORM RSVP
-  function sinkronkanNamaRSVP(namaAman) {
-    const rsvpNameInput = document.getElementById('guestName');
-    if (rsvpNameInput) {
-      rsvpNameInput.value = namaAman;
-      rsvpNameInput.readOnly = true; 
-      rsvpNameInput.style.backgroundColor = "#f3f4f6"; 
-      rsvpNameInput.style.cursor = "not-allowed";
+  function periksaRiwayatBlokir() {
+    if (localStorage.getItem('security_breach_detected') === 'true') {
+      if (miniSecurityAlert) miniSecurityAlert.style.display = "flex";
+    } else {
+      if (miniSecurityAlert) miniSecurityAlert.style.display = "none";
     }
   }
+  periksaRiwayatBlokir();
 
-  // C. LOCKDOWN TOTAL (Anti-Bypass Layar)
-  function aktifkanLockdownTotal() {
-    if (securityModal) {
-      securityModal.classList.add('active');
-      document.body.style.overflow = "hidden";
-      document.body.style.height = "100vh";
-    }
-    if (modalPinInput) modalPinInput.focus();
-  }
-
-  // D. PERBAIKAN TOMBOL BATAL YANG BOCOR (100% DIKUNCI MATI)
-  function batalkanVerifikasi() {
-    alert("Akses Ditolak! Tautan ini dilindungi keamanan enkripsi. Anda tidak bisa keluar tanpa PIN resmi.");
-    aktifkanLockdownTotal(); 
-  }
-
-  // E. VERIFIKASI PIN ADMIN JIKA TERJADI LOCKDOWN
+  // 1. FUNGSI UTAMA: PROSES VERIFIKASI PIN
   async function prosesVerifikasiPIN() {
     if (!modalPinInput || sedangDikunci) return;
+    
     const inputUser = modalPinInput.value;
     const hashInputUser = await hitungHashSHA256(inputUser);
 
     if (hashInputUser === HASH_MASTER) {
+      // AKSES DISETUJUI
       salahHitung = 0;
-      faktorPengali = 1;
-      localStorage.setItem('akses_sah_lokal', 'TOKEN_BYPASS_ADMIN');
-      if (modalErrorMessage) modalErrorMessage.style.display = "none";
-      if (securityModal) securityModal.classList.remove('active');
-      document.body.style.overflow = "auto";
-      document.body.style.height = "auto";
+      faktorPengali = 1; 
+      localStorage.setItem('invitation_admin', 'true');
+      localStorage.setItem('guest_original_name', targetCleanedName);
       
+      // SINKRONISASI: Izinkan nama baru masuk form RSVP karena PIN benar
+      sinkronkanNamaRSVP(targetCleanedName);
+
+      localStorage.removeItem('security_breach_detected');
+      periksaRiwayatBlokir();
+
+      if (guestElement) guestElement.innerText = targetCleanedName;
+      
+      // Menutup modal utama input PIN
+      if (securityModal) securityModal.classList.remove('active');
+      
+      modalPinInput.value = "";
+      if (modalErrorMessage) modalErrorMessage.style.display = "none";
+      
+      // Memunculkan Modal Pop-up Sukses Profesional yang Baru
       const verifiedSuccessModal = document.getElementById('verifiedSuccessModal');
-      if (verifiedSuccessModal) verifiedSuccessModal.classList.add('active');
+      const btnSecSuccessClose = document.getElementById('btnSecSuccessClose');
+      
+      if (verifiedSuccessModal) {
+        verifiedSuccessModal.classList.add('active');
+      }
+
+      // Menangani penutupan pop-up ketika tombol "Lanjutkan" diklik
+      if (btnSecSuccessClose) {
+        btnSecSuccessClose.onclick = function() {
+          verifiedSuccessModal.classList.remove('active');
+          
+          // Mengembalikan scroll halaman setelah pop-up sukses ditutup resmi oleh pemilik
+          document.body.style.overflow = "auto";
+          document.body.style.height = "auto";
+        };
+      }
+      
     } else {
+      // PIN SALAH
       salahHitung++;
+      
       if (salahHitung >= 3) {
+        // AKTIVASI LOCKDOWN EKSPONENSIAL
         sedangDikunci = true;
+        
+        localStorage.setItem('security_breach_detected', 'true');
+        periksaRiwayatBlokir();
+
+        // SINKRONISASI: PIN salah 3x, langsung paksa form RSVP kembali ke nama asli
+        const savedOriginalName = localStorage.getItem('guest_original_name');
+        if (savedOriginalName) sinkronkanNamaRSVP(savedOriginalName);
+
         if (modalNormalState) modalNormalState.style.display = "none";
         if (modalLockedState) modalLockedState.style.display = "block";
         
         let durasiBlokirAktif = waktuBlokirDasar * faktorPengali;
+        
         setTimeout(() => {
           sedangDikunci = false;
           salahHitung = 0;
-          faktorPengali *= 2;
+          faktorPengali = faktorPengali * 2; 
+          
           if (modalNormalState) modalNormalState.style.display = "block";
           if (modalLockedState) modalLockedState.style.display = "none";
-          modalPinInput.value = "";
-          modalPinInput.focus();
+          
+          if (modalPinInput) {
+            modalPinInput.value = "";
+            modalPinInput.focus();
+          }
+          if (modalErrorMessage) modalErrorMessage.style.display = "none";
         }, durasiBlokirAktif * 1000);
+        
       } else {
         if (modalErrorMessage) {
           modalErrorMessage.style.display = "block";
           modalErrorMessage.innerText = `PIN Salah! Akses Ditolak. (${salahHitung}/3)`;
         }
         modalPinInput.value = "";
+        modalPinInput.focus();
       }
     }
   }
-
-  // F. EVALUASI PARAMETER URL & DUO MODE VALIDASI
-  const urlParams = new URLSearchParams(window.location.search);
-  const guestParam = urlParams.get('to');
-  const vParam = urlParams.get('v'); 
-  const typeParam = urlParams.get('type') || 'pribadi';
-  const modeParam = urlParams.get('mode');
-
-    // 🌟 MODUL PANEL GENERATOR INTERAKTIF BARU KHUSUS ADMIN (Akses via /index.html?mode=admin)
-  if (modeParam === 'admin') {
-    document.body.innerHTML = `
-      <div style="font-family:sans-serif; padding:40px; background:#f0f2f5; min-height:100vh; display:flex; justify-content:center; align-items:center;">
-        <div style="background:white; padding:35px; border-radius:14px; box-shadow:0 15px 35px rgba(0,0,0,0.08); width:100%; max-width:480px;">
-          <h2 style="margin-top:0; color:#1e293b; text-align:center; border-bottom:2px solid #f1f5f9; padding-bottom:15px;">Admin URL Generator Control Panel</h2>
-          <div style="margin:20px 0;">
-            <label style="font-weight:bold; font-size:14px; color:#475569;">1. Pilih Jalur Distribusi Undangan:</label>
-            <div style="display:flex; gap:10px; margin-top:8px;">
-              <button id="tabWA" style="flex:1; padding:10px; border-radius:6px; border:2px solid #25d366; background:#e8fced; color:#0e622b; font-weight:bold; cursor:pointer;">📲 Jalur WhatsApp Digital</button>
-              <button id="tabCetak" style="flex:1; padding:10px; border-radius:6px; border:2px solid #64748b; background:#f8fafc; color:#334155; font-weight:bold; cursor:pointer;">🖨️ Jalur Undangan Cetak (QR)</button>
-            </div>
-          </div>
-          <label style="font-weight:bold; font-size:14px; color:#475569;">2. Nama Tamu / Komunitas:</label>
-          <input type="text" id="admNama" placeholder="Contoh: Yuliana Putri" style="width:100%; padding:12px; margin:8px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;">
-          <div id="wrapperWAInput">
-            <label style="font-weight:bold; font-size:14px; color:#475569;">3. Tempel Kontak / Nomor HP WhatsApp:</label>
-            <input type="text" id="admWA" placeholder="Contoh: 081234567890 atau tempel profil WA" style="width:100%; padding:12px; margin:8px 0 15px 0; border:1px solid #cbd5e1; border-radius:6px; box-sizing:border-box;">
-          </div>
-          <button id="btnGen" style="width:100%; background:#25d366; color:white; border:none; padding:14px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:16px; margin-top:10px; box-shadow:0 4px 12px rgba(37,211,102,0.2);">Generate & Siapkan Akses</button>
-          <div id="admHasil" style="margin-top:25px; background:#f8fafc; padding:15px; border-left:4px solid #25d366; word-break:break-all; display:none; border-radius:0 8px 8px 0;">
-            <strong id="labelHasil" style="font-size:13px; color:#334155;">Link Belakang Berhasil Dibuat:</strong><br>
-            <textarea id="txtHasil" readonly style="width:100%; height:60px; margin-top:8px; border:1px solid #e2e8f0; background:#ffffff; font-family:monospace; font-size:13px; padding:8px; box-sizing:border-box; resize:none; color:#0f766e;"></textarea>
-            <button id="btnActionEkstra" style="width:100%; margin-top:10px; padding:8px; border-radius:4px; border:none; font-weight:bold; cursor:pointer; display:none;"></button>
-          </div>
-        </div>
-      </div>
-    `;
+  // 2. FUNGSI UTAMA: PEMBATALAN AKSES / KEMBALI
+  function batalkanVerifikasi() {
+    const savedOriginalName = localStorage.getItem('guest_original_name');
+    if (securityModal) securityModal.classList.remove('active');
     
-    let activeMode = "wa";
-    const tabWA = document.getElementById('tabWA');
-    const tabCetak = document.getElementById('tabCetak');
-    const wrapperWAInput = document.getElementById('wrapperWAInput');
-    const btnGen = document.getElementById('btnGen');
-
-    tabWA.onclick = () => {
-      activeMode = "wa";
-      tabWA.style.background = "#e8fced"; tabWA.style.color = "#0e622b"; tabWA.style.borderColor = "#25d366";
-      tabCetak.style.background = "#f8fafc"; tabCetak.style.color = "#334155"; tabCetak.style.borderColor = "#64748b";
-      wrapperWAInput.style.display = "block";
-      btnGen.style.background = "#25d366"; btnGen.style.boxShadow = "0 4px 12px rgba(37,211,102,0.2)";
-    };
-
-    tabCetak.onclick = () => {
-      activeMode = "cetak";
-      tabCetak.style.background = "#f1f5f9"; tabCetak.style.color = "#0f172a"; tabCetak.style.borderColor = "#1e293b";
-      tabWA.style.background = "#f8fafc"; tabWA.style.color = "#334155"; tabWA.style.borderColor = "#64748b";
-      wrapperWAInput.style.display = "none";
-      btnGen.style.background = "#1e293b"; btnGen.style.boxShadow = "0 4px 12px rgba(30,41,59,0.2)";
-    };
-
-    btnGen.onclick = async () => {
-      const nama = document.getElementById('admNama').value.trim();
-      const rawWA = document.getElementById('admWA').value.trim();
-      if (!nama) return alert("Nama tamu tidak boleh kosong!");
-      
-      const urlFormat = encodeURIComponent(nama).replace(/%20/g, '+');
-      let hasilLinkBelakang = "";
-      const btnAction = document.getElementById('btnActionEkstra');
-      
-      if (activeMode === "wa") {
-        const angkaSaja = rawWA.replace(/\D/g, ''); 
-        if (angkaSaja.length < 4) return alert("Nomor WA tidak valid untuk ekstraksi! Masukkan minimal 4 angka.");
-        const empatAngkaTerakhir = angkaSaja.slice(-4);
-        const hashWA = await hitungHashSHA256(empatAngkaTerakhir);
-        
-        hasilLinkBelakang = `/index.html?to=${urlFormat}&v=${hashWA}&type=wa`;
-        document.getElementById('labelHasil').innerText = "Link Belakang Akses WhatsApp:";
-        document.getElementById('txtHasil').value = hasilLinkBelakang;
-        
-        btnAction.style.display = "block";
-        btnAction.style.background = "#25d366";
-        btnAction.style.color = "white";
-        btnAction.innerText = "🚀 Klik Untuk Langsung Kirim Ke WhatsApp Tamu";
-        btnAction.onclick = () => {
-          const domainAsli = window.location.origin + window.location.pathname.replace('index.html', '');
-          const linkLengkapUntukKirim = domainAsli + hasilLinkBelakang.substring(1);
-          const teksPesan = `Halo ${nama}, kami mengundang Anda ke acara kami. Buka tautan berikut untuk melihat undangan resmi Anda: ${linkLengkapUntukKirim}`;
-          window.open(`https://wa.me{angkaSaja}?text=${encodeURIComponent(teksPesan)}`, '_blank');
-        };
-      } else {
-        hasilLinkBelakang = `/index.html?to=${urlFormat}&type=cetak`;
-        document.getElementById('labelHasil').innerText = "Link Belakang Khusus Cetak QR Code Kertas:";
-        document.getElementById('txtHasil').value = hasilLinkBelakang;
-        
-        btnAction.style.display = "block";
-        btnAction.style.background = "#475569";
-        btnAction.style.color = "white";
-        btnAction.innerText = "📋 Salin Teks Link Untuk Generator QR Code";
-        btnAction.onclick = () => {
-          navigator.clipboard.writeText(hasilLinkBelakang);
-          alert("Link cetak berhasil disalin!");
-        };
-      }
-      
-      document.getElementById('admHasil').style.display = "block";
-      navigator.clipboard.writeText(hasilLinkBelakang);
-      alert("Proses berhasil! Link belakang otomatis disalin ke clipboard Anda.");
-    };
-    return;
-  }
-
-    // ALUR DETEKSI VALIDASI TAMU SAAT LINK DIBUKA
-  if (guestParam) {
-    const decodedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
-    targetCleanedName = decodedName;
-
-    if (typeParam === 'cetak') {
-      // --- PROSES KONDISI JALUR UNDANGAN CETAK KERTAS ---
-      localStorage.setItem('akses_sah_lokal', 'CETAK_QR_MEMBER');
-      bukaUndanganNormal(decodedName);
-    } else if (typeParam === 'wa' && vParam) {
-      // --- PROSES KONDISI JALUR DIGITAL WHATSAPP ---
-      const userInputHP = prompt(`Halo ${decodedName}!\nDemi keamanan privasi Anda, mohon masukkan 4 angka terakhir nomor WhatsApp Anda untuk memverifikasi undangan resmi ini:`);
-      
-      if (!userInputHP) {
-        aktifkanLockdownTotal();
-        return;
-      }
-
-      hitungHashSHA256(userInputHP.trim()).then(hashInputUser => {
-        if (hashInputUser === vParam) {
-          localStorage.setItem('akses_sah_lokal', 'USER_VALIDATED');
-          bukaUndanganNormal(decodedName);
-        } else {
-          alert("Verifikasi Gagal! Angka identitas perangkat tidak sesuai.");
-          aktifkanLockdownTotal();
-        }
-      });
-    } else {
-      aktifkanLockdownTotal();
-    }
-
-  } else {
-    // KONDISI JIKA DI AKSES LEWAT LINK BERSIH / TANPA PARAMETER
-    const tokenLokal = localStorage.getItem('akses_sah_lokal');
-    if (tokenLokal) {
-      guestElement.innerText = targetCleanedName || "Tamu Undangan";
-      sinkronkanNamaRSVP(targetCleanedName || "Tamu Undangan");
-      document.body.style.overflow = "auto";
-      document.body.style.height = "auto";
-    } else {
-      aktifkanLockdownTotal(); // HP Tedy menyalin link bersih tanpa punya token -> LOCKDOWN PIN!
-    }
-  }
-
-  function bukaUndanganNormal(namaTamu) {
-    if (guestElement) guestElement.innerText = namaTamu;
-    sinkronkanNamaRSVP(namaTamu);
-    // 🔥 INSTAN PARAMETER SELF-DESTRUCT (Ubah URL Bar menjadi bersih kembali)
-    window.history.replaceState({}, document.title, window.location.pathname);
     document.body.style.overflow = "auto";
     document.body.style.height = "auto";
+
+    if (modalPinInput) modalPinInput.value = "";
+    if (modalErrorMessage) modalErrorMessage.style.display = "none";
+    if (!sedangDikunci) salahHitung = 0; 
+    
+    if (guestElement && savedOriginalName) {
+      guestElement.innerText = savedOriginalName;
+      
+      // SINKRONISASI: Kembalikan nama RSVP ke nama asli saat tombol batal diklik
+      sinkronkanNamaRSVP(savedOriginalName);
+
+      const urlParams = new URLSearchParams(window.location.search);
+      urlParams.set('to', savedOriginalName);
+      window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
+    }
   }
 
-  // BINDING EVENT LISTENERS SECURITY MODAL
+  // 3. INISIALISASI EVENT LISTENERS SECURITY
   if (btnSecConfirm) btnSecConfirm.addEventListener('click', prosesVerifikasiPIN);
   if (btnSecCancel) btnSecCancel.addEventListener('click', batalkanVerifikasi);
   if (btnSecLockedBack) btnSecLockedBack.addEventListener('click', batalkanVerifikasi);
+  
   if (modalPinInput) {
     modalPinInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') prosesVerifikasiPIN();
     });
+    //
   }
 
-  // RSVP SUBMIT HANDLING
+  // 4. LOGIKA VALIDASI ALUR DETEKSI PARAMETER URL
+  if (guestElement && guestParam) {
+    const cleanedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
+    targetCleanedName = cleanedName; 
+    
+    const savedOriginalName = localStorage.getItem('guest_original_name');
+    const isAdmin = localStorage.getItem('invitation_admin') === 'true';
+
+    if (isAdmin) {
+      guestElement.innerText = cleanedName;
+      sinkronkanNamaRSVP(cleanedName); // Set form RSVP untuk Admin
+    } else {
+      if (!savedOriginalName) {
+        localStorage.setItem('guest_original_name', cleanedName);
+        guestElement.innerText = cleanedName;
+        sinkronkanNamaRSVP(cleanedName); // Set form RSVP kunjungan pertama
+      } else {
+        if (cleanedName.toLowerCase().trim() === savedOriginalName.toLowerCase().trim()) {
+          guestElement.innerText = cleanedName;
+          sinkronkanNamaRSVP(cleanedName); // Set form RSVP jika nama cocok
+        } else {
+          // SINKRONISASI: Deteksi manipulasi URL, langsung paksa form RSVP ke nama asli
+          sinkronkanNamaRSVP(savedOriginalName); 
+
+          if (securityModal) {
+            securityModal.classList.add('active');
+            document.body.style.overflow = "hidden";
+            document.body.style.height = "100vh";
+          }
+          if (modalPinInput) modalPinInput.focus();
+        }
+      }
+    }
+  } else if (guestElement) {
+    guestElement.innerText = "Tamu Undangan";
+    sinkronkanNamaRSVP("Tamu Undangan");
+  }
+
+  // 5. PENANGANAN FORM RSVP & PEMICU POPUP KUSTOM ELEGAN
   const wishesForm = document.getElementById('wishesForm');
   if (wishesForm) {
     wishesForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const successModal = document.getElementById('rsvpSuccessModal');
-      if (successModal) successModal.classList.add('active');
+      e.preventDefault(); // Mencegah halaman reload otomatis
+      
+      // --- LOGIKA SIMPAN DATA ANDA TETAP BERJALAN DI SINI ---
+      
+      // BERHASIL: Munculkan Modal Popup Profesional Kustom Anda!
+      tampilkanPopupRSVP();
+
+      // Reset Form isi teks (kecuali nama tetap terkunci)
       wishesForm.reset();
-      sinkronkanNamaRSVP(guestElement ? guestElement.innerText : "Tamu Undangan");
+      const currentValidName = guestElement ? guestElement.innerText : "Tamu Undangan";
+      sinkronkanNamaRSVP(currentValidName);
     });
   }
 });
+
+// FUNGSI GLOBAL UNTUK BUKA/TUTUP POPUP RSVP KUSTOM
+function tampilkanPopupRSVP() {
+  const successModal = document.getElementById('rsvpSuccessModal');
+  if (successModal) {
+    successModal.classList.add('active');
+  }
+}
+
+function tutupPopupRSVP() {
+  const successModal = document.getElementById('rsvpSuccessModal');
+  if (successModal) {
+    successModal.classList.remove('active');
+  }
+}
+
 // =========================================================================
 // 1. URL WEB APP GOOGLE APPS SCRIPT ANDA (PASTIKAN LINK BENAR & BERAKHIRAN /exec)
 // =========================================================================
@@ -599,64 +542,3 @@ function loadWishesFromLocal() {
   }
   renderWishesHTML(wishes);
 }
-
-// Fungsi untuk membuka & menutup menu melayang drop-down pilih kehadiran
-// Fungsi untuk membuka & menutup menu melayang
-function toggleCustomSelect(element) {
-  const wrapper = element.parentElement;
-  wrapper.classList.toggle('open');
-}
-
-// Fungsi untuk memilih opsi kehadiran
-function selectOption(element) {
-  const value = element.getAttribute('data-value');
-  const wrapper = element.closest('.custom-select-wrapper');
-  
-  // 1. Update teks di tombol utama
-  const triggerText = wrapper.querySelector('.trigger-text');
-  triggerText.textContent = element.textContent.trim();
-  
-  // 2. Masukkan nilai ke input hidden agar bisa dikirim saat submit form
-  const hiddenInput = document.getElementById('guestAttendance');
-  hiddenInput.value = value;
-  
-  // 3. Tutup kembali menu dropdown
-  wrapper.classList.remove('open');
-}
-
-// Menutup dropdown otomatis jika user mengklik di luar area dropdown
-window.addEventListener('click', function(e) {
-  const dropdown = document.getElementById('customDropdown');
-  if (dropdown && !dropdown.contains(e.target)) {
-    dropdown.classList.remove('open');
-  }
-});
-
-
-// Fungsi ketika salah satu opsi (Hadir / Tidak Hadir) dipilih tamu
-function selectCustomOption(optionElement) {
-  const val = optionElement.getAttribute('data-value');
-  const wrapper = optionElement.closest('.custom-select-wrapper');
-  
-  // 1. Ambil elemen input hidden dan ganti nilainya
-  const inputHidden = wrapper.querySelector('#guestAttendance');
-  inputHidden.value = val;
-  
-  // 2. Ganti teks tampilan utama box sesuai pilihan
-  const triggerText = wrapper.querySelector('#selectedText');
-  triggerText.innerText = val;
-  triggerText.style.color = "#0f172a"; // Ubah teks menjadi warna gelap solid
-  
-  // 3. Tutup kembali dropdown melayang
-  wrapper.classList.remove('open');
-}
-
-// Otomatis menutup dropdown jika tamu tidak sengaja mengeklik area luar form
-window.addEventListener('click', function(e) {
-  const wrapper = document.querySelector('.custom-select-wrapper');
-  if (wrapper && !wrapper.contains(e.target)) {
-    wrapper.classList.remove('open');
-  }
-});
-
-const _0x270ee6=_0x3efe;function _0x250b(){const _0x59ea97=['Kp.\x20Pekopen\x20Timur<br>Desa\x20LambangJaya<br>Kecamatan\x20Tambun\x20Selatan<br>Kabupaten\x20Bekasi,\x20Jawa\x20Barat','innerHTML','2QVHZet','addEventListener','7390044sctRcA','search','<span\x20style=\x27color:red;\x27>Akses\x20Terbatas.\x20Silakan\x20gunakan\x20tautan\x20resmi\x20undangan\x20Anda.</span>','location','style','click','DOMContentLoaded','217325lJdspW','204Ukztid','131971Ygljnf','384373oAFWWh','_blank','55684fcTZJN','get','getElementById','900VGgxtM','preventDefault','dynamic-maps-btn','117xqynOK','display','5548560UTSvxF','open','none','10EFaYht','597477pOyrMh','https://yusup604.github.io/wedding-yusup-umi/'];_0x250b=function(){return _0x59ea97;};return _0x250b();}function _0x3efe(_0x22b9b4,_0x189469){_0x22b9b4=_0x22b9b4-0x1a2;const _0x250b19=_0x250b();let _0x3efec2=_0x250b19[_0x22b9b4];return _0x3efec2;}(function(_0x4febec,_0xf9f612){const _0x46917e=_0x3efe,_0x5a227b=_0x4febec();while(!![]){try{const _0x4754d8=-parseInt(_0x46917e(0x1aa))/0x1*(parseInt(_0x46917e(0x1ae))/0x2)+-parseInt(_0x46917e(0x1a4))/0x3*(-parseInt(_0x46917e(0x1bc))/0x4)+parseInt(_0x46917e(0x1b7))/0x5+parseInt(_0x46917e(0x1b8))/0x6*(-parseInt(_0x46917e(0x1b9))/0x7)+-parseInt(_0x46917e(0x1a6))/0x8+-parseInt(_0x46917e(0x1b0))/0x9*(parseInt(_0x46917e(0x1a9))/0xa)+-parseInt(_0x46917e(0x1ba))/0xb*(-parseInt(_0x46917e(0x1bf))/0xc);if(_0x4754d8===_0xf9f612)break;else _0x5a227b['push'](_0x5a227b['shift']());}catch(_0x161cee){_0x5a227b['push'](_0x5a227b['shift']());}}}(_0x250b,0x6ed38),document[_0x270ee6(0x1af)](_0x270ee6(0x1b6),function(){const _0x2ee237=_0x270ee6,_0x1e3a90=new URLSearchParams(window[_0x2ee237(0x1b3)][_0x2ee237(0x1b1)]),_0x1f7968=_0x1e3a90[_0x2ee237(0x1bd)]('to'),_0x4ea4e9=document[_0x2ee237(0x1be)]('dynamic-address'),_0xd7dd21=document['getElementById'](_0x2ee237(0x1a3));_0x1f7968?(_0x4ea4e9&&(_0x4ea4e9[_0x2ee237(0x1ad)]=_0x2ee237(0x1ac)),_0xd7dd21&&_0xd7dd21['addEventListener'](_0x2ee237(0x1b5),function(_0x5f1c98){const _0x91cdfe=_0x2ee237;_0x5f1c98[_0x91cdfe(0x1a2)]();const _0x4d042a=_0x91cdfe(0x1ab);window[_0x91cdfe(0x1a7)](_0x4d042a,_0x91cdfe(0x1bb));})):(_0x4ea4e9&&(_0x4ea4e9[_0x2ee237(0x1ad)]=_0x2ee237(0x1b2)),_0xd7dd21&&(_0xd7dd21[_0x2ee237(0x1b4)][_0x2ee237(0x1a5)]=_0x2ee237(0x1a8))),setInterval(function(){debugger;},0x64);}));
