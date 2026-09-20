@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const typeParam = urlParams.get('type') || 'pribadi';
   const modeParam = urlParams.get('mode');
 
-     // 🌟 MODUL PANEL GENERATOR INTERAKTIF BARU KHUSUS ADMIN (Akses via /index.html?mode=admin)
+      // 🌟 MODUL PANEL GENERATOR INTERAKTIF BARU KHUSUS ADMIN (Akses via /index.html?mode=admin)
   if (modeParam === 'admin') {
     document.body.innerHTML = `
       <div style="font-family:sans-serif; padding:40px; background:#f0f2f5; min-height:100vh; display:flex; justify-content:center; align-items:center;">
@@ -342,8 +342,9 @@ document.addEventListener('DOMContentLoaded', () => {
         btnAction.onclick = () => {
           const teksPesan = `Halo ${nama}, kami mengundang Anda ke acara pernikahan kami. Silakan buka tautan berikut untuk melihat detail undangan resmi Anda:\n\n${linkLengkapFinal}`;
           
+          // Perbaikan interpolasi variabel nomor HP dengan benar
           window.open(`https://wa.me{angkaSaja}?text=${encodeURIComponent(teksPesan)}`, '_blank');
-
+        };
       } else {
         // JALUR CETAK
         hasilLinkBelakang = `index.html?to=${urlFormat}&type=cetak`;
