@@ -237,7 +237,7 @@
           const teksPesan = `Halo ${nama}, kami mengundang Anda ke acara pernikahan kami. Silakan buka tautan resmi Anda di sini untuk melihat detail acara dan konfirmasi kehadiran: ${linkLengkap}`;
           
           // Perbaikan typo wa.me/{angkasaja} dan penambahan garis miring (/) resmi
-          window.open(`https://wa.me{nomorValid}?text=${encodeURIComponent(teksPesan)}`, '_blank');
+          window.open("https://wa.me" + nomorValid + "?text=" + encodeURIComponent(teksPesan), "_blank");
         };
       } else {
         // Jalur undangan cetak kertas / QR Code
