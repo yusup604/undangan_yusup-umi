@@ -64,7 +64,7 @@ function updateCountdown() {
 }
 
 
-// KODE PERBAIKAN UNTUK MENGGANTIKAN BLOK KODE TERSEBUT
+// KODE lihat rekening
 document.addEventListener('DOMContentLoaded', function() {
   
   // 1. Jalankan hitung mundur dengan aman setelah halaman siap
@@ -88,6 +88,23 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+
+// Fungsi Copy Nomor Rekening
+// Fungsi Copy Nomor Rekening Versi Profesional (Tanpa Alert)
+function copyText(elementId) {
+  const element = document.getElementById(elementId);
+  if (element) {
+    const textToCopy = element.innerText;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      
+      // KODE PERBAIKAN: Memanggil fungsi notifikasi melayang
+      showToastNotification('Nomor rekening berhasil disalin!');
+      
+    }).catch(err => {
+      console.error('Gagal menyalin: ', err);
+    });
+  }
+}
 
 // Fungsi Tambahan untuk Membuat Efek Pop-up Melayang Elegan dengan Ikon
 function showToastNotification(message) {
