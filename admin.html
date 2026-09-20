@@ -219,7 +219,6 @@
         const empatAngkaTerakhir = angkaSaja.slice(-4);
         const hashWA = await hitungHashSHA256(empatAngkaTerakhir);
         
-        // Gabungkan domain asli langsung ke dalam teks hasil generator menggunakan format kutip dua standar
         const linkLengkap = domainAsli + "index.html?to=" + urlFormat + "&v=" + hashWA + "&type=wa";
         document.getElementById('txtHasil').value = linkLengkap;
         
@@ -228,18 +227,32 @@
         btnAction.innerText = "🚀 Klik Untuk Langsung Kirim Ke WhatsApp Tamu";
         
         let nomorValid = angkaSaja;
-        // Otomatis ubah awalan 0 menjadi 62 agar link wa.me valid
         if (nomorValid.startsWith('0')) {
           nomorValid = "62" + nomorValid.slice(1);
         }
         
-        const teksPesan = "Halo " + nama + ", kami mengundang Anda ke acara pernikahan kami. Silakan buka tautan resmi Anda di sini untuk melihat detail acara dan konfirmasi kehadiran: " + linkLengkap;
+        // 🔥 PERBAIKAN BAHASA: Format teks disesuaikan persis seperti contoh gambar Anda
+        const teksPesan = "Assalamu'alaikum Warahmatullahi Wabarakatuh\n\n" +
+                          "Yth. Bapak/Ibu/Saudara/i\n" +
+                          "*" + nama + "*\n" +
+                          "Di Tempat\n\n" +
+                          "Dengan segala kerendahan hati, kami mengundang Bapak/Ibu/Saudara/i dan teman-teman dalam acara pernikahan kami :\n\n" +
+                          "Pada Hari : Sabtu\n" +
+                          "🗓️ Tanggal : 12 Desember 2026\n" +
+                          "⏰ Pukul : 09:00 - Selesai\n" +
+                          "📍 Lokasi : Kp. Pekopen Timur. Desa LambangJaya. Tambun Selatan, Bekasi. Jawa Barat.\n\n" +
+                          "Tanpa mengurangi rasa hormat, mohon akses undangan pada link berikut:\n" +
+                          linkLengkap + "\n\n" +
+                          "Kehadiran Bapak/Ibu/Saudara/i tentu akan menjadi kehormatan besar bagi kami dan keluarga. Terima kasih.\n\n" +
+                          "Yang berbahagia,\n\n" +
+                          "*Umi & Yusup*\n\n" +
+                          "Wassalamu'alaikum Warahmatullahi Wabarakatuh";
         
-        // 🔥 PERBAIKAN TOTAL: Ditambahkan tanda / setelah wa.me dan diarahkan natural via atribut .href
         btnAction.href = "https://wa.me/" + nomorValid + "?text=" + encodeURIComponent(teksPesan);
-        btnAction.target = "_blank"; // Membuka aplikasi WhatsApp / tab baru tanpa terblokir pop-up browser
+        btnAction.target = "_blank";
+      }
         
-      } else {
+         else {
         // Jalur undangan cetak kertas / QR Code
         const linkLengkapCetak = domainAsli + "index.html?to=" + urlFormat + "&type=cetak";
         document.getElementById('txtHasil').value = linkLengkapCetak;
