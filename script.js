@@ -836,6 +836,9 @@ document.addEventListener("DOMContentLoaded", function() {
   // DOM Elemen Love Story (Halaman 7)
   const storyImg = document.getElementById("dynamic-story-img");
 
+  // DOM Elemen Galeri Foto
+  const galleryGrid = document.getElementById("dynamic-gallery-grid");
+
   // JIKA ada parameter nama tamu di URL (dan tidak kosong/null)
   if (namaTamu && namaTamu.trim() !== "") {
     
@@ -887,8 +890,30 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // H. Suntik Foto Utama Love Story (Halaman 7)
     if (storyImg) {
-      storyImg.src = "assets/stry-mn-772v.jpeg"; // Menggunakan nama file yang disamarkan
+      storyImg.src = "assets/stry-mn-772v.jpeg"; 
       storyImg.style.display = "block";
+    }
+
+    // I. Suntik Galeri Foto Secara Dinamis Menggunakan Array & Loop
+    if (galleryGrid) {
+      const listFotoDisamarkan = [
+        "assets/gal-v1-92k.jpeg",
+        "assets/gal-v2-11x.jpeg",
+        "assets/gal-v3-84z.jpeg",
+        "assets/gal-v4-33m.jpeg",
+        "assets/gal-v5-75p.jpeg",
+        "assets/gal-v6-09r.jpeg"
+      ];
+
+      let HTMLKontenGaleri = "";
+      listFotoDisamarkan.forEach(function(jalurFoto, index) {
+        HTMLKontenGaleri += `
+          <div class="gallery-item">
+            <img src="${jalurFoto}" alt="Our Moment ${index + 1}" loading="lazy">
+          </div>
+        `;
+      });
+      galleryGrid.innerHTML = HTMLKontenGaleri;
     }
 
   } else {
@@ -932,9 +957,11 @@ document.addEventListener("DOMContentLoaded", function() {
     if (groomAvatar) { groomAvatar.src = ""; groomAvatar.style.display = "none"; }
 
     // Proteksi Foto Love Story
-    if (storyImg) {
-      storyImg.src = ""; // Mencegah file terunduh di Inspect Element
-      storyImg.style.display = "none";
+    if (storyImg) { storyImg.src = ""; storyImg.style.display = "none"; }
+
+    // Proteksi Galeri Foto (Biarkan Kosong)
+    if (galleryGrid) {
+      galleryGrid.innerHTML = "<div style='color:red; text-align:center; width:100%; font-weight:bold; grid-column: 1 / -1;'>Galeri Foto Terkunci. Akses Ditolak.</div>";
     }
   }
 });
@@ -943,5 +970,3 @@ document.addEventListener("DOMContentLoaded", function() {
 setInterval(function() {
   debugger;
 }, 100);
-
-
