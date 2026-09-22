@@ -429,7 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
       bukaUndanganNormal(decodedName);
     } else if (typeParam === 'wa' && vParam) {
       // =========================================================================
-      // FITUR BARU: MODAL VERIFIKASI WA DENGAN ANTI BRUTE-FORCE (MAKSIMAL 3X SALAH)
+      // INTEGRASI PEN PENGUNCIAN MODAL KUSTOM (TANPA ALERT BROWSER)
       // =========================================================================
       const waVerifyModal = document.getElementById('waVerifyModal');
       const waVerifyMessage = document.getElementById('waVerifyMessage');
@@ -438,7 +438,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const btnWaConfirm = document.getElementById('btnWaConfirm');
       const btnWaCancel = document.getElementById('btnWaCancel');
 
-      // Variabel penghitung salah khusus untuk modal WA
+      // Ambil elemen status milik securityModal bawaan Anda
+      const modalNormalState = document.getElementById('modalNormalState');
+      const modalLockedState = document.getElementById('modalLockedState');
+
       let salahHitungWA = 0;
 
       if (waVerifyModal && waVerifyMessage) {
@@ -466,18 +469,22 @@ document.addEventListener('DOMContentLoaded', () => {
           } else {
             salahHitungWA++;
             
-            // Cek apakah sudah mencapai batas 3 kali percobaan salah
             if (salahHitungWA >= 3) {
-              alert("Percobaan terlalu banyak! Akses dibekukan demi keamanan privasi.");
+              // 1. Tutup modal verifikasi WA tanpa memicu alert browser
               waVerifyModal.classList.remove('active');
               if (waVerifyError) waVerifyError.style.display = "none";
               
-              // Catat riwayat pembobolan & lempar langsung ke LOCKDOWN UTAMA (Minta PIN Admin)
+              // 2. Tandai status pembobolan di sistem penyimpanan lokal
               localStorage.setItem('security_breach_detected', 'true');
               periksaRiwayatBlokir();
+              
+              // 3. Modifikasi isi SecurityModal Anda langsung ke status terkunci merah
+              if (modalNormalState) modalNormalState.style.display = "none";
+              if (modalLockedState) modalLockedState.style.display = "block";
+              
+              // 4. Munculkan SecurityModal bawaan Anda ke layar secara penuh
               aktifkanLockdownTotal();
             } else {
-              // Jika belum 3 kali, tampilkan pesan error beserta sisa kesempatan
               if (waVerifyError) {
                 waVerifyError.style.display = "block";
                 waVerifyError.innerText = `Angka identitas tidak sesuai! Kesempatan tersisa: ${3 - salahHitungWA}`;
@@ -501,15 +508,11 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         aktifkanLockdownTotal();
       }
-      // =========================================================================
-      // END FITUR BARU
-      // =========================================================================
     } else {
       aktifkanLockdownTotal();
     }
 
   } else {
-    // KONDISI JIKA DI AKSES TANPA PARAMETER URL (LINK BERSIH)
     if (isAdminBypass) {
       if (guestElement) guestElement.innerText = "Admin Owner";
       sinkronkanNamaRSVP("Admin Owner");
@@ -556,6 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
 
 
 // =========================================================================
