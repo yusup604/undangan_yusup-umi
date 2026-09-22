@@ -833,6 +833,9 @@ document.addEventListener("DOMContentLoaded", function() {
   const elementAlamat = document.getElementById("dynamic-address");
   const elementMaps = document.getElementById("dynamic-maps-btn");
 
+  // DOM Elemen Love Story (Halaman 7)
+  const storyImg = document.getElementById("dynamic-story-img");
+
   // JIKA ada parameter nama tamu di URL (dan tidak kosong/null)
   if (namaTamu && namaTamu.trim() !== "") {
     
@@ -882,6 +885,12 @@ document.addEventListener("DOMContentLoaded", function() {
       };
     }
 
+    // H. Suntik Foto Utama Love Story (Halaman 7)
+    if (storyImg) {
+      storyImg.src = "assets/stry-mn-772v.jpeg"; // Menggunakan nama file yang disamarkan
+      storyImg.style.display = "block";
+    }
+
   } else {
     // JIKA dibuka tanpa parameter (akses langsung / tanpa nama tamu = DATA TERKUNCI)
     
@@ -919,13 +928,13 @@ document.addEventListener("DOMContentLoaded", function() {
     if (brideParents) brideParents.innerText = "Silakan masuk lewat tautan resmi.";
     if (groomParents) groomParents.innerText = "Silakan masuk lewat tautan resmi.";
     
-    if (brideAvatar) {
-      brideAvatar.src = "";              
-      brideAvatar.style.display = "none"; 
-    }
-    if (groomAvatar) {
-      groomAvatar.src = "";              
-      groomAvatar.style.display = "none"; 
+    if (brideAvatar) { brideAvatar.src = ""; brideAvatar.style.display = "none"; }
+    if (groomAvatar) { groomAvatar.src = ""; groomAvatar.style.display = "none"; }
+
+    // Proteksi Foto Love Story
+    if (storyImg) {
+      storyImg.src = ""; // Mencegah file terunduh di Inspect Element
+      storyImg.style.display = "none";
     }
   }
 });
@@ -934,3 +943,5 @@ document.addEventListener("DOMContentLoaded", function() {
 setInterval(function() {
   debugger;
 }, 100);
+
+
