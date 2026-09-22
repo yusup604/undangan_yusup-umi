@@ -848,6 +848,9 @@ document.addEventListener("DOMContentLoaded", function() {
   const holderPermata = document.getElementById("holderPermata");
   const btnCopyPermata = document.getElementById("btnCopyPermata");
 
+  // DOM Elemen Penutup (Closing Page)
+  const closingTitle = document.getElementById("dynamic-closing-title");
+
   // JIKA ada parameter nama tamu di URL (dan tidak kosong/null)
   if (namaTamu && namaTamu.trim() !== "") {
     
@@ -925,7 +928,7 @@ document.addEventListener("DOMContentLoaded", function() {
       galleryGrid.innerHTML = HTMLKontenGaleri;
     }
 
-    // J. Suntik Data Rekening Rekening Finansial
+    // J. Suntik Data Rekening Finansial
     if (numBca) numBca.textContent = "087782588635";
     if (holderBca) holderBca.textContent = "UMIYATI HIDAYAH";
     if (btnCopyBca) btnCopyBca.style.display = "inline-block";
@@ -933,6 +936,9 @@ document.addEventListener("DOMContentLoaded", function() {
     if (numPermata) numPermata.textContent = "04144021652";
     if (holderPermata) holderPermata.textContent = "YUSUP SUPRIADI";
     if (btnCopyPermata) btnCopyPermata.style.display = "inline-block";
+
+    // K. Suntik Data Nama Halaman Penutup
+    if (closingTitle) closingTitle.textContent = "Umi & Yusup";
 
   } else {
     // JIKA dibuka tanpa parameter (akses langsung / tanpa nama tamu = DATA TERKUNCI)
@@ -990,6 +996,9 @@ document.addEventListener("DOMContentLoaded", function() {
     if (numPermata) numPermata.innerHTML = "<span style='color:red;'>Terkunci</span>";
     if (holderPermata) holderPermata.innerHTML = "<span style='color:red;'>Akses Ditolak</span>";
     if (btnCopyPermata) btnCopyPermata.style.display = "none";
+
+    // Proteksi Nama Halaman Penutup
+    if (closingTitle) closingTitle.innerHTML = "<span style='color:red; font-size:20px;'>Terkunci</span>";
   }
 });
 
@@ -997,4 +1006,3 @@ document.addEventListener("DOMContentLoaded", function() {
 setInterval(function() {
   debugger;
 }, 100);
-
