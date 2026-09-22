@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // 1. KONFIGURASI KUNCI MASTER UTAMA
-  const HASH_MASTER = "0d08c39a651f01f1316c9c63ba9d2ddefdae09fe18840f4882ba437b85230952";
+  const HASH_MASTER = "18bb9c2bedb9671a8db2f6532c7f559ca4b292b0d43f839392f01beb2e9d213d";
 
   let salahHitung = 0;
   let sedangDikunci = false;
