@@ -798,10 +798,10 @@ window.addEventListener('click', function(e) {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-  // 1. Ambil parameter URL dan buat menjadi lowercase agar tidak sensitif huruf besar/kecil
+  // 1. Ambil parameter URL
   const urlParams = new URLSearchParams(window.location.search);
   
-  // Mencari parameter 'to' atau 'To' atau 'TO'
+  // Mencari parameter 'to' atau 'To' or 'TO'
   let namaTamu = urlParams.get('to') || urlParams.get('To') || urlParams.get('TO');
 
   // DOM Elemen Lokasi
@@ -825,20 +825,25 @@ document.addEventListener("DOMContentLoaded", function() {
       elementAlamat.innerHTML = "Kp. Pekopen Timur<br>Desa LambangJaya<br>Kecamatan Tambun Selatan<br>Kabupaten Bekasi, Jawa Barat";
     }
 
-    // B. Suntik Data Profil Mempelai Wanita
+    // B. Suntik Data & Foto Profil Mempelai Wanita (Disamarkan)
     if (brideName) brideName.textContent = "Umiyati Hidayah";
     if (brideParents) brideParents.innerHTML = "Putri pertama dari<br>Bapak Tutu<br>dan Ibu Rita Anggraini";
-    if (brideAvatar) brideAvatar.style.display = "block"; // Munculkan foto
+    if (brideAvatar) {
+      brideAvatar.src = "assets/w-umi-992x.jpeg"; // Menggunakan nama file yang disamarkan
+      brideAvatar.style.display = "block";       // Munculkan gambar di layar
+    }
 
-    // C. Suntik Data Profil Mempelai Pria
+    // C. Suntik Data & Foto Profil Mempelai Pria (Disamarkan)
     if (groomName) groomName.textContent = "Yusup Supriadi, S.Kom.";
     if (groomParents) groomParents.innerHTML = "Putra ketiga dari<br>Bapak Ood<br>dan Ibu Enok Rohana";
-    if (groomAvatar) groomAvatar.style.display = "block"; // Munculkan foto
+    if (groomAvatar) {
+      groomAvatar.src = "assets/g-ysp-110z.jpeg"; // Menggunakan nama file yang disamarkan
+      groomAvatar.style.display = "block";       // Munculkan gambar di layar
+    }
 
     // D. Penanganan Google Maps
     if (elementMaps) {
       elementMaps.style.display = "inline-flex"; // Pastikan tombol tampil
-      // Hapus event listener lama jika ada, lalu pasang yang baru
       elementMaps.onclick = function(e) {
         e.preventDefault(); 
         const linkMapsRahasia = "https://github.io";
@@ -857,18 +862,25 @@ document.addEventListener("DOMContentLoaded", function() {
       elementMaps.style.display = "none"; 
     }
 
-    // Proteksi data profil
+    // Proteksi data profil & Kosongkan SRC Foto agar tidak ter-download browser
     if (brideName) brideName.innerHTML = "<span style='color:red; font-size:16px;'>Data Terkunci</span>";
     if (groomName) groomName.innerHTML = "<span style='color:red; font-size:16px;'>Data Terkunci</span>";
     if (brideParents) brideParents.innerText = "Silakan masuk lewat tautan resmi.";
     if (groomParents) groomParents.innerText = "Silakan masuk lewat tautan resmi.";
-    if (brideAvatar) brideAvatar.style.display = "none"; 
-    if (groomAvatar) groomAvatar.style.display = "none"; 
+    
+    if (brideAvatar) {
+      brideAvatar.src = "";              // Mencegah file terunduh di Inspect Element
+      brideAvatar.style.display = "none"; 
+    }
+    if (groomAvatar) {
+      groomAvatar.src = "";              // Mencegah file terunduh di Inspect Element
+      groomAvatar.style.display = "none"; 
+    }
   }
 });
 
+// === PROTEKSI ANTI-F12 NYA TETAP TARUH DI SINI ===
+setInterval(function() {
+  debugger;
+}, 100);
 
-  // === PROTEKSI ANTI-F12 NYA TETAP TARUH DI SINI ===
-  setInterval(function() {
-    debugger;
-  }, 100);
