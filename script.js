@@ -798,15 +798,17 @@ window.addEventListener('click', function(e) {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-  // Ambil nama tamu dari URL
+  // 1. Ambil parameter URL dan buat menjadi lowercase agar tidak sensitif huruf besar/kecil
   const urlParams = new URLSearchParams(window.location.search);
-  const namaTamu = urlParams.get('to');
+  
+  // Mencari parameter 'to' atau 'To' atau 'TO'
+  let namaTamu = urlParams.get('to') || urlParams.get('To') || urlParams.get('TO');
 
-  // DOM Elemen Lokasi (Lama)
+  // DOM Elemen Lokasi
   const elementAlamat = document.getElementById("dynamic-address");
   const elementMaps = document.getElementById("dynamic-maps-btn");
 
-  // DOM Elemen Profil Mempelai (Baru)
+  // DOM Elemen Profil Mempelai
   const brideName = document.getElementById("dynamic-bride-name");
   const brideParents = document.getElementById("dynamic-bride-parents");
   const brideAvatar = document.getElementById("avatar-bride");
@@ -815,47 +817,53 @@ document.addEventListener("DOMContentLoaded", function() {
   const groomParents = document.getElementById("dynamic-groom-parents");
   const groomAvatar = document.getElementById("avatar-groom");
 
-  // JIKA ada parameter nama tamu di URL (?to=nama)
-  if (namaTamu) {
-    // 1. Suntik Alamat Pernikahan
+  // JIKA ada parameter nama tamu di URL (dan tidak kosong/null)
+  if (namaTamu && namaTamu.trim() !== "") {
+    
+    // A. Suntik Alamat Pernikahan
     if (elementAlamat) {
       elementAlamat.innerHTML = "Kp. Pekopen Timur<br>Desa LambangJaya<br>Kecamatan Tambun Selatan<br>Kabupaten Bekasi, Jawa Barat";
     }
 
-    // 2. Suntik Data Profil Mempelai Wanita
-    if (brideName) brideName.innerText = "Umiyati Hidayah";
+    // B. Suntik Data Profil Mempelai Wanita
+    if (brideName) brideName.textContent = "Umiyati Hidayah";
     if (brideParents) brideParents.innerHTML = "Putri pertama dari<br>Bapak Tutu<br>dan Ibu Rita Anggraini";
     if (brideAvatar) brideAvatar.style.display = "block"; // Munculkan foto
 
-    // 3. Suntik Data Profil Mempelai Pria
-    if (groomName) groomName.innerText = "Yusup Supriadi, S.Kom.";
+    // C. Suntik Data Profil Mempelai Pria
+    if (groomName) groomName.textContent = "Yusup Supriadi, S.Kom.";
     if (groomParents) groomParents.innerHTML = "Putra ketiga dari<br>Bapak Ood<br>dan Ibu Enok Rohana";
     if (groomAvatar) groomAvatar.style.display = "block"; // Munculkan foto
 
-    // 4. Penanganan Google Maps
+    // D. Penanganan Google Maps
     if (elementMaps) {
-      elementMaps.addEventListener("click", function(e) {
+      elementMaps.style.display = "inline-flex"; // Pastikan tombol tampil
+      // Hapus event listener lama jika ada, lalu pasang yang baru
+      elementMaps.onclick = function(e) {
         e.preventDefault(); 
         const linkMapsRahasia = "https://github.io";
         window.open(linkMapsRahasia, "_blank"); 
-      });
+      };
     }
+
   } else {
-    // JIKA dibuka tanpa parameter (orang iseng / bot scraper)
+    // JIKA dibuka tanpa parameter (akses langsung / tanpa nama tamu)
+    
+    // Proteksi Alamat & Maps
     if (elementAlamat) {
-      elementAlamat.innerHTML = "<span style='color:red;'>Akses Terbatas. Silakan gunakan tautan resmi undangan Anda.</span>";
+      elementAlamat.innerHTML = "<span style='color:red; font-weight:bold;'>Akses Terbatas. Silakan gunakan tautan resmi undangan Anda.</span>";
     }
     if (elementMaps) {
       elementMaps.style.display = "none"; 
     }
 
-    // Proteksi data profil jika tanpa parameter
+    // Proteksi data profil
     if (brideName) brideName.innerHTML = "<span style='color:red; font-size:16px;'>Data Terkunci</span>";
     if (groomName) groomName.innerHTML = "<span style='color:red; font-size:16px;'>Data Terkunci</span>";
-    if (brideParents) brideParents.innerText = "Akses terbatas.";
-    if (groomParents) groomParents.innerText = "Akses terbatas.";
-    if (brideAvatar) brideAvatar.style.display = "none"; // Foto tetap sembunyi
-    if (groomAvatar) groomAvatar.style.display = "none"; // Foto tetap sembunyi
+    if (brideParents) brideParents.innerText = "Silakan masuk lewat tautan resmi.";
+    if (groomParents) groomParents.innerText = "Silakan masuk lewat tautan resmi.";
+    if (brideAvatar) brideAvatar.style.display = "none"; 
+    if (groomAvatar) groomAvatar.style.display = "none"; 
   }
 });
 
