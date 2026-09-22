@@ -2419,3 +2419,9 @@ section:has(+ #quote-section) {
 .btn-secondary { background: #f3f4f6; color: #4b5563; }
 .btn-secondary:hover { background: #e5e7eb; }
 
+/* Menyembunyikan tombol Kembali secara permanen di dalam kondisi terkunci */
+#btnSecLockedBack {
+  display: none !important;
+}
+
+
