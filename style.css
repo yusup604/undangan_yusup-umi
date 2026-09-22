@@ -1800,13 +1800,13 @@ section:has(+ #quote-section) {
 
 .closing-paragraph {
   font-family: 'Montserrat', sans-serif;
-  font-size: 0.8rem;
-  line-height: 1.7;
-  color: #ffffff !important; /* KEMBALI PUTIH SESUAI KEINGINAN ANDA */
-  max-width: 290px;
-  margin: 0 auto 24px auto !important;
-  text-align: center;
-  font-weight: 
+  font-size: 0.78rem;
+  line-height: 1.6;
+  color: #ffffff;
+  max-width: 320px;
+  margin: 0 0 24px 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
 
 /* Logo Lingkaran M */
 .brand-logo-circle {
@@ -1846,15 +1846,12 @@ section:has(+ #quote-section) {
   transform: scale(1.1);
 }
 
-/* Penjaga Khusus Watermark Teks */
+/* Watermark Teks */
 .watermark-text p {
-  font-family: 'Montserrat', sans-serif !important;
-  font-size: 0.75rem !important;
-  color: #4a5568 !important; /* Warna abu-abu gelap tegas */
-  text-align: center !important;
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
 }
 
 /* PIN Undangan Overlay Latar Belakang Gelap Transparan */
@@ -2468,5 +2465,3 @@ section:has(+ #quote-section) {
   max-width: 180px;          /* Batas lebar maksimal agar tetap terlihat proporsional */
   text-align: center;
 }
-
-
