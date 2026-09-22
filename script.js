@@ -440,7 +440,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (waVerifyModal && waVerifyMessage) {
         // Suntik teks sapaan dinamis berdasarkan nama tamu dari URL
-        waVerifyMessage.innerText = `Halo ${decodedName}!\nDemi keamanan privasi Anda, mohon masukkan 4 angka terakhir nomor WhatsApp Anda untuk memverifikasi undangan resmi ini:`;
+        waVerifyMessage.innerText = `Halo ${decodedName}!\nDemi keamanan privasi, mohon masukkan 4 angka terakhir nomor WhatsApp Anda untuk memverifikasi undangan resmi ini:`;
         
         // Tampilkan modal ke layar & kunci scroll latar belakang
         waVerifyModal.classList.add('active');
