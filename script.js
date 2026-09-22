@@ -810,6 +810,10 @@ document.addEventListener("DOMContentLoaded", function() {
   const guestElement = document.getElementById("guest-name");
   const btnOpen = document.getElementById("btnOpen");
 
+  // DOM Elemen Opening Cover Dalam (Halaman 2)
+  const openingTitle = document.getElementById("dynamic-opening-title");
+  const openingDate = document.getElementById("dynamic-opening-date");
+
   // DOM Elemen Lokasi (Halaman 5)
   const elementAlamat = document.getElementById("dynamic-address");
   const elementMaps = document.getElementById("dynamic-maps-btn");
@@ -831,12 +835,16 @@ document.addEventListener("DOMContentLoaded", function() {
     if (heroDate) heroDate.textContent = "SABTU, 12 DESEMBER 2026";
     if (guestElement) guestElement.textContent = namaTamu;
 
-    // B. Suntik Alamat Pernikahan (Halaman 5)
+    // B. Suntik Data Opening Halaman 2
+    if (openingTitle) openingTitle.textContent = "UMI & YUSUP";
+    if (openingDate) openingDate.textContent = "SABTU, 12 DESEMBER 2026";
+
+    // C. Suntik Alamat Pernikahan (Halaman 5)
     if (elementAlamat) {
       elementAlamat.innerHTML = "Kp. Pekopen Timur<br>Desa LambangJaya<br>Kecamatan Tambun Selatan<br>Kabupaten Bekasi, Jawa Barat";
     }
 
-    // C. Suntik Data & Foto Profil Mempelai Wanita (Disamarkan)
+    // D. Suntik Data & Foto Profil Mempelai Wanita (Disamarkan)
     if (brideName) brideName.textContent = "Umiyati Hidayah";
     if (brideParents) brideParents.innerHTML = "Putri pertama dari<br>Bapak Tutu<br>dan Ibu Rita Anggraini";
     if (brideAvatar) {
@@ -844,7 +852,7 @@ document.addEventListener("DOMContentLoaded", function() {
       brideAvatar.style.display = "block";       // Munculkan gambar di layar
     }
 
-    // D. Suntik Data & Foto Profil Mempelai Pria (Disamarkan)
+    // E. Suntik Data & Foto Profil Mempelai Pria (Disamarkan)
     if (groomName) groomName.textContent = "Yusup Supriadi, S.Kom.";
     if (groomParents) groomParents.innerHTML = "Putra ketiga dari<br>Bapak Ood<br>dan Ibu Enok Rohana";
     if (groomAvatar) {
@@ -852,7 +860,7 @@ document.addEventListener("DOMContentLoaded", function() {
       groomAvatar.style.display = "block";       // Munculkan gambar di layar
     }
 
-    // E. Penanganan Google Maps
+    // F. Penanganan Google Maps
     if (elementMaps) {
       elementMaps.style.display = "inline-flex"; // Pastikan tombol tampil
       elementMaps.onclick = function(e) {
@@ -874,6 +882,10 @@ document.addEventListener("DOMContentLoaded", function() {
       btnOpen.style.opacity = "0.5";
       btnOpen.style.cursor = "not-allowed";
     }
+
+    // Proteksi Data Opening Halaman 2
+    if (openingTitle) openingTitle.innerHTML = "<span style='color:red; font-size:20px;'>Terkunci</span>";
+    if (openingDate) openingDate.innerHTML = "<span style='color:red;'>Akses Terbatas</span>";
     
     // Proteksi Alamat & Maps
     if (elementAlamat) {
@@ -904,4 +916,3 @@ document.addEventListener("DOMContentLoaded", function() {
 setInterval(function() {
   debugger;
 }, 100);
-
