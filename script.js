@@ -429,7 +429,7 @@ document.addEventListener('DOMContentLoaded', () => {
       bukaUndanganNormal(decodedName);
     } else if (typeParam === 'wa' && vParam) {
       // =========================================================================
-      // FITUR BARU: MODAL VERIFIKASI WA KUSTOM PROFESIONAL (PENGGANTI PROMPT JADUL)
+      // FITUR BARU: MODAL VERIFIKASI WA DENGAN ANTI BRUTE-FORCE (MAKSIMAL 3X SALAH)
       // =========================================================================
       const waVerifyModal = document.getElementById('waVerifyModal');
       const waVerifyMessage = document.getElementById('waVerifyMessage');
@@ -438,19 +438,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const btnWaConfirm = document.getElementById('btnWaConfirm');
       const btnWaCancel = document.getElementById('btnWaCancel');
 
+      // Variabel penghitung salah khusus untuk modal WA
+      let salahHitungWA = 0;
+
       if (waVerifyModal && waVerifyMessage) {
-        // Suntik teks sapaan dinamis berdasarkan nama tamu dari URL
-        waVerifyMessage.innerText = `Halo ${decodedName}!\nDemi keamanan privasi, mohon masukkan 4 angka terakhir nomor WhatsApp Anda untuk memverifikasi undangan resmi ini:`;
+        waVerifyMessage.innerText = `Halo ${decodedName}!\nDemi keamanan privasi Anda, mohon masukkan 4 angka terakhir nomor WhatsApp Anda untuk memverifikasi undangan resmi ini:`;
         
-        // Tampilkan modal ke layar & kunci scroll latar belakang
         waVerifyModal.classList.add('active');
         document.body.style.overflow = "hidden";
         if (waVerifyInput) {
-          waVerifyInput.value = ""; // Bersihkan sisa ketikan sebelumnya jika ada
+          waVerifyInput.value = "";
           waVerifyInput.focus();
         }
 
-        // Fungsi utama mengecek keabsahan input 4 digit nomor WA
         async function eksekusiVerifikasiKustom() {
           const userInputHP = waVerifyInput.value.trim();
           if (!userInputHP) return;
@@ -460,32 +460,45 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('akses_sah_lokal', 'USER_VALIDATED');
             localStorage.setItem('guest_original_name', decodedName); 
             
-            // Tutup modal verifikasi, hilangkan error, dan buka undangan
             waVerifyModal.classList.remove('active');
             if (waVerifyError) waVerifyError.style.display = "none";
             bukaUndanganNormal(decodedName);
           } else {
-            // Tampilkan pesan error merah, kosongkan input, dan fokuskan kembali
-            if (waVerifyError) waVerifyError.style.display = "block";
-            waVerifyInput.value = "";
-            waVerifyInput.focus();
+            salahHitungWA++;
+            
+            // Cek apakah sudah mencapai batas 3 kali percobaan salah
+            if (salahHitungWA >= 3) {
+              alert("Percobaan terlalu banyak! Akses dibekukan demi keamanan privasi.");
+              waVerifyModal.classList.remove('active');
+              if (waVerifyError) waVerifyError.style.display = "none";
+              
+              // Catat riwayat pembobolan & lempar langsung ke LOCKDOWN UTAMA (Minta PIN Admin)
+              localStorage.setItem('security_breach_detected', 'true');
+              periksaRiwayatBlokir();
+              aktifkanLockdownTotal();
+            } else {
+              // Jika belum 3 kali, tampilkan pesan error beserta sisa kesempatan
+              if (waVerifyError) {
+                waVerifyError.style.display = "block";
+                waVerifyError.innerText = `Angka identitas tidak sesuai! Kesempatan tersisa: ${3 - salahHitungWA}`;
+              }
+              waVerifyInput.value = "";
+              waVerifyInput.focus();
+            }
           }
         }
 
-        // Daftarkan aksi pada klik tombol "Verifikasi" & tekan tombol "Enter"
         btnWaConfirm.onclick = eksekusiVerifikasiKustom;
         waVerifyInput.onkeypress = (e) => {
           if (e.key === 'Enter') eksekusiVerifikasiKustom();
         };
 
-        // Aksi jika tamu menolak melakukan verifikasi (klik tombol "Batal")
         btnWaCancel.onclick = () => {
           waVerifyModal.classList.remove('active');
           if (waVerifyError) waVerifyError.style.display = "none";
-          aktifkanLockdownTotal(); // Lempar langsung ke penguncian PIN sistem
+          aktifkanLockdownTotal(); 
         };
       } else {
-        // Fallback darurat jika elemen HTML modal kustom lupa dipasang
         aktifkanLockdownTotal();
       }
       // =========================================================================
@@ -508,14 +521,13 @@ document.addEventListener('DOMContentLoaded', () => {
       document.body.style.overflow = "auto";
       document.body.style.height = "auto";
     } else {
-      aktifkanLockdownTotal(); // Perangkat asing langsung kena LOCKDOWN PIN!
+      aktifkanLockdownTotal(); 
     }
   }
 
   function bukaUndanganNormal(namaTamu) {
     if (guestElement) guestElement.innerText = namaTamu;
     sinkronkanNamaRSVP(namaTamu);
-    // SELF-DESTRUCT URL: Menghapus parameter demi keamanan privasi tamu
     window.history.replaceState({}, document.title, window.location.pathname);
     document.body.style.overflow = "auto";
     document.body.style.height = "auto";
