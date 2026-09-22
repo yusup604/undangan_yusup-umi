@@ -804,11 +804,17 @@ document.addEventListener("DOMContentLoaded", function() {
   // Mencari parameter 'to' atau 'To' or 'TO'
   let namaTamu = urlParams.get('to') || urlParams.get('To') || urlParams.get('TO');
 
-  // DOM Elemen Lokasi
+  // DOM Elemen Hero Cover (Halaman 1)
+  const heroTitle = document.getElementById("dynamic-hero-title");
+  const heroDate = document.getElementById("dynamic-hero-date");
+  const guestElement = document.getElementById("guest-name");
+  const btnOpen = document.getElementById("btnOpen");
+
+  // DOM Elemen Lokasi (Halaman 5)
   const elementAlamat = document.getElementById("dynamic-address");
   const elementMaps = document.getElementById("dynamic-maps-btn");
 
-  // DOM Elemen Profil Mempelai
+  // DOM Elemen Profil Mempelai (Halaman 4)
   const brideName = document.getElementById("dynamic-bride-name");
   const brideParents = document.getElementById("dynamic-bride-parents");
   const brideAvatar = document.getElementById("avatar-bride");
@@ -820,12 +826,17 @@ document.addEventListener("DOMContentLoaded", function() {
   // JIKA ada parameter nama tamu di URL (dan tidak kosong/null)
   if (namaTamu && namaTamu.trim() !== "") {
     
-    // A. Suntik Alamat Pernikahan
+    // A. Suntik Data Hero Halaman 1 & Tampilkan Nama Tamu
+    if (heroTitle) heroTitle.textContent = "Umi & Yusup";
+    if (heroDate) heroDate.textContent = "SABTU, 12 DESEMBER 2026";
+    if (guestElement) guestElement.textContent = namaTamu;
+
+    // B. Suntik Alamat Pernikahan (Halaman 5)
     if (elementAlamat) {
       elementAlamat.innerHTML = "Kp. Pekopen Timur<br>Desa LambangJaya<br>Kecamatan Tambun Selatan<br>Kabupaten Bekasi, Jawa Barat";
     }
 
-    // B. Suntik Data & Foto Profil Mempelai Wanita (Disamarkan)
+    // C. Suntik Data & Foto Profil Mempelai Wanita (Disamarkan)
     if (brideName) brideName.textContent = "Umiyati Hidayah";
     if (brideParents) brideParents.innerHTML = "Putri pertama dari<br>Bapak Tutu<br>dan Ibu Rita Anggraini";
     if (brideAvatar) {
@@ -833,7 +844,7 @@ document.addEventListener("DOMContentLoaded", function() {
       brideAvatar.style.display = "block";       // Munculkan gambar di layar
     }
 
-    // C. Suntik Data & Foto Profil Mempelai Pria (Disamarkan)
+    // D. Suntik Data & Foto Profil Mempelai Pria (Disamarkan)
     if (groomName) groomName.textContent = "Yusup Supriadi, S.Kom.";
     if (groomParents) groomParents.innerHTML = "Putra ketiga dari<br>Bapak Ood<br>dan Ibu Enok Rohana";
     if (groomAvatar) {
@@ -841,7 +852,7 @@ document.addEventListener("DOMContentLoaded", function() {
       groomAvatar.style.display = "block";       // Munculkan gambar di layar
     }
 
-    // D. Penanganan Google Maps
+    // E. Penanganan Google Maps
     if (elementMaps) {
       elementMaps.style.display = "inline-flex"; // Pastikan tombol tampil
       elementMaps.onclick = function(e) {
@@ -852,7 +863,17 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
   } else {
-    // JIKA dibuka tanpa parameter (akses langsung / tanpa nama tamu)
+    // JIKA dibuka tanpa parameter (akses langsung / tanpa nama tamu = DATA TERKUNCI)
+    
+    // Proteksi Data Hero Halaman 1 & Kunci Tombol Buka
+    if (heroTitle) heroTitle.innerHTML = "<span style='color:red; font-size:24px;'>Akses Terkunci</span>";
+    if (heroDate) heroDate.innerHTML = "<span style='color:red;'>Gunakan Tautan Resmi Undangan</span>";
+    if (guestElement) guestElement.textContent = "Tamu Tidak Dikenal";
+    if (btnOpen) {
+      btnOpen.disabled = true;
+      btnOpen.style.opacity = "0.5";
+      btnOpen.style.cursor = "not-allowed";
+    }
     
     // Proteksi Alamat & Maps
     if (elementAlamat) {
