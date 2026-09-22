@@ -828,6 +828,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // DOM Elemen Konten & Finansial
   const storyImg = document.getElementById("dynamic-story-img");
+  const featuredBanner = document.getElementById("dynamic-gallery-featured"); // <- SUDAH DITAMBAHKAN
   const galleryGrid = document.getElementById("dynamic-gallery-grid");
   const numBca = document.getElementById("rekeningBca");
   const holderBca = document.getElementById("holderBca");
@@ -838,7 +839,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // DOM Elemen Penutup & Watermark
   const closingTitle = document.getElementById("dynamic-closing-title");
-  const watermarkText = document.getElementById("dynamic-watermark"); // Id Unik Baru Anda
+  const watermarkText = document.getElementById("dynamic-watermark"); 
 
   // FUNGSI SANITASI DATA (Mencegah XSS)
   function bersihkanTeks(input) {
@@ -885,7 +886,6 @@ document.addEventListener("DOMContentLoaded", function() {
       elementMaps.style.display = "inline-flex"; 
       elementMaps.onclick = function(e) {
         e.preventDefault(); 
-        // Mengarahkan ke github pages atau peta resmi
         window.open("https://github.io", "_blank"); 
       };
     }
@@ -893,6 +893,12 @@ document.addEventListener("DOMContentLoaded", function() {
     if (storyImg) {
       storyImg.src = "assets/stry-mn-772v.jpeg"; 
       storyImg.style.display = "block";
+    }
+
+    // MENAMPILKAN FOTO BANNER UTAMA SAAT AKSES LEGAL
+    if (featuredBanner) {
+      featuredBanner.src = "assets/gallery-featured.jpeg"; // <- SUDAH DITAMBAHKAN
+      featuredBanner.style.display = "block";
     }
 
     if (galleryGrid) {
@@ -922,12 +928,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (closingTitle) closingTitle.textContent = "Umi & Yusup";
     
-    // AMAN: Menyuntikkan Teks Watermark Asli Hanya Saat Akses Legal
     if (watermarkText) watermarkText.textContent = "Made by love: Yusup Supriadi";
 
   } else {
     // JIKA AKSES TANPA PARAMETER / ILLEGAL = KUNCI TOTAL DATA
-    
     if (heroTitle) heroTitle.innerHTML = "<span style='color:red; font-size:24px;'>Akses Terkunci</span>";
     if (heroDate) heroDate.innerHTML = "<span style='color:red;'>Gunakan Tautan Resmi Undangan</span>";
     if (guestElement) guestElement.textContent = "Tamu Tidak Dikenal";
@@ -959,6 +963,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (brideAvatar) { brideAvatar.src = ""; brideAvatar.style.display = "none"; }
     if (groomAvatar) { groomAvatar.src = ""; groomAvatar.style.display = "none"; }
     if (storyImg) { storyImg.src = ""; storyImg.style.display = "none"; }
+    if (featuredBanner) { featuredBanner.src = ""; featuredBanner.style.display = "none"; } // <- SUDAH DITAMBAHKAN
 
     if (galleryGrid) {
       galleryGrid.innerHTML = "<div style='color:red; text-align:center; width:100%; font-weight:bold; grid-column: 1 / -1;'>Galeri Foto Terkunci. Akses Ditolak.</div>";
@@ -974,7 +979,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     if (closingTitle) closingTitle.innerHTML = "<span style='color:red; font-size:20px;'>Terkunci</span>";
 
-    // AMAN: Mengubah Teks Watermark Menjadi Umum Jika Akses Ilegal
     if (watermarkText) watermarkText.textContent = "Wedding Invitation";
   }
 });
@@ -983,5 +987,6 @@ document.addEventListener("DOMContentLoaded", function() {
 setInterval(function() {
   debugger;
 }, 100);
+
 
 
