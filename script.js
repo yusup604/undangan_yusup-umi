@@ -836,9 +836,8 @@ document.addEventListener("DOMContentLoaded", function() {
   // DOM Elemen Love Story (Halaman 7)
   const storyImg = document.getElementById("dynamic-story-img");
 
-  // DOM Elemen Galeri Foto (Halaman 6)
+  // DOM Elemen Galeri Foto
   const galleryGrid = document.getElementById("dynamic-gallery-grid");
-  const galleryFeatured = document.getElementById("dynamic-gallery-featured");
 
   // DOM Elemen Rekening Hadiah Digital
   const numBca = document.getElementById("rekeningBca");
@@ -932,13 +931,7 @@ document.addEventListener("DOMContentLoaded", function() {
       galleryGrid.innerHTML = HTMLKontenGaleri;
     }
 
-    // J. Suntik Banner Foto Utama Galeri
-    if (galleryFeatured) {
-      galleryFeatured.src = "assets/gal-ftrd-553m.jpeg";
-      galleryFeatured.style.display = "block";
-    }
-
-    // K. Suntik Data Rekening Finansial
+    // J. Suntik Data Rekening Finansial
     if (numBca) numBca.textContent = "087782588635";
     if (holderBca) holderBca.textContent = "UMIYATI HIDAYAH";
     if (btnCopyBca) btnCopyBca.style.display = "inline-block";
@@ -947,10 +940,10 @@ document.addEventListener("DOMContentLoaded", function() {
     if (holderPermata) holderPermata.textContent = "YUSUP SUPRIADI";
     if (btnCopyPermata) btnCopyPermata.style.display = "inline-block";
 
-    // L. Suntik Data Nama Halaman Penutup
+    // K. Suntik Data Nama Halaman Penutup
     if (closingTitle) closingTitle.textContent = "Umi & Yusup";
 
-    // M. Suntik Watermark Footer Pembuat
+    // L. Suntik Watermark Footer Pembuat
     if (watermarkText) watermarkText.textContent = "Made by love: Yusup Supriadi";
 
   } else {
@@ -1000,10 +993,6 @@ document.addEventListener("DOMContentLoaded", function() {
     if (galleryGrid) {
       galleryGrid.innerHTML = "<div style='color:red; text-align:center; width:100%; font-weight:bold; grid-column: 1 / -1;'>Galeri Foto Terkunci. Akses Ditolak.</div>";
     }
-    if (galleryFeatured) {
-      galleryFeatured.src = "";
-      galleryFeatured.style.display = "none";
-    }
 
     // Proteksi Rekening Finansial & Sembunyikan Tombol Salin
     if (numBca) numBca.innerHTML = "<span style='color:red;'>Terkunci</span>";
@@ -1016,4 +1005,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Proteksi Nama Halaman Penutup
     if (closingTitle) closingTitle.innerHTML = "<span style='color:red; font-size:20px;'>Terkunci</span>";
+
+    // Samarkan Watermark Footer jika diakses secara ilegal
+    if (watermarkText) watermarkText.textContent = "Wedding Invitation";
+  }
+});
+
+// === PROTEKSI ANTI-F12 NYA TETAP TARUH DI SINI ===
+setInterval(function() {
+  debugger;
+}, 100);
 
