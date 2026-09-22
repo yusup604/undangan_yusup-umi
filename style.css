@@ -1800,14 +1800,13 @@ section:has(+ #quote-section) {
 
 .closing-paragraph {
   font-family: 'Montserrat', sans-serif;
-  font-size: 0.82rem; /* Sedikit dinaikkan ukurannya */
-  line-height: 1.6;
-  color: #1a202c !important; /* Biru/Hitam arang super gelap agar sangat kontras */
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: #ffffff !important; /* KEMBALI PUTIH SESUAI KEINGINAN ANDA */
   max-width: 290px;
   margin: 0 auto 24px auto !important;
   text-align: center;
-  font-weight: 600; /* Dibuat semi-bold agar tidak kalah dengan kecerahan foto latar belakang */
-  text-shadow: 
+  font-weight: 
 
 /* Logo Lingkaran M */
 .brand-logo-circle {
