@@ -628,6 +628,24 @@
   </div>
 
 </section>
+<!-- Modal Verifikasi WA Kustom Profesional -->
+<div id="waVerifyModal" class="custom-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-icon">🔒</div>
+      <h3>Verifikasi Keamanan</h3>
+    </div>
+    <div class="modal-body">
+      <p id="waVerifyMessage">Halo Tamu! Demi keamanan privasi Anda, mohon masukkan 4 angka terakhir nomor WhatsApp Anda untuk memverifikasi undangan resmi ini:</p>
+      <input type="tel" id="waVerifyInput" maxlength="4" placeholder="Contoh: 1234" autocomplete="off">
+      <span id="waVerifyError" class="error-msg" style="display: none;">Angka identitas tidak sesuai. Silakan coba lagi.</span>
+    </div>
+    <div class="modal-footer">
+      <button id="btnWaCancel" class="btn-secondary">Batal</button>
+      <button id="btnWaConfirm" class="btn-primary">Verifikasi</button>
+    </div>
+  </div>
+</div>
 
   <!-- Scripts -->
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
