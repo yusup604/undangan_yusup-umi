@@ -1802,10 +1802,11 @@ section:has(+ #quote-section) {
   font-family: 'Montserrat', sans-serif;
   font-size: 0.78rem;
   line-height: 1.6;
-  color: #ffffff;
+  color: #2c3e50; /* DIUBAH: Menjadi warna gelap agar kontras dengan foto yang putih terang */
   max-width: 320px;
-  margin: 0 0 24px 0;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  margin: 0 auto 24px auto; /* DIUBAH: Menggunakan 'auto' kanan-kiri agar teks otomatis center di tengah layar HP */
+  text-align: center; /* DITAMBAHKAN: Memastikan teks rata tengah agar rapi */
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8); /* DIUBAH: Bayangan putih tipis untuk mempertegas tulisan di atas foto */
 }
 
 /* Logo Lingkaran M */
@@ -1849,9 +1850,11 @@ section:has(+ #quote-section) {
 /* Watermark Teks */
 .watermark-text p {
   font-family: 'Montserrat', sans-serif;
-  font-size: 0.65rem;
-  color: rgba(255, 255, 255, 0.8);
-  margin: 0;
+  font-size: 0.75rem; /* DIUBAH: Sedikit diperbesar dari 0.65rem agar lebih mudah dibaca */
+  color: #4a5568; /* DIUBAH: Menjadi warna abu-abu gelap agar terlihat jelas di layar */
+  text-align: center; /* DITAMBAHKAN: Memastikan tulisan berada tepat di tengah bawah */
+  margin-top: 20px; /* DITAMBAHKAN: Memberikan jarak spasi di bawah teks penutup agar tidak menempel */
+  display: block;
 }
 
 /* PIN Undangan Overlay Latar Belakang Gelap Transparan */
