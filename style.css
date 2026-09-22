@@ -2368,87 +2368,54 @@ section:has(+ #quote-section) {
   100% { transform: scale(1); }
 }
 
-/* ================================================================= */
-/* 🔒 CSS MODAL VERIFIKASI KUSTOM (INDEX.HTML)                      */
-/* ================================================================= */
-.popup-success-overlay {
+/* Gaya Dasar Modal pop up 4 digit wa Kustom */
+.custom-modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background: rgba(15, 23, 42, 0.75); /* Latar belakang gelap transparan */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999999; /* Memastikan modal berada di paling depan foto */
-  opacity: 0;
-  pointer-events: none;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999;
+  opacity: 0; pointer-events: none;
   transition: all 0.3s ease;
-  padding: 20px;
-  box-sizing: border-box;
 }
-
-.popup-success-overlay.active {
-  opacity: 1;
-  pointer-events: auto;
+.custom-modal.active {
+  opacity: 1; pointer-events: auto;
 }
-
-.popup-success-card {
+.modal-content {
   background: #ffffff;
-  padding: 30px;
-  border-radius: 24px;
-  width: 100%;
-  max-width: 380px; /* Membatasi lebar kotak modal agar tidak melebar */
+  padding: 24px;
+  border-radius: 16px;
+  width: 90%; max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
   text-align: center;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-  transform: scale(0.8);
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-sizing: border-box;
 }
-
-.popup-success-overlay.active .popup-success-card {
-  transform: scale(1);
+.modal-icon {
+  font-size: 2rem; margin-bottom: 8px;
 }
-
-.popup-celebrate-icon {
-  font-size: 40px;
-  margin-bottom: 15px;
-  display: inline-block;
+.modal-body p {
+  font-size: 0.95rem; color: #4b5563; line-height: 1.5; margin-bottom: 16px;
 }
-
-.popup-success-card h3 {
-  margin: 0 0 10px 0;
-  color: #1e3a8a;
-  font-size: 20px;
-  font-weight: 700;
-  font-family: sans-serif;
+#waVerifyInput {
+  width: 100%; padding: 12px; border: 1px solid #d1d5db;
+  border-radius: 8px; font-size: 1.1rem; text-align: center;
+  letter-spacing: 2px; box-sizing: border-box;
 }
-
-.popup-success-card p {
-  margin: 0 0 20px 0;
-  color: #475569;
-  font-size: 14px;
-  line-height: 1.6;
-  font-family: sans-serif;
+#waVerifyInput:focus {
+  border-color: #2563eb; outline: none; box-shadow: 0 0 0 3px rgba(37,99,235,0.2);
 }
-
-.popup-btn-close {
-  background: #1e3a8a;
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 50px; 
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
-  transition: background 0.2s;
-  width: 100%;
-  box-sizing: border-box;
+.error-msg {
+  color: #dc2626; font-size: 0.85rem; display: block; margin-top: 8px;
 }
-
-.popup-btn-close:hover {
-  background: #1d4ed8;
+.modal-footer {
+  display: flex; gap: 12px; margin-top: 20px;
 }
+.modal-footer button {
+  flex: 1; padding: 12px; border: none; border-radius: 8px;
+  font-weight: 600; cursor: pointer; transition: background 0.2s;
+}
+.btn-primary { background: #2563eb; color: #fff; }
+.btn-primary:hover { background: #1d4ed8; }
+.btn-secondary { background: #f3f4f6; color: #4b5563; }
+.btn-secondary:hover { background: #e5e7eb; }
 
