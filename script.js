@@ -851,6 +851,9 @@ document.addEventListener("DOMContentLoaded", function() {
   // DOM Elemen Penutup (Closing Page)
   const closingTitle = document.getElementById("dynamic-closing-title");
 
+  // DOM Elemen Watermark Footer
+  const watermarkText = document.getElementById("dynamic-watermark");
+
   // JIKA ada parameter nama tamu di URL (dan tidak kosong/null)
   if (namaTamu && namaTamu.trim() !== "") {
     
@@ -940,6 +943,9 @@ document.addEventListener("DOMContentLoaded", function() {
     // K. Suntik Data Nama Halaman Penutup
     if (closingTitle) closingTitle.textContent = "Umi & Yusup";
 
+    // L. Suntik Watermark Footer Pembuat
+    if (watermarkText) watermarkText.textContent = "Made by love: Yusup Supriadi";
+
   } else {
     // JIKA dibuka tanpa parameter (akses langsung / tanpa nama tamu = DATA TERKUNCI)
     
@@ -999,6 +1005,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Proteksi Nama Halaman Penutup
     if (closingTitle) closingTitle.innerHTML = "<span style='color:red; font-size:20px;'>Terkunci</span>";
+
+    // Samarkan Watermark Footer jika diakses secara ilegal
+    if (watermarkText) watermarkText.textContent = "Wedding Invitation";
   }
 });
 
