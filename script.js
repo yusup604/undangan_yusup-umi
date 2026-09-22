@@ -422,73 +422,29 @@ document.addEventListener('DOMContentLoaded', () => {
       return; 
     }
 
-    // =================================================================
-// --- JALUR PROSES VALIDASI TAMU ASLI (?to=Nama+Tamu) ---
-// =================================================================
+    // --- JALUR PROSES VALIDASI TAMU ASLI (?to=Nama+Tamu) ---
     if (typeParam === 'cetak') {
       localStorage.setItem('akses_sah_lokal', 'CETAK_QR_MEMBER');
       localStorage.setItem('guest_original_name', decodedName); 
       bukaUndanganNormal(decodedName);
     } else if (typeParam === 'wa' && vParam) {
+      const userInputHP = prompt(`Halo ${decodedName}!\nDemi keamanan privasi Anda, mohon masukkan 4 angka terakhir nomor WhatsApp Anda untuk memverifikasi undangan resmi ini:`);
       
-      // 1. Ambil seluruh elemen modal kustom yang ada di index.html
-      const customVerifyModal = document.getElementById('customVerifyModal');
-      const verifyTitle = document.getElementById('verifyTitle');
-      const customVerifyInput = document.getElementById('customVerifyInput');
-      const customVerifyError = document.getElementById('customVerifyError');
-      const btnCustomVerifySubmit = document.getElementById('btnCustomVerifySubmit');
-      const btnCustomVerifyCancel = document.getElementById('btnCustomVerifyCancel');
-
-      // 2. Munculkan modal kustom ke layar tamu
-      if (customVerifyModal) {
-        if (verifyTitle) verifyTitle.innerText = `Halo ${decodedName}!`;
-        if (customVerifyError) customVerifyError.style.display = "none"; // Reset error terdahulu
-        customVerifyModal.classList.add('active');
-        document.body.style.overflow = "hidden";
-        document.body.style.height = "100vh";
-        if (customVerifyInput) {
-          customVerifyInput.value = "";
-          customVerifyInput.focus();
-        }
+      if (!userInputHP) {
+        aktifkanLockdownTotal();
+        return;
       }
 
-      // 3. Logika Aksi ketika tombol "Verifikasi" di-klik
-      btnCustomVerifySubmit.onclick = () => {
-        const userInputHP = customVerifyInput.value.trim();
-        
-        if (!userInputHP || userInputHP.length < 4) {
-          if (customVerifyError) {
-            customVerifyError.style.display = "block";
-            customVerifyError.innerText = "Mohon masukkan 4 digit angka dengan lengkap!";
-          }
-          return;
+      hitungHashSHA256(userInputHP.trim()).then(hashInputUser => {
+        if (hashInputUser === vParam.toLowerCase()) {
+          localStorage.setItem('akses_sah_lokal', 'USER_VALIDATED');
+          localStorage.setItem('guest_original_name', decodedName); 
+          bukaUndanganNormal(decodedName);
+        } else {
+          alert("Verifikasi Gagal! Angka identitas perangkat tidak sesuai.");
+          aktifkanLockdownTotal();
         }
-
-        hitungHashSHA256(userInputHP).then(hashInputUser => {
-          if (hashInputUser === vParam.toLowerCase()) {
-            // JIKA SUKSES
-            localStorage.setItem('akses_sah_lokal', 'USER_VALIDATED');
-            localStorage.setItem('guest_original_name', decodedName); 
-            if (customVerifyModal) customVerifyModal.classList.remove('active');
-            bukaUndanganNormal(decodedName);
-          } else {
-            // JIKA GAGAL (Pengganti alert bawaan browser)
-            if (customVerifyError) {
-              customVerifyError.style.display = "block";
-              customVerifyError.innerText = "Verifikasi Gagal! Angka identitas perangkat tidak sesuai.";
-            }
-            customVerifyInput.value = "";
-            customVerifyInput.focus();
-          }
-        });
-      };
-
-      // 4. Logika Aksi ketika tombol "Batal" di-klik
-      btnCustomVerifyCancel.onclick = () => {
-        if (customVerifyModal) customVerifyModal.classList.remove('active');
-        aktifkanLockdownTotal();
-      };
-
+      });
     } else {
       aktifkanLockdownTotal();
     }
