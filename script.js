@@ -802,34 +802,63 @@ document.addEventListener("DOMContentLoaded", function() {
   const urlParams = new URLSearchParams(window.location.search);
   const namaTamu = urlParams.get('to');
 
+  // DOM Elemen Lokasi (Lama)
   const elementAlamat = document.getElementById("dynamic-address");
   const elementMaps = document.getElementById("dynamic-maps-btn");
 
+  // DOM Elemen Profil Mempelai (Baru)
+  const brideName = document.getElementById("dynamic-bride-name");
+  const brideParents = document.getElementById("dynamic-bride-parents");
+  const brideAvatar = document.getElementById("avatar-bride");
+
+  const groomName = document.getElementById("dynamic-groom-name");
+  const groomParents = document.getElementById("dynamic-groom-parents");
+  const groomAvatar = document.getElementById("avatar-groom");
+
   // JIKA ada parameter nama tamu di URL (?to=nama)
   if (namaTamu) {
-    // 1. Suntik Alamat Pernikahan secara Dinamis
+    // 1. Suntik Alamat Pernikahan
     if (elementAlamat) {
       elementAlamat.innerHTML = "Kp. Pekopen Timur<br>Desa LambangJaya<br>Kecamatan Tambun Selatan<br>Kabupaten Bekasi, Jawa Barat";
     }
 
-    // 2. PERBAIKAN: Jangan isi .href, tapi gunakan fungsi klik tersembunyi
+    // 2. Suntik Data Profil Mempelai Wanita
+    if (brideName) brideName.innerText = "Umiyati Hidayah";
+    if (brideParents) brideParents.innerHTML = "Putri pertama dari<br>Bapak Tutu<br>dan Ibu Rita Anggraini";
+    if (brideAvatar) brideAvatar.style.display = "block"; // Munculkan foto
+
+    // 3. Suntik Data Profil Mempelai Pria
+    if (groomName) groomName.innerText = "Yusup Supriadi, S.Kom.";
+    if (groomParents) groomParents.innerHTML = "Putra ketiga dari<br>Bapak Ood<br>dan Ibu Enok Rohana";
+    if (groomAvatar) groomAvatar.style.display = "block"; // Munculkan foto
+
+    // 4. Penanganan Google Maps
     if (elementMaps) {
       elementMaps.addEventListener("click", function(e) {
-        e.preventDefault(); // Mencegah browser melompat ke href="#"
-        
-        const linkMapsRahasia = "https://yusup604.github.io/wedding-yusup-umi/";
-        window.open(linkMapsRahasia, "_blank"); // Membuka link penanganan khusus di tab baru
+        e.preventDefault(); 
+        const linkMapsRahasia = "https://github.io";
+        window.open(linkMapsRahasia, "_blank"); 
       });
     }
   } else {
-    // JIKA dibuka tanpa parameter (orang iseng / bukan link resmi)
+    // JIKA dibuka tanpa parameter (orang iseng / bot scraper)
     if (elementAlamat) {
       elementAlamat.innerHTML = "<span style='color:red;'>Akses Terbatas. Silakan gunakan tautan resmi undangan Anda.</span>";
     }
     if (elementMaps) {
-      elementMaps.style.display = "none"; // Sembunyikan tombol maps
+      elementMaps.style.display = "none"; 
     }
+
+    // Proteksi data profil jika tanpa parameter
+    if (brideName) brideName.innerHTML = "<span style='color:red; font-size:16px;'>Data Terkunci</span>";
+    if (groomName) groomName.innerHTML = "<span style='color:red; font-size:16px;'>Data Terkunci</span>";
+    if (brideParents) brideParents.innerText = "Akses terbatas.";
+    if (groomParents) groomParents.innerText = "Akses terbatas.";
+    if (brideAvatar) brideAvatar.style.display = "none"; // Foto tetap sembunyi
+    if (groomAvatar) groomAvatar.style.display = "none"; // Foto tetap sembunyi
   }
+});
+
 
   // === PROTEKSI ANTI-F12 NYA TETAP TARUH DI SINI ===
   setInterval(function() {
