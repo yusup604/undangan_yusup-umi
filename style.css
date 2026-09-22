@@ -2424,4 +2424,26 @@ section:has(+ #quote-section) {
   display: none !important;
 }
 
+/* 1. Menyembunyikan tombol Batal secara total */
+#btnSecCancel {
+  display: none !important;
+}
+
+/* 2. Memaksa kontainer tombol menjadi satu kolom dan memposisikan tombol Verifikasi ke tengah */
+.security-modal-buttons {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+/* 3. Menyesuaikan ukuran tombol Verifikasi agar terlihat proporsional dan estetis di tengah */
+#btnSecConfirm {
+  margin: 0 auto !important;
+  width: 100% !important;    /* Membuat tombol melebar penuh memenuhi ruang box */
+  max-width: 180px;          /* Batas maksimal lebar tombol agar tetap elegan */
+  text-align: center;
+}
+
+
 
