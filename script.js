@@ -814,10 +814,6 @@ document.addEventListener("DOMContentLoaded", function() {
   const openingTitle = document.getElementById("dynamic-opening-title");
   const openingDate = document.getElementById("dynamic-opening-date");
 
-  // DOM Elemen Lokasi (Halaman 5)
-  const elementAlamat = document.getElementById("dynamic-address");
-  const elementMaps = document.getElementById("dynamic-maps-btn");
-
   // DOM Elemen Profil Mempelai (Halaman 4)
   const brideName = document.getElementById("dynamic-bride-name");
   const brideParents = document.getElementById("dynamic-bride-parents");
@@ -826,6 +822,16 @@ document.addEventListener("DOMContentLoaded", function() {
   const groomName = document.getElementById("dynamic-groom-name");
   const groomParents = document.getElementById("dynamic-groom-parents");
   const groomAvatar = document.getElementById("avatar-groom");
+
+  // DOM Elemen Waktu Acara (Halaman 5)
+  const akadDate = document.getElementById("dynamic-akad-date");
+  const akadTime = document.getElementById("dynamic-akad-time");
+  const resepsiDate = document.getElementById("dynamic-resepsi-date");
+  const resepsiTime = document.getElementById("dynamic-resepsi-time");
+
+  // DOM Elemen Lokasi & Maps (Halaman 5)
+  const elementAlamat = document.getElementById("dynamic-address");
+  const elementMaps = document.getElementById("dynamic-maps-btn");
 
   // JIKA ada parameter nama tamu di URL (dan tidak kosong/null)
   if (namaTamu && namaTamu.trim() !== "") {
@@ -839,30 +845,36 @@ document.addEventListener("DOMContentLoaded", function() {
     if (openingTitle) openingTitle.textContent = "UMI & YUSUP";
     if (openingDate) openingDate.textContent = "SABTU, 12 DESEMBER 2026";
 
-    // C. Suntik Alamat Pernikahan (Halaman 5)
+    // C. Suntik Data & Foto Profil Mempelai Wanita (Disamarkan)
+    if (brideName) brideName.textContent = "Umiyati Hidayah";
+    if (brideParents) brideParents.innerHTML = "Putri pertama dari<br>Bapak Tutu<br>dan Ibu Rita Anggraini";
+    if (brideAvatar) {
+      brideAvatar.src = "assets/w-umi-992x.jpeg"; 
+      brideAvatar.style.display = "block";       
+    }
+
+    // D. Suntik Data & Foto Profil Mempelai Pria (Disamarkan)
+    if (groomName) groomName.textContent = "Yusup Supriadi, S.Kom.";
+    if (groomParents) groomParents.innerHTML = "Putra ketiga dari<br>Bapak Ood<br>dan Ibu Enok Rohana";
+    if (groomAvatar) {
+      groomAvatar.src = "assets/g-ysp-110z.jpeg"; 
+      groomAvatar.style.display = "block";       
+    }
+
+    // E. Suntik Jadwal Waktu Acara (Halaman 5)
+    if (akadDate) akadDate.textContent = "SABTU, 12 DESEMBER 2026";
+    if (akadTime) akadTime.textContent = "PUKUL : 09.00 - 10.00 WIB";
+    if (resepsiDate) resepsiDate.textContent = "SABTU, 12 DESEMBER 2026";
+    if (resepsiTime) resepsiTime.textContent = "PUKUL : 11.00 - SELESAI";
+
+    // F. Suntik Alamat Pernikahan (Halaman 5)
     if (elementAlamat) {
       elementAlamat.innerHTML = "Kp. Pekopen Timur<br>Desa LambangJaya<br>Kecamatan Tambun Selatan<br>Kabupaten Bekasi, Jawa Barat";
     }
 
-    // D. Suntik Data & Foto Profil Mempelai Wanita (Disamarkan)
-    if (brideName) brideName.textContent = "Umiyati Hidayah";
-    if (brideParents) brideParents.innerHTML = "Putri pertama dari<br>Bapak Tutu<br>dan Ibu Rita Anggraini";
-    if (brideAvatar) {
-      brideAvatar.src = "assets/w-umi-992x.jpeg"; // Menggunakan nama file yang disamarkan
-      brideAvatar.style.display = "block";       // Munculkan gambar di layar
-    }
-
-    // E. Suntik Data & Foto Profil Mempelai Pria (Disamarkan)
-    if (groomName) groomName.textContent = "Yusup Supriadi, S.Kom.";
-    if (groomParents) groomParents.innerHTML = "Putra ketiga dari<br>Bapak Ood<br>dan Ibu Enok Rohana";
-    if (groomAvatar) {
-      groomAvatar.src = "assets/g-ysp-110z.jpeg"; // Menggunakan nama file yang disamarkan
-      groomAvatar.style.display = "block";       // Munculkan gambar di layar
-    }
-
-    // F. Penanganan Google Maps
+    // G. Penanganan Google Maps
     if (elementMaps) {
-      elementMaps.style.display = "inline-flex"; // Pastikan tombol tampil
+      elementMaps.style.display = "inline-flex"; 
       elementMaps.onclick = function(e) {
         e.preventDefault(); 
         const linkMapsRahasia = "https://github.io";
@@ -887,6 +899,12 @@ document.addEventListener("DOMContentLoaded", function() {
     if (openingTitle) openingTitle.innerHTML = "<span style='color:red; font-size:20px;'>Terkunci</span>";
     if (openingDate) openingDate.innerHTML = "<span style='color:red;'>Akses Terbatas</span>";
     
+    // Proteksi Waktu Acara (Halaman 5)
+    if (akadDate) akadDate.innerHTML = "<span style='color:red;'>Terkunci</span>";
+    if (akadTime) akadTime.innerHTML = "<span style='color:red;'>Terkunci</span>";
+    if (resepsiDate) resepsiDate.innerHTML = "<span style='color:red;'>Terkunci</span>";
+    if (resepsiTime) resepsiTime.innerHTML = "<span style='color:red;'>Terkunci</span>";
+
     // Proteksi Alamat & Maps
     if (elementAlamat) {
       elementAlamat.innerHTML = "<span style='color:red; font-weight:bold;'>Akses Terbatas. Silakan gunakan tautan resmi undangan Anda.</span>";
@@ -902,11 +920,11 @@ document.addEventListener("DOMContentLoaded", function() {
     if (groomParents) groomParents.innerText = "Silakan masuk lewat tautan resmi.";
     
     if (brideAvatar) {
-      brideAvatar.src = "";              // Mencegah file terunduh di Inspect Element
+      brideAvatar.src = "";              
       brideAvatar.style.display = "none"; 
     }
     if (groomAvatar) {
-      groomAvatar.src = "";              // Mencegah file terunduh di Inspect Element
+      groomAvatar.src = "";              
       groomAvatar.style.display = "none"; 
     }
   }
