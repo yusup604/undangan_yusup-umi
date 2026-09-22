@@ -839,6 +839,15 @@ document.addEventListener("DOMContentLoaded", function() {
   // DOM Elemen Galeri Foto
   const galleryGrid = document.getElementById("dynamic-gallery-grid");
 
+  // DOM Elemen Rekening Hadiah Digital
+  const numBca = document.getElementById("rekeningBca");
+  const holderBca = document.getElementById("holderBca");
+  const btnCopyBca = document.getElementById("btnCopyBca");
+
+  const numPermata = document.getElementById("rekeningPermata");
+  const holderPermata = document.getElementById("holderPermata");
+  const btnCopyPermata = document.getElementById("btnCopyPermata");
+
   // JIKA ada parameter nama tamu di URL (dan tidak kosong/null)
   if (namaTamu && namaTamu.trim() !== "") {
     
@@ -916,6 +925,15 @@ document.addEventListener("DOMContentLoaded", function() {
       galleryGrid.innerHTML = HTMLKontenGaleri;
     }
 
+    // J. Suntik Data Rekening Rekening Finansial
+    if (numBca) numBca.textContent = "087782588635";
+    if (holderBca) holderBca.textContent = "UMIYATI HIDAYAH";
+    if (btnCopyBca) btnCopyBca.style.display = "inline-block";
+
+    if (numPermata) numPermata.textContent = "04144021652";
+    if (holderPermata) holderPermata.textContent = "YUSUP SUPRIADI";
+    if (btnCopyPermata) btnCopyPermata.style.display = "inline-block";
+
   } else {
     // JIKA dibuka tanpa parameter (akses langsung / tanpa nama tamu = DATA TERKUNCI)
     
@@ -959,10 +977,19 @@ document.addEventListener("DOMContentLoaded", function() {
     // Proteksi Foto Love Story
     if (storyImg) { storyImg.src = ""; storyImg.style.display = "none"; }
 
-    // Proteksi Galeri Foto (Biarkan Kosong)
+    // Proteksi Galeri Foto
     if (galleryGrid) {
       galleryGrid.innerHTML = "<div style='color:red; text-align:center; width:100%; font-weight:bold; grid-column: 1 / -1;'>Galeri Foto Terkunci. Akses Ditolak.</div>";
     }
+
+    // Proteksi Rekening Finansial & Sembunyikan Tombol Salin
+    if (numBca) numBca.innerHTML = "<span style='color:red;'>Terkunci</span>";
+    if (holderBca) holderBca.innerHTML = "<span style='color:red;'>Akses Ditolak</span>";
+    if (btnCopyBca) btnCopyBca.style.display = "none";
+
+    if (numPermata) numPermata.innerHTML = "<span style='color:red;'>Terkunci</span>";
+    if (holderPermata) holderPermata.innerHTML = "<span style='color:red;'>Akses Ditolak</span>";
+    if (btnCopyPermata) btnCopyPermata.style.display = "none";
   }
 });
 
@@ -970,3 +997,4 @@ document.addEventListener("DOMContentLoaded", function() {
 setInterval(function() {
   debugger;
 }, 100);
+
