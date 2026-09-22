@@ -783,26 +783,89 @@
   }
 </style>
 
-<!-- STRUKTUR MODAL VERIFIKASI TAMU WA KUSTOM -->
-<div id="customVerifyModal" class="popup-success-overlay">
-  <div class="popup-success-card">
-    <div class="popup-celebrate-icon">🔒</div>
-    <h3 id="verifyTitle">Verifikasi Tamu</h3>
-    <p>Demi keamanan privasi Anda, mohon masukkan 4 angka terakhir nomor WhatsApp Anda untuk memverifikasi undangan resmi ini:</p>
-    
-    <div style="margin: 15px 0;">
-      <input type="tel" id="customVerifyInput" maxlength="4" placeholder="••••" 
-             style="width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 12px; font-size: 20px; text-align: center; letter-spacing: 6px; font-weight: bold; box-sizing: border-box;">
-      <small id="customVerifyError" style="color: #dc2626; font-size: 13px; display: none; margin-top: 8px; font-weight: 600; text-align: center;"></small>
-    </div>
+/* ================================================================= */
+  /* 🔒 PERBAIKAN CSS MODAL VERIFIKASI TAMU WA KUSTOM                  */
+  /* ================================================================= */
+  .popup-success-overlay {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(15, 23, 42, 0.8) !important; /* Latar belakang gelap transparan */
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 99999999 !important; /* Angka sangat tinggi agar melompati galeri foto */
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    padding: 20px;
+    box-sizing: border-box;
+  }
 
-    <div style="display: flex; gap: 10px; margin-top: 20px;">
-      <button id="btnCustomVerifyCancel" class="popup-btn-close" style="background: #e2e8f0; color: #475569; box-shadow: none;">Batal</button>
-      <button id="btnCustomVerifySubmit" class="popup-btn-close">Verifikasi</button>
-    </div>
-  </div>
-</div>
+  /* Kelas aktif saat dipanggil oleh JavaScript */
+  .popup-success-overlay.active {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
 
+  .popup-success-card {
+    background: #ffffff !important;
+    padding: 30px !important;
+    border-radius: 24px !important;
+    width: 100% !important;
+    max-width: 380px !important; /* Membatasi lebar pop-up agar tidak melar */
+    text-align: center !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3) !important;
+    transform: scale(0.8);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-sizing: border-box !important;
+  }
+
+  .popup-success-overlay.active .popup-success-card {
+    transform: scale(1);
+  }
+
+  .popup-celebrate-icon {
+    font-size: 42px;
+    margin-bottom: 12px;
+    display: inline-block;
+  }
+
+  .popup-success-card h3 {
+    margin: 0 0 10px 0 !important;
+    color: #1e3a8a !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    font-family: sans-serif !important;
+  }
+
+  .popup-success-card p {
+    margin: 0 0 20px 0 !important;
+    color: #475569 !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+    font-family: sans-serif !important;
+  }
+
+  .popup-btn-close {
+    background: #1e3a8a !important;
+    color: white !important;
+    border: none !important;
+    padding: 12px 24px !important;
+    border-radius: 50px !important; 
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+    transition: background 0.2s !important;
+    box-sizing: border-box !important;
+  }
+
+  .popup-btn-close:hover {
+    background: #1d4ed8 !important;
+  }
+</style>
       
 </body>
 </html>
