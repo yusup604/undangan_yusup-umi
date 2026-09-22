@@ -783,6 +783,26 @@
   }
 </style>
 
+<!-- STRUKTUR MODAL VERIFIKASI TAMU WA KUSTOM -->
+<div id="customVerifyModal" class="popup-success-overlay">
+  <div class="popup-success-card">
+    <div class="popup-celebrate-icon">🔒</div>
+    <h3 id="verifyTitle">Verifikasi Tamu</h3>
+    <p>Demi keamanan privasi Anda, mohon masukkan 4 angka terakhir nomor WhatsApp Anda untuk memverifikasi undangan resmi ini:</p>
+    
+    <div style="margin: 15px 0;">
+      <input type="tel" id="customVerifyInput" maxlength="4" placeholder="••••" 
+             style="width: 100%; padding: 12px; border: 2px solid #cbd5e1; border-radius: 12px; font-size: 20px; text-align: center; letter-spacing: 6px; font-weight: bold; box-sizing: border-box;">
+      <small id="customVerifyError" style="color: #dc2626; font-size: 13px; display: none; margin-top: 8px; font-weight: 600; text-align: center;"></small>
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-top: 20px;">
+      <button id="btnCustomVerifyCancel" class="popup-btn-close" style="background: #e2e8f0; color: #475569; box-shadow: none;">Batal</button>
+      <button id="btnCustomVerifySubmit" class="popup-btn-close">Verifikasi</button>
+    </div>
+  </div>
+</div>
+
       
 </body>
 </html>
