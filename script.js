@@ -872,4 +872,3 @@ document.addEventListener("DOMContentLoaded", function() {
   setInterval(function() {
     debugger;
   }, 100);
-});
