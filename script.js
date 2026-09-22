@@ -428,23 +428,69 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('guest_original_name', decodedName); 
       bukaUndanganNormal(decodedName);
     } else if (typeParam === 'wa' && vParam) {
-      const userInputHP = prompt(`Halo ${decodedName}!\nDemi keamanan privasi Anda, mohon masukkan 4 angka terakhir nomor WhatsApp Anda untuk memverifikasi undangan resmi ini:`);
-      
-      if (!userInputHP) {
-        aktifkanLockdownTotal();
-        return;
-      }
+      // =========================================================================
+      // FITUR BARU: MODAL VERIFIKASI WA KUSTOM PROFESIONAL (PENGGANTI PROMPT JADUL)
+      // =========================================================================
+      const waVerifyModal = document.getElementById('waVerifyModal');
+      const waVerifyMessage = document.getElementById('waVerifyMessage');
+      const waVerifyInput = document.getElementById('waVerifyInput');
+      const waVerifyError = document.getElementById('waVerifyError');
+      const btnWaConfirm = document.getElementById('btnWaConfirm');
+      const btnWaCancel = document.getElementById('btnWaCancel');
 
-      hitungHashSHA256(userInputHP.trim()).then(hashInputUser => {
-        if (hashInputUser === vParam.toLowerCase()) {
-          localStorage.setItem('akses_sah_lokal', 'USER_VALIDATED');
-          localStorage.setItem('guest_original_name', decodedName); 
-          bukaUndanganNormal(decodedName);
-        } else {
-          alert("Verifikasi Gagal! Angka identitas perangkat tidak sesuai.");
-          aktifkanLockdownTotal();
+      if (waVerifyModal && waVerifyMessage) {
+        // Suntik teks sapaan dinamis berdasarkan nama tamu dari URL
+        waVerifyMessage.innerText = `Halo ${decodedName}!\nDemi keamanan privasi Anda, mohon masukkan 4 angka terakhir nomor WhatsApp Anda untuk memverifikasi undangan resmi ini:`;
+        
+        // Tampilkan modal ke layar & kunci scroll latar belakang
+        waVerifyModal.classList.add('active');
+        document.body.style.overflow = "hidden";
+        if (waVerifyInput) {
+          waVerifyInput.value = ""; // Bersihkan sisa ketikan sebelumnya jika ada
+          waVerifyInput.focus();
         }
-      });
+
+        // Fungsi utama mengecek keabsahan input 4 digit nomor WA
+        async function eksekusiVerifikasiKustom() {
+          const userInputHP = waVerifyInput.value.trim();
+          if (!userInputHP) return;
+
+          const hashInputUser = await hitungHashSHA256(userInputHP);
+          if (hashInputUser === vParam.toLowerCase()) {
+            localStorage.setItem('akses_sah_lokal', 'USER_VALIDATED');
+            localStorage.setItem('guest_original_name', decodedName); 
+            
+            // Tutup modal verifikasi, hilangkan error, dan buka undangan
+            waVerifyModal.classList.remove('active');
+            if (waVerifyError) waVerifyError.style.display = "none";
+            bukaUndanganNormal(decodedName);
+          } else {
+            // Tampilkan pesan error merah, kosongkan input, dan fokuskan kembali
+            if (waVerifyError) waVerifyError.style.display = "block";
+            waVerifyInput.value = "";
+            waVerifyInput.focus();
+          }
+        }
+
+        // Daftarkan aksi pada klik tombol "Verifikasi" & tekan tombol "Enter"
+        btnWaConfirm.onclick = eksekusiVerifikasiKustom;
+        waVerifyInput.onkeypress = (e) => {
+          if (e.key === 'Enter') eksekusiVerifikasiKustom();
+        };
+
+        // Aksi jika tamu menolak melakukan verifikasi (klik tombol "Batal")
+        btnWaCancel.onclick = () => {
+          waVerifyModal.classList.remove('active');
+          if (waVerifyError) waVerifyError.style.display = "none";
+          aktifkanLockdownTotal(); // Lempar langsung ke penguncian PIN sistem
+        };
+      } else {
+        // Fallback darurat jika elemen HTML modal kustom lupa dipasang
+        aktifkanLockdownTotal();
+      }
+      // =========================================================================
+      // END FITUR BARU
+      // =========================================================================
     } else {
       aktifkanLockdownTotal();
     }
@@ -498,6 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
 
 // =========================================================================
 // 1. URL WEB APP GOOGLE APPS SCRIPT ANDA (PASTIKAN LINK BENAR & BERAKHIRAN /exec)
