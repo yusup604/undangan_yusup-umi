@@ -136,7 +136,7 @@ function showToastNotification(message) {
 
 
 // =================================================================
-// SYSTEM KEAMANAN UNDANGAN WEB - ANTI-FORWARDING & VIA PARAMETER URL
+// SYSTEM KEAMANAN UNDANGAN WEB - ANTI-FORWARDING & INTEGRASI PRIVASI
 // =================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -164,6 +164,43 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnSecLockedBack = document.getElementById('btnSecLockedBack');
   const guestElement = document.getElementById('guest-name');
   const miniSecurityAlert = document.getElementById('miniSecurityAlert');
+
+  // DOM Elemen Utama Konten Undangan
+  const heroTitle = document.getElementById("dynamic-hero-title");
+  const heroDate = document.getElementById("dynamic-hero-date");
+  const btnOpen = document.getElementById("btnOpen");
+  const openingTitle = document.getElementById("dynamic-opening-title");
+  const openingDate = document.getElementById("dynamic-opening-date");
+
+  // DOM Elemen Profil Mempelai
+  const brideName = document.getElementById("dynamic-bride-name");
+  const brideParents = document.getElementById("dynamic-bride-parents");
+  const brideAvatar = document.getElementById("avatar-bride");
+  const groomName = document.getElementById("dynamic-groom-name");
+  const groomParents = document.getElementById("dynamic-groom-parents");
+  const groomAvatar = document.getElementById("avatar-groom");
+  // DOM Elemen Waktu & Lokasi
+  const akadDate = document.getElementById("dynamic-akad-date");
+  const akadTime = document.getElementById("dynamic-akad-time");
+  const resepsiDate = document.getElementById("dynamic-resepsi-date");
+  const resepsiTime = document.getElementById("dynamic-resepsi-time");
+  const elementAlamat = document.getElementById("dynamic-address");
+  const elementMaps = document.getElementById("dynamic-maps-btn");
+
+  // DOM Elemen Konten & Finansial
+  const storyImg = document.getElementById("dynamic-story-img");
+  const featuredBanner = document.getElementById("dynamic-gallery-featured");
+  const galleryGrid = document.getElementById("dynamic-gallery-grid");
+  const numBca = document.getElementById("rekeningBca");
+  const holderBca = document.getElementById("holderBca");
+  const btnCopyBca = document.getElementById("btnCopyBca");
+  const numPermata = document.getElementById("rekeningPermata");
+  const holderPermata = document.getElementById("holderPermata");
+  const btnCopyPermata = document.getElementById("btnCopyPermata");
+
+  // DOM Elemen Penutup & Watermark
+  const closingTitle = document.getElementById("dynamic-closing-title");
+  const watermarkText = document.getElementById("dynamic-watermark"); 
 
   // A. FUNGSI HASH SHA-256 (Case-Insensitive Fix)
   async function hitungHashSHA256(teks) {
@@ -200,6 +237,13 @@ document.addEventListener('DOMContentLoaded', () => {
   function batalkanVerifikasi() {
     alert("Akses Ditolak! Tautan ini dilindungi keamanan enkripsi. Anda tidak bisa keluar tanpa PIN resmi.");
     aktifkanLockdownTotal(); 
+  }
+
+  // FUNGSI SANITASI DATA (Mencegah XSS)
+  function bersihkanTeks(input) {
+    const temp = document.createElement('div');
+    temp.textContent = input;
+    return temp.innerHTML;
   }
 
   function periksaRiwayatBlokir() {
@@ -272,7 +316,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   }
-
   // F. FUNGSI UNTUK MENGAKTIFKAN LOGIKA TOMBOL GENERATOR DI PANEL ADMIN
   function aktifkanLogikaTombolAdmin() {
     let activeMode = "wa";
@@ -351,9 +394,9 @@ document.addEventListener('DOMContentLoaded', () => {
       alert("Proses berhasil! Tautan otomatis disalin ke clipboard Anda.");
     };
   }
-  // G. EVALUASI PARAMETER URL & VERIFIKASI ANTI-FORWARDING
+  // G. EVALUASI PARAMETER URL, VERIFIKASI ANTI-FORWARDING & SUNTIK DATA PRIVASI
   const urlParams = new URLSearchParams(window.location.search);
-  const guestParam = urlParams.get('to');
+  const guestParam = urlParams.get('to') || urlParams.get('To') || urlParams.get('TO');
   const vParam = urlParams.get('v'); 
   const typeParam = urlParams.get('type') || 'pribadi';
 
@@ -365,6 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const decodedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
     targetCleanedName = decodedName;
 
+    // A. JALUR KHUSUS ADMINISTRATOR (ADMIN OWNER)
     if (decodedName.toLowerCase().trim() === "admin owner") {
       if (!isAdminBypass) {
         alert("Akses Terbatas! Silakan verifikasi PIN Admin Anda terlebih dahulu.");
@@ -416,17 +460,19 @@ document.addEventListener('DOMContentLoaded', () => {
       return; 
     }
 
+    // B. JALUR PERANGKAT ADMIN SAAT CEK TAUTAN TAMU
     if (isAdminBypass) {
-      if (guestElement) guestElement.innerText = decodedName;
-      sinkronkanNamaRSVP(decodedName);
+      suntikDataPrivasiSah(decodedName);
       document.body.style.overflow = "auto";
       document.body.style.height = "auto";
       return; 
     }
 
+    // C. JALUR PROSES VALIDASI TAMU ASLI DARI QR / WA
     if (typeParam === 'cetak') {
       localStorage.setItem('akses_sah_lokal', 'CETAK_QR_MEMBER');
       localStorage.setItem('guest_original_name', decodedName); 
+      suntikDataPrivasiSah(decodedName);
       bukaUndanganNormal(decodedName);
     } else if (typeParam === 'wa' && vParam) {
       const waVerifyModal = document.getElementById('waVerifyModal');
@@ -459,6 +505,8 @@ document.addEventListener('DOMContentLoaded', () => {
             
             waVerifyModal.classList.remove('active');
             if (waVerifyError) waVerifyError.style.display = "none";
+            
+            suntikDataPrivasiSah(decodedName); 
             bukaUndanganNormal(decodedName);
           } else {
             salahHitungWA++;
@@ -470,6 +518,8 @@ document.addEventListener('DOMContentLoaded', () => {
               
               if (modalNormalState) modalNormalState.style.display = "none";
               if (modalLockedState) modalLockedState.style.display = "block";
+              
+              kunciTotalDataPrivasi(); 
               aktifkanLockdownTotal();
             } else {
               if (waVerifyError) {
@@ -490,60 +540,32 @@ document.addEventListener('DOMContentLoaded', () => {
         btnWaCancel.onclick = () => {
           waVerifyModal.classList.remove('active');
           if (waVerifyError) waVerifyError.style.display = "none";
+          kunciTotalDataPrivasi();
           aktifkanLockdownTotal(); 
         };
       } else {
+        kunciTotalDataPrivasi();
         aktifkanLockdownTotal();
       }
     } else {
+      kunciTotalDataPrivasi();
       aktifkanLockdownTotal();
     }
-
   } else {
+    // D. PENGECEKAN SESI LOCALSTORAGE AKTIF
     if (isAdminBypass) {
-      if (guestElement) guestElement.innerText = "Admin Owner";
-      sinkronkanNamaRSVP("Admin Owner");
+      suntikDataPrivasiSah("Admin Owner");
       document.body.style.overflow = "auto";
       document.body.style.height = "auto";
     } else if (tokenLokal && savedOriginalName) {
-      if (guestElement) guestElement.innerText = savedOriginalName;
-      sinkronkanNamaRSVP(savedOriginalName);
-      document.body.style.overflow = "auto";
-      document.body.style.height = "auto";
+      suntikDataPrivasiSah(savedOriginalName);
+      bukaUndanganNormal(savedOriginalName);
     } else {
+      kunciTotalDataPrivasi();
       aktifkanLockdownTotal(); 
     }
   }
 
-  function bukaUndanganNormal(namaTamu) {
-    if (guestElement) guestElement.innerText = namaTamu;
-    sinkronkanNamaRSVP(namaTamu);
-    window.history.replaceState({}, document.title, window.location.pathname);
-    document.body.style.overflow = "auto";
-    document.body.style.height = "auto";
-  }
-
-  if (btnSecConfirm) btnSecConfirm.addEventListener('click', prosesVerifikasiPIN);
-  if (btnSecCancel) btnSecCancel.addEventListener('click', batalkanVerifikasi);
-  if (btnSecLockedBack) btnSecLockedBack.addEventListener('click', batalkanVerifikasi);
-  if (modalPinInput) {
-    modalPinInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') prosesVerifikasiPIN();
-    });
-  }
-
-  const wishesForm = document.getElementById('wishesForm');
-  if (wishesForm) {
-    wishesForm.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const successModal = document.getElementById('rsvpSuccessModal');
-      if (successModal) successModal.classList.add('active');
-      wishesForm.reset();
-      const currentValidName = localStorage.getItem('guest_original_name') || "Tamu Undangan";
-      sinkronkanNamaRSVP(currentValidName);
-    });
-  }
-});
 
 // =========================================================================
 // 1. URL WEB APP GOOGLE APPS SCRIPT ANDA (PASTIKAN LINK BENAR & BERAKHIRAN /exec)
@@ -779,81 +801,39 @@ window.addEventListener('click', function(e) {
   }
 });
 
-document.addEventListener("DOMContentLoaded", function() {
-  // 1. Ambil parameter URL (Case-Insensitive untuk 'to')
-  const urlParams = new URLSearchParams(window.location.search);
-  let namaTamu = urlParams.get('to') || urlParams.get('To') || urlParams.get('TO');
-
-  // DOM Elemen Utama
-  const heroTitle = document.getElementById("dynamic-hero-title");
-  const heroDate = document.getElementById("dynamic-hero-date");
-  const guestElement = document.getElementById("guest-name");
-  const btnOpen = document.getElementById("btnOpen");
-  const openingTitle = document.getElementById("dynamic-opening-title");
-  const openingDate = document.getElementById("dynamic-opening-date");
-
-  // DOM Elemen Profil Mempelai
-  const brideName = document.getElementById("dynamic-bride-name");
-  const brideParents = document.getElementById("dynamic-bride-parents");
-  const brideAvatar = document.getElementById("avatar-bride");
-  const groomName = document.getElementById("dynamic-groom-name");
-  const groomParents = document.getElementById("dynamic-groom-parents");
-  const groomAvatar = document.getElementById("avatar-groom");
-
-  // DOM Elemen Waktu & Lokasi
-  const akadDate = document.getElementById("dynamic-akad-date");
-  const akadTime = document.getElementById("dynamic-akad-time");
-  const resepsiDate = document.getElementById("dynamic-resepsi-date");
-  const resepsiTime = document.getElementById("dynamic-resepsi-time");
-  const elementAlamat = document.getElementById("dynamic-address");
-  const elementMaps = document.getElementById("dynamic-maps-btn");
-
-  // DOM Elemen Konten & Finansial
-  const storyImg = document.getElementById("dynamic-story-img");
-  const featuredBanner = document.getElementById("dynamic-gallery-featured"); // <- SUDAH DITAMBAHKAN
-  const galleryGrid = document.getElementById("dynamic-gallery-grid");
-  const numBca = document.getElementById("rekeningBca");
-  const holderBca = document.getElementById("holderBca");
-  const btnCopyBca = document.getElementById("btnCopyBca");
-  const numPermata = document.getElementById("rekeningPermata");
-  const holderPermata = document.getElementById("holderPermata");
-  const btnCopyPermata = document.getElementById("btnCopyPermata");
-
-  // DOM Elemen Penutup & Watermark
-  const closingTitle = document.getElementById("dynamic-closing-title");
-  const watermarkText = document.getElementById("dynamic-watermark"); 
-
-  // FUNGSI SANITASI DATA (Mencegah XSS)
-  function bersihkanTeks(input) {
-    const temp = document.createElement('div');
-    temp.textContent = input;
-    return temp.innerHTML;
+    // D. PENGECEKAN SESI LOCALSTORAGE AKTIF
+    if (isAdminBypass) {
+      suntikDataPrivasiSah("Admin Owner");
+      document.body.style.overflow = "auto";
+      document.body.style.height = "auto";
+    } else if (tokenLokal && savedOriginalName) {
+      suntikDataPrivasiSah(savedOriginalName);
+      bukaUndanganNormal(savedOriginalName);
+    } else {
+      kunciTotalDataPrivasi();
+      aktifkanLockdownTotal(); 
+    }
   }
 
-  // JIKA TAUTAN SAH (Parameter nama tamu ada dan valid)
-  if (namaTamu && namaTamu.trim() !== "") {
-    
-    // Gunakan textContent untuk keamanan text input
+  // =========================================================================
+  // FUNGSI UTAMA UNTUK MENYUNTIKKAN DATA PRIVASI PERNIKAHAN SECARA DINAMIS
+  // =========================================================================
+  function suntikDataPrivasiSah(namaTamuSah) {
     if (heroTitle) heroTitle.textContent = "Umi & Yusup";
     if (heroDate) heroDate.textContent = "SABTU, 12 DESEMBER 2026";
-    if (guestElement) guestElement.innerHTML = bersihkanTeks(namaTamu);
+    if (guestElement) guestElement.innerHTML = bersihkanTeks(namaTamuSah);
+    sinkronkanNamaRSVP(namaTamuSah);
 
     if (openingTitle) openingTitle.textContent = "UMI & YUSUP";
     if (openingDate) openingDate.textContent = "SABTU, 12 DESEMBER 2026";
 
     if (brideName) brideName.textContent = "Umiyati Hidayah";
     if (brideParents) brideParents.innerHTML = "Putri pertama dari<br>Bapak Tutu<br>dan Ibu Rita Anggraini";
-    if (brideAvatar) {
-      brideAvatar.src = "assets/w-umi-992x.jpeg"; 
-      brideAvatar.style.display = "block";       
-    }
+    if (brideAvatar) { brideAvatar.src = "assets/w-umi-992x.jpeg"; brideAvatar.style.display = "block"; }
 
     if (groomName) groomName.textContent = "Yusup Supriadi, S.Kom.";
     if (groomParents) groomParents.innerHTML = "Putra ketiga dari<br>Bapak Ood<br>dan Ibu Enok Rohana";
-    if (groomAvatar) {
-      groomAvatar.src = "assets/g-ysp-110z.jpeg"; 
-      groomAvatar.style.display = "block";       
-    }
+    if (groomAvatar) { groomAvatar.src = "assets/g-ysp-110z.jpeg"; groomAvatar.style.display = "block"; }
 
     if (akadDate) akadDate.textContent = "SABTU, 12 DESEMBER 2026";
     if (akadTime) akadTime.textContent = "PUKUL : 09.00 - 10.00 WIB";
@@ -868,20 +848,12 @@ document.addEventListener("DOMContentLoaded", function() {
       elementMaps.style.display = "inline-flex"; 
       elementMaps.onclick = function(e) {
         e.preventDefault(); 
-        window.open("https://github.io", "_blank"); 
+        window.open("https://google.com", "_blank"); 
       };
     }
 
-    if (storyImg) {
-      storyImg.src = "assets/stry-mn-772v.jpeg"; 
-      storyImg.style.display = "block";
-    }
-
-    // MENAMPILKAN FOTO BANNER UTAMA SAAT AKSES LEGAL
-    if (featuredBanner) {
-      featuredBanner.src = "assets/gallery-featured.jpeg"; // <- SUDAH DITAMBAHKAN
-      featuredBanner.style.display = "block";
-    }
+    if (storyImg) { storyImg.src = "assets/stry-mn-772v.jpeg"; storyImg.style.display = "block"; }
+    if (featuredBanner) { featuredBanner.src = "assets/gallery-featured.jpeg"; featuredBanner.style.display = "block"; }
 
     if (galleryGrid) {
       const listFotoDisamarkan = [
@@ -899,7 +871,6 @@ document.addEventListener("DOMContentLoaded", function() {
       galleryGrid.innerHTML = HTMLKontenGaleri;
     }
 
-    // Suntik Data Rekening Finansial
     if (numBca) numBca.textContent = "087782588635";
     if (holderBca) holderBca.textContent = "UMIYATI HIDAYAH";
     if (btnCopyBca) btnCopyBca.style.display = "inline-block";
@@ -909,11 +880,13 @@ document.addEventListener("DOMContentLoaded", function() {
     if (btnCopyPermata) btnCopyPermata.style.display = "inline-block";
 
     if (closingTitle) closingTitle.textContent = "Umi & Yusup";
-    
     if (watermarkText) watermarkText.textContent = "Made by love: Yusup Supriadi";
+  }
 
-  } else {
-    // JIKA AKSES TANPA PARAMETER / ILLEGAL = KUNCI TOTAL DATA
+  // =========================================================================
+  // FUNGSI PROTEKSI: MENGUNCI TOTAL INFORMASI JIKA AKSES TIDAK SAH
+  // =========================================================================
+  function kunciTotalDataPrivasi() {
     if (heroTitle) heroTitle.innerHTML = "<span style='color:red; font-size:24px;'>Akses Terkunci</span>";
     if (heroDate) heroDate.innerHTML = "<span style='color:red;'>Gunakan Tautan Resmi Undangan</span>";
     if (guestElement) guestElement.textContent = "Tamu Tidak Dikenal";
@@ -945,7 +918,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (brideAvatar) { brideAvatar.src = ""; brideAvatar.style.display = "none"; }
     if (groomAvatar) { groomAvatar.src = ""; groomAvatar.style.display = "none"; }
     if (storyImg) { storyImg.src = ""; storyImg.style.display = "none"; }
-    if (featuredBanner) { featuredBanner.src = ""; featuredBanner.style.display = "none"; } // <- SUDAH DITAMBAHKAN
+    if (featuredBanner) { featuredBanner.src = ""; featuredBanner.style.display = "none"; }
 
     if (galleryGrid) {
       galleryGrid.innerHTML = "<div style='color:red; text-align:center; width:100%; font-weight:bold; grid-column: 1 / -1;'>Galeri Foto Terkunci. Akses Ditolak.</div>";
@@ -960,14 +933,37 @@ document.addEventListener("DOMContentLoaded", function() {
     if (btnCopyPermata) btnCopyPermata.style.display = "none";
 
     if (closingTitle) closingTitle.innerHTML = "<span style='color:red; font-size:20px;'>Terkunci</span>";
-
     if (watermarkText) watermarkText.textContent = "Wedding Invitation";
+  }
+
+  function bukaUndanganNormal(namaTamu) {
+    window.history.replaceState({}, document.title, window.location.pathname);
+    document.body.style.overflow = "auto";
+    document.body.style.height = "auto";
+  }
+
+  if (btnSecConfirm) btnSecConfirm.addEventListener('click', prosesVerifikasiPIN);
+  if (btnSecCancel) btnSecCancel.addEventListener('click', batalkanVerifikasi);
+  if (btnSecLockedBack) btnSecLockedBack.addEventListener('click', batalkanVerifikasi);
+  if (modalPinInput) {
+    modalPinInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') prosesVerifikasiPIN();
+    });
+  }
+
+  const wishesForm = document.getElementById('wishesForm');
+  if (wishesForm) {
+    wishesForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+      const successModal = document.getElementById('rsvpSuccessModal');
+      if (successModal) successModal.classList.add('active');
+      wishesForm.reset();
+      const currentValidName = localStorage.getItem('guest_original_name') || "Tamu Undangan";
+      suntikDataPrivasiSah(currentValidName);
+    });
   }
 });
 
-// Anti-F12 debugger tetap dipertahankan di paling bawah
 setInterval(function() {
   debugger;
 }, 100);
-
-
