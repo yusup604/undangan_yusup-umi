@@ -397,6 +397,29 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 setInterval(() => { debugger; }, 100);
 
+// Tambahkan kode ini di bagian bawah script.js agar langsung berjalan saat web dibuka
+document.addEventListener("DOMContentLoaded", () => {
+    // Memeriksa apakah nama tamu sudah tersimpan di localStorage (tanda akses sah)
+    const namaTamuDisimpan = localStorage.getItem('guest_original_name');
+    
+    // ATAU memeriksa apakah ada parameter nama tamu di URL (misal: ?to=Cupz)
+    const urlParams = new URLSearchParams(window.location.search);
+    const namaTamuURL = urlParams.get('to'); 
+
+    if (namaTamuURL || namaTamuDisimpan) {
+        // Jika sah, langsung suntik data asli ke Hero, Opening, dan Mempelai
+        const namaFinal = namaTamuURL || namaTamuDisimpan;
+        
+        // Simpan ke localStorage agar status sah menetap
+        if (namaTamuURL) localStorage.setItem('guest_original_name', namaTamuURL);
+        
+        suntikDataPrivasiSah(namaFinal);
+    } else {
+        // Jika tidak ada parameter tamu sama sekali, kunci halaman
+        kunciTotalDataPrivasi();
+    }
+});
+
 
 // =========================================================================
 // 1. URL WEB APP GOOGLE APPS SCRIPT ANDA (PASTIKAN LINK BENAR & BERAKHIRAN /exec)
