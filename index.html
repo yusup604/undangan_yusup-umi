@@ -9,37 +9,42 @@
   <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
   <!-- External CSS -->
   <link rel="stylesheet" href="style.css" />
+
+    <script src="https://cloudflare.com"></script>
+  <script src="script.js"></script>
 </head>
 
 <body>
 
  <!-- 1. HERO / COVER UTAMA (PAGE 1) -->
-  <section id="hero" class="hero-section">
-    <div class="hero-overlay"></div>
-    
-    <div class="hero-content">
-      <!-- Bagian Atas: Judul & Tanggal -->
-      <div class="header-text" data-aos="fade-down">
-        <p class="subtitle">THE WEDDING OF</p>
-        <h1 class="couple-names">Umi & Yusup</h1>
-        <p class="date">SABTU, 12 DESEMBER 2026</p>
-      </div>
-
-      <!-- Bagian Bawah: Nama Tamu + Tombol Buka Undangan -->
-      <div class="guest-action-block" data-aos="fade-up" data-aos-delay="200">
-        <p class="guest-label">Kepada Yth.<br>Bapak/Ibu/Saudara/i</p>
-        <h3 id="guest-name" class="guest-name">Tamu Undangan</h3>
-      <h4 Class="guest-label">di Tempat</h4>
-        <button id="btnOpen" class="btn-open" onclick="openInvitation()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-          </svg>
-          Buka Undangan
-        </button>
-      </div>
+<section id="hero" class="hero-section">
+  <div class="hero-overlay"></div>
+  
+  <div class="hero-content">
+   
+    <div class="header-text" data-aos="fade-down">
+      <p class="subtitle">THE WEDDING OF</p>
+      
+      <h1 id="dynamic-hero-title" class="couple-names">...</h1>
+      
+      <p id="dynamic-hero-date" class="date">...</p>
     </div>
-  </section>
 
+    <!-- Bagian Bawah: Nama Tamu + Tombol Buka Undangan -->
+    <div class="guest-action-block" data-aos="fade-up" data-aos-delay="200">
+      <p class="guest-label">Kepada Yth.<br>Bapak/Ibu/Saudara/i</p>
+      <h3 id="guest-name" class="guest-name">Tamu Undangan</h3>
+      <h4 class="guest-label">di Tempat</h4>
+      
+      <button id="btnOpen" class="btn-open" onclick="openInvitation()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+        </svg>
+        Buka Undangan
+      </button>
+    </div>
+  </div>
+</section>
 
 
   <!-- Audio Backsound -->
@@ -49,17 +54,20 @@
 
   
   <!-- 2. OPENING / COVER DALAM (PAGE 2) -->
-  <section id="opening" class="opening-section">
-    <div class="opening-overlay"></div>
-    
-    <div class="opening-content" data-aos="fade-up">
-      <div class="opening-text">
-        <p class="subtitle">THE WEDDING OF</p>
-        <h1 class="couple-names">UMI & YUSUP</h1>
-        <p class="date">SABTU, 12 DESEMBER 2026</p>
-      </div>
+<section id="opening" class="opening-section">
+  <div class="opening-overlay"></div>
+  
+  <div class="opening-content" data-aos="fade-up">
+    <div class="opening-text">
+      <p class="subtitle">THE WEDDING OF</p>
+
+      <h1 id="dynamic-opening-title" class="couple-names">...</h1>
+      
+      <p id="dynamic-opening-date" class="date">...</p>
     </div>
-  </section>
+  </div>
+</section>
+
 
 <!-- 3. PAGE 3: WE ARE GETTING MARRIED & COUNTDOWN -->
   <section id="countdown-section" class="countdown-section">
@@ -133,26 +141,18 @@
     <!-- Mempelai Wanita (The Bride) -->
     <div class="profile-row bride-row" data-aos="fade-up">
       <div class="profile-capsule-img">
-        <img src="assets/mempelai-wanita.jpeg" alt="Umi" />
+      
+        <img id="avatar-bride" alt="Umi" style="display: none;" />
       </div>
       <div class="profile-details">
         <div class="label-wrapper">
           <span class="label-role">The Bride</span>
           <span class="line-decor"></span>
         </div>
-        <h3 class="person-fullname">Umiyati Hidayah</h3>
-        <p class="parents-detail">
-          Putri pertama dari<br>
-          Bapak Tutu<br>
-          dan Ibu Rita Anggraini
-        </p>
-       <!-- <a href="https://instagram.com/username_umi" target="_blank" class="btn-ig" aria-label="Instagram Umi">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-          </svg> -->
-        </a>
+      
+        <h3 id="dynamic-bride-name" class="person-fullname"></h3>
+       
+        <p id="dynamic-bride-parents" class="parents-detail"></p>
       </div>
     </div>
 
@@ -168,22 +168,14 @@
           <span class="line-decor"></span>
           <span class="label-role">The Groom</span>
         </div>
-        <h3 class="person-fullname">Yusup Supriadi, S.Kom.</h3>
-        <p class="parents-detail">
-          Putra ketiga dari<br>
-          Bapak Ood<br>
-          dan Ibu Enok Rohana
-        </p>
-       <!-- <a href="https://instagram.com/username_yusup" target="_blank" class="btn-ig" aria-label="Instagram Yusup">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-          </svg> -->
-        </a>
+      
+        <h3 id="dynamic-groom-name" class="person-fullname"></h3>
+      
+        <p id="dynamic-groom-parents" class="parents-detail"></p>
       </div>
       <div class="profile-capsule-img">
-        <img src="assets/mempelai-pria.jpeg" alt="Yusup" />
+      
+        <img id="avatar-groom" alt="Yusup" style="display: none;" />
       </div>
     </div>
 
@@ -198,6 +190,7 @@
 
   </div>
 </section>
+
 
 <!-- 5. PAGE 5: WEDDING EVENT (BERURUTAN) -->
 <section id="wedding-event" class="event-section">
@@ -229,8 +222,10 @@
           <h3 class="card-title">AKAD NIKAH</h3>
           <span class="line-decor"></span>
         </div>
-        <p class="event-date">SABTU, 12 DESEMBER 2026</p>
-        <p class="event-time">PUKUL : 09.00 - 10.00 WIB</p>
+
+        <p id="dynamic-akad-date" class="event-date"></p>
+
+        <p id="dynamic-akad-time" class="event-time"></p>
       </div>
 
       <div class="event-divider-line" data-aos="fade-up" data-aos-delay="350"></div>
@@ -242,13 +237,15 @@
           <h3 class="card-title">RESEPSI</h3>
           <span class="line-decor"></span>
         </div>
-        <p class="event-date">SABTU, 12 DESEMBER 2026</p>
-        <p class="event-time">PUKUL : 11.00 - SELESAI</p>
+  
+        <p id="dynamic-resepsi-date" class="event-date"></p>
+    
+        <p id="dynamic-resepsi-time" class="event-time"></p>
       </div>
 
       <div class="event-divider-line" data-aos="fade-up" data-aos-delay="450"></div>
 
-     <!-- 5. DETAIL LOKASI & TOMBOL GOOGLE MAPS (DI PALING BOTTOM) -->
+      <!-- 5. DETAIL LOKASI & TOMBOL GOOGLE MAPS -->
       <div class="location-bottom-block" data-aos="fade-up" data-aos-delay="500">
         <div class="location-pin-icon">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="#ffffff">
@@ -256,16 +253,13 @@
           </svg>
         </div>
 
-        <p class="location-name">Kediaman Mempelai Wanita</p>
-        <p class="location-address">
-          Kp. Pekopen Timur<br>
-          Desa LambangJaya<br>
-          Kecamatan Tambun Selatan<br>
-          Kabupaten Bekasi, Jawa Barat
-        </p>
+    
+        <p id="dynamic-location-name" class="location-name"></p>
+   
+        <p id="dynamic-address" class="location-address"></p>
 
-        <!-- Tombol Google Maps di Akhir -->
-        <a href="https://yusup604.github.io/wedding-yusup-umi/" target="_blank" class="btn-gmaps">
+   
+        <a id="dynamic-maps-btn" href="#" target="_blank" class="btn-gmaps" style="display: none;">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="#1f3a52">
             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
           </svg>
@@ -277,6 +271,7 @@
 
   </div>
 </section>
+
 
   <!-- 6. PAGE 6: QUOTE AR-RUM 21 -->
 <section id="quote-section" class="quote-section">
@@ -313,10 +308,10 @@
     <span class="line-decor"></span>
   </div>
 
-  <!-- Foto Utama dengan Frame -->
   <div class="story-featured-wrapper" data-aos="fade-up" data-aos-delay="400">
-    <div class="story-featured-frame">
-      <img src="assets/love-story-main.jpeg" alt="Love Story Featured" class="story-featured-img">
+   
+    <div id="dynamic-story-frame" class="story-featured-frame">
+     
     </div>
   </div>
 
@@ -369,6 +364,7 @@
 
 </section>
 
+
 <!-- 8. PAGE 8: GALLERY / OUR MOMENT -->
 <section id="gallery" class="gallery-section">
   
@@ -384,26 +380,9 @@
   <h2 class="title-gallery" data-aos="zoom-in" data-aos-delay="200">Gallery</h2>
   <p class="subtitle-moment" data-aos="zoom-in" data-aos-delay="300">Our Moment</p>
 
-  <!-- Grid Foto 2 Kolom Presisi -->
-  <div class="gallery-grid" data-aos="fade-up" data-aos-delay="350">
-    <div class="gallery-item">
-      <img src="assets/gallery-1.jpeg" alt="Our Moment 1" loading="lazy">
-    </div>
-    <div class="gallery-item">
-      <img src="assets/gallery-2.jpeg" alt="Our Moment 2" loading="lazy">
-    </div>
-    <div class="gallery-item">
-      <img src="assets/gallery-3.jpeg" alt="Our Moment 3" loading="lazy">
-    </div>
-    <div class="gallery-item">
-      <img src="assets/gallery-4.jpeg" alt="Our Moment 4" loading="lazy">
-    </div>
-    <div class="gallery-item">
-      <img src="assets/gallery-5.jpeg" alt="Our Moment 5" loading="lazy">
-    </div>
-    <div class="gallery-item">
-      <img src="assets/gallery-6.jpeg" alt="Our Moment 6" loading="lazy">
-    </div>
+ 
+  <div id="dynamic-gallery-grid" class="gallery-grid" data-aos="fade-up" data-aos-delay="350">
+   
   </div>
 
   <!-- Quote Romantis Penutup Galeri -->
@@ -416,11 +395,13 @@
   <!-- Transisi Banner Foto Utama (Latar Biru Dusty) -->
   <div class="gallery-featured-banner" data-aos="fade-up" data-aos-delay="450">
     <div class="featured-card-frame">
-      <img src="assets/gallery-featured.jpeg" alt="Featured Moment" loading="lazy">
+     
+      <img id="dynamic-gallery-featured" alt="Featured Moment" loading="lazy" style="display: none;">
     </div>
   </div>
 
 </section>
+
 
 <!-- PAGE 9: WEDDING WISHES & RSVP -->
 <section id="wishes" class="wishes-section">
@@ -549,13 +530,15 @@
     <!-- Container Daftar Kartu (Awalnya Tersembunyi) -->
     <div id="bankContainer" class="bank-container hidden">
       
-      <!-- Kartu 1 (kartu1.jpg) -->
+      <!-- Kartu 1 (BCA) -->
       <div class="card-item card-bg-1">
         <div class="card-content">
           <span class="card-label">Nomor Rekening</span>
-          <span class="card-number" id="rekeningBca">087782588635</span>
+        
+          <span class="card-number" id="rekeningBca"></span>
           <span class="card-label">Atas Nama</span>
-          <span class="card-holder">UMIYATI HIDAYAH</span>
+         
+          <span class="card-holder" id="holderBca"></span>
         </div>
         <button type="button" class="btn-copy" onclick="copyText('rekeningBca')">
           <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
@@ -565,13 +548,15 @@
         </button>
       </div>
 
-      <!-- Kartu 2 (kartu2.jpg) -->
+      <!-- Kartu 2 (Permata) -->
       <div class="card-item card-bg-2">
         <div class="card-content">
           <span class="card-label">Nomor Rekening</span>
-          <span class="card-number" id="rekeningPermata">04144021652</span>
+        
+          <span class="card-number" id="rekeningPermata"></span>
           <span class="card-label">Atas Nama</span>
-          <span class="card-holder">YUSUP SUPRIADI</span>
+          
+          <span class="card-holder" id="holderPermata"></span>
         </div>
         <button type="button" class="btn-copy" onclick="copyText('rekeningPermata')">
           <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16">
@@ -586,48 +571,32 @@
   </div>
 </section>
 
+
  <!-- 12. PAGE 12: FOOTER & CLOSING SECTION -->
 <section id="footer-closing" class="footer-closing-section">
   
   <!-- Container Utama dengan Background Foto Mempelai -->
   <div class="closing-hero-card">
     
-    <!-- Foto / Bingkai Kecil di Atas (Opsional) -->
+    <!-- Foto / Bingkai Kecil di Atas -->
     <div class="top-circle-avatar">
-      <img src="assets/bg-closing.jpeg" alt="Widya & Habib">
+   
+      <img id="avatar-closing" alt="Umi & Yusup" style="display: none;">
     </div>
 
     <!-- Container Teks Overlay -->
     <div class="closing-content">
       <p class="happy-label">Kami yang berbahagia</p>
-      <h2 class="couples-name">Umi & Yusup</h2>
+      
+      <h2 id="dynamic-closing-title" class="couples-name">...</h2>
       
       <p class="closing-paragraph">
         Merupakan suatu kebahagiaan dan kehormatan bagi kami, apabila Bapak/Ibu/Saudara/i, berkenan hadir dan memberikan doa restu kepada kami. Terima kasih
       </p>
 
-      <!-- Logo Bulat M / Initial 
-      <div class="brand-logo-circle">
-        <span>M</span>
-      </div> -->
-
-      <!-- Ikon Sosial Media (WA & IG) 
-      <div class="social-icons">
-        <a href="#" class="social-btn">
-          <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326z"/>
-          </svg>
-        </a>
-        <a href="#" class="social-btn">
-          <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.298.039.851.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.039 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.039-.851-.174-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003z"/>
-          </svg>
-        </a>
-      </div> -->
-
       <!-- Watermark Footer -->
       <div class="watermark-text">
-        <p>Made by love: Yusup Supriadi</p>
+        <p id="dynamic-watermark">Made by love: Yusup Supriadi</p>
       </div>
 
     </div>
@@ -635,6 +604,7 @@
   </div>
 
 </section>
+
 
   <!-- Scripts -->
   <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
@@ -790,7 +760,61 @@
   }
 </style>
 
-<script src="script.js"></script>
   
+  <!-- ========================================================================= -->
+  <!-- MODAL POP-UP KEAMANAN VERIFIKASI IDENTITAS WHATSAPP (CSS WAJIB DISESUAIKAN) -->
+  <!-- ========================================================================= -->
+  <div id="waVerifyModal" class="wa-modal-overlay">
+    <div class="wa-modal-card">
+      <div class="wa-modal-icon">🔒</div>
+      <h3 class="wa-modal-title">Konfirmasi Identitas</h3>
+      <p class="wa-modal-desc">
+        Demi kenyamanan dan privasi mempelai, silakan masukkan <strong>4 digit terakhir nomor WhatsApp</strong> Anda untuk membuka undangan resmi:
+      </p>
+      
+      <div class="wa-form-group">
+        <input type="password" id="waVerifyInput" placeholder="Contoh: 7890" maxlength="4" class="wa-modal-input" autocomplete="off">
+        <!-- Elemen untuk menampilkan pesan kesalahan -->
+        <p id="waVerifyError" class="wa-error-text"></p>
+      </div>
+      
+      <button id="btnWaConfirm" class="wa-btn-primary">Verifikasi & Buka Undangan</button>
+    </div>
+  </div>
+
+  <!-- Pasang CSS Internal Sederhana untuk Efek Blur & Glassmorphism -->
+  <style>
+    .wa-modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(31, 58, 82, 0.45); backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px); display: none; z-index: 99999;
+      justify-content: center; align-items: center; padding: 20px;
+    }
+    .wa-modal-overlay.active { display: flex; }
+    .wa-modal-card {
+      background: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 20px;
+      max-width: 400px; width: 100%; text-align: center;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.4);
+    }
+    .wa-modal-icon { font-size: 40px; margin-bottom: 15px; }
+    .wa-modal-title { color: #1f3a52; font-size: 20px; margin-bottom: 10px; font-weight: 700; }
+    .wa-modal-desc { color: #555; font-size: 13px; line-height: 1.6; margin-bottom: 20px; }
+    .wa-modal-input {
+      width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 10px;
+      text-align: center; font-size: 18px; letter-spacing: 4px; font-weight: 600;
+      color: #1f3a52; outline: none; transition: border 0.3s;
+    }
+    .wa-modal-input:focus { border-color: #1f3a52; }
+    .wa-error-text { color: #dc2626; font-size: 12px; margin-top: 8px; font-weight: 600; display: block; min-height: 18px; }
+    .wa-btn-primary {
+      width: 100%; padding: 12px; background: #1f3a52; color: #fff; border: none;
+      border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer;
+      margin-top: 10px; transition: background 0.3s;
+    }
+    .wa-btn-primary:hover { background: #15293c; }
+  </style>
+
+  <!-- Panggil library enkripsi aes.js terlebih dahulu, baru script utama Anda -->
+  <script src="aes.js"></script>
+  <script src="script.js"></script>
 </body>
-</html>
