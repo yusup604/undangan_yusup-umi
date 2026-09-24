@@ -801,20 +801,6 @@ window.addEventListener('click', function(e) {
   }
 });
 
-    // D. PENGECEKAN SESI LOCALSTORAGE AKTIF
-    if (isAdminBypass) {
-      suntikDataPrivasiSah("Admin Owner");
-      document.body.style.overflow = "auto";
-      document.body.style.height = "auto";
-    } else if (tokenLokal && savedOriginalName) {
-      suntikDataPrivasiSah(savedOriginalName);
-      bukaUndanganNormal(savedOriginalName);
-    } else {
-      kunciTotalDataPrivasi();
-      aktifkanLockdownTotal(); 
-    }
-  }
-
   // =========================================================================
   // FUNGSI UTAMA UNTUK MENYUNTIKKAN DATA PRIVASI PERNIKAHAN SECARA DINAMIS
   // =========================================================================
