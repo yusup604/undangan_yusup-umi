@@ -242,14 +242,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // E. FUNGSI PENAMPIL DATA PRIVASI (MUTASI KONTEN SAH VS ILLEGAL VIA DEKRIPSI AES)
-  function suntikDataPrivasiSah(namaTamuSah, kunciAkses) {
+  // E. FUNGSI PENAMPIL DATA PRIVASI (DIPERBAIKI TOTAL: MENGGUNAKAN KUNCI INTERNAL HARDFIX)
+  function suntikDataPrivasiSah(namaTamuSah) {
     try {
-      // PROSES DEKRIPSI: Membuka data privat mentah murni menggunakan kunci akses
-      const bytes = CryptoJS.AES.decrypt(DATA_TERENKRIPSI_MURNI, kunciAkses);
+      // PROSES DEKRIPSI UTAMA: Menggunakan HASH_MASTER sebagai kunci tetap penjamin data AES mencair murni
+      const bytes = CryptoJS.AES.decrypt(DATA_TERENKRIPSI_MURNI, HASH_MASTER);
       const teksAsli = bytes.toString(CryptoJS.enc.Utf8);
 
-      // Jika gagal dekripsi (link palsu / salah kode), paksa kunci halaman
+      // Jika gagal melakukan dekripsi karena data rusak atau manipulasi, batalkan total
       if (!teksAsli || teksAsli.length === 0) {
         kunciTotalDataPrivasi();
         return;
@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (closingTitle) closingTitle.textContent = "Umi & Yusup"; 
       if (watermarkText) watermarkText.textContent = "Made by love: Yusup Supriadi";
 
-      // KONTEN SENSITIF (Baru disuntik setelah AES berhasil dibongkar di memori)
+      // KONTEN SENSITIF (Aman disuntik dari memori RAM setelah validasi AES sukses)
       if (brideName) brideName.textContent = "Umiyati Hidayah";
       if (brideParents) brideParents.innerHTML = "Putri pertama dari<br>Bapak Tutu<br>dan Ibu Rita Anggraini";
       if (brideAvatar) { brideAvatar.src = "assets/mempelai-wanita.jpeg"; brideAvatar.style.display = "block"; }
@@ -328,13 +328,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function bukaUndanganNormal() { window.history.replaceState({}, document.title, window.location.pathname); document.body.style.overflow = "auto"; document.body.style.height = "auto"; }
 
-  // D. PEMILAH LOGIKA OTOMATIS SAAT HALAMAN DI-LOAD
+  // D. PEMILAH LOGIKA OTOMATIS SAAT HALAMAN DI-LOAD (DI-UPDATE AGAR PROSES SUNTIK DATA STABIL)
   const urlParams = new URLSearchParams(window.location.search);
   const guestParam = urlParams.get('to') || urlParams.get('To') || urlParams.get('TO');
   const vParam = urlParams.get('v'), typeParam = urlParams.get('type') || 'pribadi';
   const tokenLokal = localStorage.getItem('akses_sah_lokal');
   const savedOriginalName = localStorage.getItem('guest_original_name');
-  const kunciAksesDisimpan = localStorage.getItem('kunci_akses_sah');
   const isAdminBypass = (tokenLokal === 'TOKEN_BYPASS_ADMIN');
 
   if (guestParam) {
@@ -345,15 +344,14 @@ document.addEventListener('DOMContentLoaded', () => {
       return; 
     }
 
-    if (isAdminBypass && kunciAksesDisimpan) { suntikDataPrivasiSah(decodedName, kunciAksesDisimpan); return; }
+    if (isAdminBypass) { suntikDataPrivasiSah(decodedName); return; }
 
     // Jika tamu menggunakan Link Cetak / QR Code Fisik
     if (typeParam === 'cetak') {
       localStorage.setItem('akses_sah_lokal', 'CETAK_QR_MEMBER'); 
       localStorage.setItem('guest_original_name', decodedName); 
-      localStorage.setItem('kunci_akses_sah', HASH_MASTER);
       
-      suntikDataPrivasiSah(decodedName, HASH_MASTER); 
+      suntikDataPrivasiSah(decodedName); 
       bukaUndanganNormal();
     } 
     // Jika tamu menggunakan Link Jalur WhatsApp
@@ -369,10 +367,9 @@ document.addEventListener('DOMContentLoaded', () => {
           if (hashUserText === vParam.toLowerCase().trim()) {
             localStorage.setItem('akses_sah_lokal', 'USER_VALIDATED'); 
             localStorage.setItem('guest_original_name', decodedName);
-            localStorage.setItem('kunci_akses_sah', HASH_MASTER);
             
             waVerifyModal.classList.remove('active'); 
-            suntikDataPrivasiSah(decodedName, HASH_MASTER); 
+            suntikDataPrivasiSah(decodedName); 
             bukaUndanganNormal();
           } else {
             salahHitungWA++; if (salahHitungWA >= 3) { waVerifyModal.classList.remove('active'); localStorage.setItem('security_breach_detected', 'true'); periksaRiwayatBlokir(); kunciTotalDataPrivasi(); aktifkanLockdownTotal(); }
@@ -383,8 +380,8 @@ document.addEventListener('DOMContentLoaded', () => {
     } else { kunciTotalDataPrivasi(); aktifkanLockdownTotal(); }
   } else {
     // Jalur Cookies / Penyimpanan Sesi Refresh Browser
-    if (tokenLokal && savedOriginalName && kunciAksesDisimpan) { 
-      suntikDataPrivasiSah(savedOriginalName, kunciAksesDisimpan); 
+    if (tokenLokal && savedOriginalName) { 
+      suntikDataPrivasiSah(savedOriginalName); 
     } else { 
       kunciTotalDataPrivasi(); 
       aktifkanLockdownTotal(); 
@@ -401,14 +398,10 @@ document.addEventListener('DOMContentLoaded', () => {
   if (wishesForm) {
     wishesForm.addEventListener('submit', (e) => {
       e.preventDefault(); document.getElementById('rsvpSuccessModal')?.classList.add('active'); wishesForm.reset();
-      if(kunciAksesDisimpan || localStorage.getItem('kunci_akses_sah')) {
-         suntikDataPrivasiSah(localStorage.getItem('guest_original_name') || "Tamu Undangan", kunciAksesDisimpan || localStorage.getItem('kunci_akses_sah'));
-      }
+      suntikDataPrivasiSah(localStorage.getItem('guest_original_name') || "Tamu Undangan");
     });
   }
 });
-
-
 
 
 // =========================================================================
