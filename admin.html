@@ -4,178 +4,390 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Control Panel - Umi & Yusup Wedding</title>
-  <style>
+    <style>
+    :root {
+      --dusty-blue: #93a9b5;
+      --navy-text: #2c3e50;
+      --glass-bg: rgba(255, 255, 255, 0.45);
+      --glass-border: rgba(255, 255, 255, 0.4);
+      --input-bg: rgba(255, 255, 255, 0.7);
+    }
+
+    /* --- PENGATURAN AREA HALAMAN UTAMA --- */
     body {
       font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: #0f172a; /* Warna Navy Peat khas Keamanan */
+      background-color: #93a9b5; /* Warna dasar jika gambar sedang dimuat */
+      margin: 0;
+      padding: 0;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
-      margin: 0;
-      padding: 20px;
+      color: var(--navy-text);
       box-sizing: border-box;
+      position: relative;
     }
-    .admin-card {
-      background: #ffffff;
-      padding: 30px;
-      border-radius: 20px; /* Melengkung rapi sesuai gambar modal */
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+
+    /* --- PEMBATAS UKURAN GAMBAR LATAR BELAKANG (AGAR TIDAK RAKSASA) --- */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      /* Membatasi lebar gambar latar belakang maksimal seukuran layar HP */
       width: 100%;
-      max-width: 440px;
+      max-width: 450px; 
+      /* Menyelaraskan posisi gambar agar selalu tepat berada di tengah layar */
+      left: 50%;
+      transform: translateX(-50%);
+      /* Mengambil gambar dari folder assets Anda */
+      background: linear-gradient(rgba(147, 169, 181, 0.6), rgba(147, 169, 181, 0.75)), 
+                  url('assets/event-bg.jpeg') no-repeat center center;
+      background-size: cover; /* Gambar otomatis menyesuaikan diri tanpa gepeng */
+      z-index: -1; /* Mengirim gambar ke lapisan paling belakang di bawah text/card */
+    }
+
+    /* --- KARTU PANEL ADMIN (GLASSMORPHISM) --- */
+    .admin-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 35px 25px;
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+      border: 1px solid var(--glass-border);
+      width: 90%;
+      max-width: 380px; /* Ukuran pas agar serasi di dalam background bingkai */
       box-sizing: border-box;
       text-align: center;
+      margin: 20px;
     }
+
+    .admin-header {
+      margin-bottom: 25px;
+    }
+
+    .admin-header .icon-lock {
+      font-size: 32px;
+      color: var(--navy-text);
+      opacity: 0.8;
+      margin-bottom: 5px;
+    }
+
     .admin-header h2 {
       margin: 0;
-      color: #0f172a;
       font-size: 22px;
-      font-weight: 700;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--navy-text);
     }
+
     .admin-header p {
-      margin: 4px 0 20px 0;
-      color: #64748b;
+      margin: 6px 0 0 0;
+      color: rgba(44, 62, 80, 0.75);
       font-size: 13px;
     }
+
+    /* --- FORMULIR INPUT --- */
     .admin-form-group {
-      margin-bottom: 16px;
+      margin-bottom: 18px;
       text-align: left;
     }
+
     .admin-form-group label {
       font-weight: 600;
-      font-size: 13px;
-      color: #334155;
+      font-size: 12px;
+      color: var(--navy-text);
       display: block;
       margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
+
+    /* --- TOMBOL TAB DISTRIBUSI --- */
     .admin-tabs {
       display: flex;
       gap: 8px;
+      background: rgba(255, 255, 255, 0.3);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--glass-border);
     }
+
     .tab-btn {
       flex: 1;
       padding: 10px;
-      border-radius: 10px;
-      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      border: none;
+      background: transparent;
+      color: rgba(44, 62, 80, 0.7);
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn.active {
+      background: rgba(255, 255, 255, 0.85);
+      color: var(--navy-text);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    /* --- ELEMEN INPUT & TEXTAREA --- */
+    .admin-input {
+      width: 100%;
+      padding: 12px 14px;
+      background: var(--input-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      box-sizing: border-box;
+      font-size: 14px;
+      color: var(--navy-text);
+      transition: all 0.3s ease;
+    }
+
+    .admin-input:focus {
+      border-color: rgba(44, 62, 80, 0.5);
       background: #ffffff;
-      color: #64748b;
+      outline: none;
+    }
+
+    .admin-textarea {
+      width: 100%;
+      height: 70px;
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid var(--glass-border);
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+      padding: 10px;
+      box-sizing: border-box;
+      resize: none;
+      color: var(--navy-text);
+      border-radius: 10px;
+      margin-top: 6px;
+      outline: none;
+    }
+
+    /* --- TOMBOL UTAMA GENERATE --- */
+    .admin-btn-primary {
+      width: 100%;
+      background: var(--navy-text);
+      color: #ffffff;
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(44, 62, 80, 0.15);
+      margin-top: 5px;
+    }
+
+    .admin-btn-primary:hover {
+      background: #1a252f;
+      transform: translateY(-1px);
+    }
+
+    /* --- KOTAK HASIL GENERATOR LINK --- */
+    .admin-result-box {
+      margin-top: 20px;
+      background: rgba(255, 255, 255, 0.5);
+      padding: 14px;
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      text-align: left;
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- TOMBOL AKSI KIRIM / SALIN --- */
+    .admin-btn-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
       font-weight: 600;
       font-size: 13px;
       cursor: pointer;
-    }
-    .tab-btn.active {
-      background: #f0f4ff;
-      color: #1e3a8a;
-      border: 2px solid #1e3a8a;
-    }
-    .admin-input {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #cbd5e1;
-      border-radius: 10px;
+      color: white;
+      text-decoration: none;
       box-sizing: border-box;
-      font-size: 14px;
-      outline: none;
+      transition: all 0.3s ease;
     }
-    .admin-input:focus {
-      border-color: #1e3a8a;
+
+    .wa-action { 
+      background: #2e7d32; 
+      box-shadow: 0 4px 10px rgba(46, 125, 50, 0.15);
     }
-    .admin-textarea {
+    .wa-action:hover { background: #1b5e20; }
+
+    .cetak-action { 
+      background: #546e7a; 
+      box-shadow: 0 4px 10px rgba(84, 110, 122, 0.15);
+    }
+    .cetak-action:hover { background: #37474f; }
+
+    /* --- TAMPILAN POP-UP MODAL KUSTOM (GLASSMORPHISM) --- */
+    .custom-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
-      height: 60px;
-      border: 1px solid #e2e8f0;
-      background: #f8fafc;
-      font-family: monospace;
-      font-size: 12px;
-      padding: 8px;
-      box-sizing: border-box;
-      resize: none;
-      color: #1e3a8a;
-      border-radius: 8px;
-      margin-top: 5px;
-      outline: none;
+      height: 100%;
+      background: rgba(44, 62, 80, 0.4);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
     }
-    .admin-btn-primary {
-      width: 100%;
-      background: #1e3a8a;
+
+    .custom-modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .custom-modal {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 25px;
+      width: 85%;
+      max-width: 350px;
+      text-align: center;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+      transform: scale(0.85);
+      transition: transform 0.3s ease;
+    }
+
+    .custom-modal-overlay.active .custom-modal {
+      transform: scale(1);
+    }
+
+    .modal-icon {
+      font-size: 36px;
+      margin-bottom: 12px;
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--navy-text);
+      margin-bottom: 8px;
+    }
+
+    .modal-desc {
+      font-size: 13px;
+      color: rgba(44, 62, 80, 0.8);
+      line-height: 1.4;
+      margin-bottom: 18px;
+    }
+
+    .modal-btn {
+      background: var(--navy-text);
       color: #ffffff;
       border: none;
-      padding: 13px;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(30, 58, 138, 0.2);
-    }
-    .admin-result-box {
-      margin-top: 18px;
-      background: #ffffff;
-      padding: 12px;
-      border: 1px solid #e2e8f0;
-      border-left: 4px solid #1e3a8a;
+      padding: 9px 20px;
       border-radius: 8px;
-      text-align: left;
-    }
-    .admin-btn-action {
-      width: 100%;
-      margin-top: 8px;
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
       font-weight: 600;
       font-size: 12px;
       cursor: pointer;
-      color: white;
+      transition: background 0.2s;
     }
-    .wa-action { background: #25d366; }
-    .cetak-action { background: #475569; }
+
+    .modal-btn:hover {
+      background: #1a252f;
+    }
   </style>
+
 </head>
 <body>
-
   <div class="admin-card">
     <div class="admin-header">
-      <div style="font-size: 38px; margin-bottom: 8px;">🔒</div>
-      <h2>Admin Control Panel</h2>
-      <p>URL Generator Undangan Umi & Yusup</p>
+      <div class="icon-lock">💍</div>
+      <h2>Wedding Admin Panel</h2>
+      <p>URL Generator Umi & Yusup</p>
     </div>
     
     <div class="admin-form-group">
-      <label>1. Jalur Distribusi Undangan:</label>
+      <label>1. Jalur Distribusi Undangan</label>
       <div class="admin-tabs">
         <button id="tabWA" class="tab-btn active">📲 Jalur WhatsApp</button>
-        <button id="tabCetak" class="tab-btn">🖨️ Undangan Cetak (QR)</button>
+        <button id="tabCetak" class="tab-btn">🖨️ Undangan Cetak</button>
       </div>
     </div>
 
     <div class="admin-form-group">
-      <label>2. Nama Tamu / Komunitas:</label>
-      <input type="text" id="admNama" placeholder="Contoh: Yuliana Putri" class="admin-input">
+      <label>2. Nama Tamu / Komunitas</label>
+      <input type="text" id="admNama" placeholder="Contoh: Yuliana Putri" class="admin-input" autocomplete="off">
     </div>
 
     <div id="wrapperWAInput" class="admin-form-group">
-      <label>3. Nomor Kontak WhatsApp:</label>
-      <input type="text" id="admWA" placeholder="Contoh: 081234567890" class="admin-input">
+      <label>3. Nomor Kontak WhatsApp</label>
+      <input type="text" id="admWA" placeholder="Contoh: 081234567890" class="admin-input" autocomplete="off">
     </div>
 
     <button id="btnGen" class="admin-btn-primary">Generate & Siapkan Akses</button>
 
     <div id="admHasil" class="admin-result-box" style="display:none;">
-      <strong>Link Akses Hasil Generator:</strong>
+      <label style="font-size:11px; font-weight:600;">Tautan Akses Berhasil Dibuat:</label>
       <textarea id="txtHasil" readonly class="admin-textarea"></textarea>
-      <!-- 🔥 PERBAIKAN UTAMA: Menggunakan tag <a> link langsung agar kebal blokir browser HP -->
-      <a id="btnActionEkstra" class="admin-btn-action" style="display:none; text-align:center; text-decoration:none; box-sizing:border-box;"></a>
+      <a id="btnActionEkstra" class="admin-btn-action" style="display:none; text-align:center;"></a>
     </div>
   </div>
 
+  <!-- STRUKTUR POP-UP MODAL KUSTOM (GLASSMORPHISM) -->
+  <div id="customModal" class="custom-modal-overlay">
+    <div class="custom-modal">
+      <div id="modalIcon" class="modal-icon">✨</div>
+      <div id="modalTitle" class="modal-title">Notifikasi</div>
+      <div id="modalDesc" class="modal-desc">Pesan pemberitahuan di sini.</div>
+      <button id="modalBtnClose" class="modal-btn">Dimengerti</button>
+    </div>
+  </div>
   <script>
-    // 🛡️ SECURITY CHECK: Mencegah orang asing masuk tanpa izin lewat file index.html
-    const tokenLokal = localStorage.getItem('akses_sah_lokal');
-    if (tokenLokal !== 'TOKEN_BYPASS_ADMIN') {
-      alert("Akses Terbatas! Silakan buka halaman utama dan verifikasi PIN Admin Anda terlebih dahulu.");
-      window.location.href = "index.html";
+    // Fungsi Kustom Modal untuk menggantikan alert() bawaan browser
+    function tampilkanNotifikasi(judul, deskripsi, ikon = '✨', callback = null) {
+      document.getElementById('modalIcon').innerText = ikon;
+      document.getElementById('modalTitle').innerText = judul;
+      document.getElementById('modalDesc').innerText = deskripsi;
+      
+      const modal = document.getElementById('customModal');
+      modal.classList.add('active');
+      
+      document.getElementById('modalBtnClose').onclick = () => {
+        modal.classList.remove('active');
+        if (callback) callback();
+      };
     }
 
+    // 🛡️ SECURITY CHECK: Validasi token akses lokal
+    const tokenLokal = localStorage.getItem('akses_sah_lokal');
+    if (tokenLokal !== 'TOKEN_BYPASS_ADMIN') {
+      tampilkanNotifikasi(
+        "Akses Terbatas", 
+        "Silakan buka halaman utama dan lakukan verifikasi PIN Admin Anda terlebih dahulu.", 
+        "🔒", 
+        () => { window.location.href = "index.html"; }
+      );
+    }
+
+    // Fungsi enkripsi SHA-256 untuk 4 angka nomor kontak terakhir
     async function hitungHashSHA256(teks) {
       const msgBuffer = new TextEncoder().encode(teks);
       const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -188,6 +400,7 @@
     const wrapperWAInput = document.getElementById('wrapperWAInput');
     const btnGen = document.getElementById('btnGen');
 
+    // Kontrol Tab Distribusi
     tabWA.onclick = () => {
       activeMode = "wa";
       tabWA.classList.add('active');
@@ -202,36 +415,35 @@
       wrapperWAInput.style.display = "none";
     };
 
+    // Fungsi Utama Pembuatan Tautan Undangan
     btnGen.onclick = async () => {
       const nama = document.getElementById('admNama').value.trim();
       const rawWA = document.getElementById('admWA').value.trim();
-      if (!nama) return alert("Nama tamu tidak boleh kosong!");
+      if (!nama) return tampilkanNotifikasi("Input Kosong", "Nama tamu tidak boleh dikosongkan!", "⚠️");
       
       const urlFormat = encodeURIComponent(nama).replace(/%20/g, '+');
       const btnAction = document.getElementById('btnActionEkstra');
-
-      // Ambil domain dasar secara dinamis (Otomatis mendeteksi localhost atau GitHub Pages)
       const domainAsli = window.location.origin + window.location.pathname.replace('admin.html', '');
       
       if (activeMode === "wa") {
         const angkaSaja = rawWA.replace(/\D/g, ''); 
-        if (angkaSaja.length < 4) return alert("Nomor WA harus menyertakan minimal 4 angka terakhir!");
+        if (angkaSaja.length < 4) return tampilkanNotifikasi("Nomor Tidak Valid", "Nomor WA harus menyertakan minimal 4 angka terakhir!", "📱");
         const empatAngkaTerakhir = angkaSaja.slice(-4);
         const hashWA = await hitungHashSHA256(empatAngkaTerakhir);
         
         const linkLengkap = domainAsli + "index.html?to=" + urlFormat + "&v=" + hashWA + "&type=wa";
         document.getElementById('txtHasil').value = linkLengkap;
         
-        btnAction.style.display = "block";
+        btnAction.style.display = "flex";
         btnAction.className = "admin-btn-action wa-action";
-        btnAction.innerText = "🚀 Klik Untuk Langsung Kirim Ke WhatsApp Tamu";
+        btnAction.innerText = "🚀 Kirim Undangan via WhatsApp";
         
         let nomorValid = angkaSaja;
         if (nomorValid.startsWith('0')) {
           nomorValid = "62" + nomorValid.slice(1);
         }
         
-        // 🔥 PERBAIKAN BAHASA: Format teks disesuaikan persis seperti contoh gambar Anda
+        // Template pesan undangan WhatsApp formal
         const teksPesan = "Assalamu'alaikum Warahmatullahi Wabarakatuh\n\n" +
                           "Yth. Bapak/Ibu/Saudara/i\n" +
                           "*" + nama + "*\n" +
@@ -248,30 +460,30 @@
                           "*Umi & Yusup*\n\n" +
                           "Wassalamu'alaikum Warahmatullahi Wabarakatuh";
         
-        btnAction.href = "https://wa.me/" + nomorValid + "?text=" + encodeURIComponent(teksPesan);
+        btnAction.href = "https://wa.me" + nomorValid + "?text=" + encodeURIComponent(teksPesan);
         btnAction.target = "_blank";
-      }
-        
-         else {
-        // Jalur undangan cetak kertas / QR Code
+        btnAction.onclick = null;
+      } else {
+        // Logika untuk Mode Cetak / QR Code fisik
         const linkLengkapCetak = domainAsli + "index.html?to=" + urlFormat + "&type=cetak";
         document.getElementById('txtHasil').value = linkLengkapCetak;
         
-        btnAction.style.display = "block";
+        btnAction.style.display = "flex";
         btnAction.className = "admin-btn-action cetak-action";
-        btnAction.innerText = "📋 Salin Teks Link Untuk Generator QR Code";
+        btnAction.innerText = "📋 Salin Link QR Code";
         btnAction.href = "javascript:void(0);";
         btnAction.removeAttribute("target");
         
         btnAction.onclick = () => {
           navigator.clipboard.writeText(linkLengkapCetak);
-          alert("Tautan cetak berhasil disalin!");
+          tampilkanNotifikasi("Tersalin!", "Tautan untuk cetak/QR Code berhasil disalin ke clipboard.", "🎉");
         };
       }
       
+      // Menampilkan kotak hasil dan menyalin tautan secara otomatis
       document.getElementById('admHasil').style.display = "block";
       navigator.clipboard.writeText(document.getElementById('txtHasil').value);
-      alert("Proses berhasil! Tautan lengkap otomatis disalin ke clipboard Anda.");
+      tampilkanNotifikasi("Sukses!", "Proses berhasil! Tautan lengkap otomatis disalin ke clipboard Anda.", "🎉");
     };
   </script>
 </body>
