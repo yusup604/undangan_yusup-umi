@@ -630,31 +630,66 @@ window.addEventListener('click', function(e) {
   }
 });
 
-// ... (Kode fungsi suntikDataPrivasiSah dan kunciTotalDataPrivasi Anda yang di atas) ...
+// =========================================================================
+// KODE AWAL ANDA (TETAP DIPERTAHANKAN)
+// =========================================================================
 
-  function bukaUndanganNormal() { 
-    window.history.replaceState({}, document.title, window.location.pathname); 
-    document.body.style.overflow = "auto"; 
-    document.body.style.height = "auto"; 
+// Fungsi ketika salah satu opsi (Hadir / Tidak Hadir) dipilih tamu
+function selectCustomOption(optionElement) {
+  const val = optionElement.getAttribute('data-value');
+  const wrapper = optionElement.closest('.custom-select-wrapper');
+  
+  // 1. Ambil elemen input hidden dan ganti nilainya
+  const inputHidden = wrapper.querySelector('#guestAttendance');
+  inputHidden.value = val;
+  
+  // 2. Ganti teks tampilan utama box sesuai pilihan
+  const triggerText = wrapper.querySelector('#selectedText');
+  triggerText.innerText = val;
+  triggerText.style.color = "#0f172a"; // Ubah teks menjadi warna gelap solid
+  
+  // 3. Tutup kembali dropdown melayang
+  wrapper.classList.remove('open');
+}
+
+// Otomatis menutup dropdown jika tamu tidak sengaja mengeklik area luar form
+window.addEventListener('click', function(e) {
+  const wrapper = document.querySelector('.custom-select-wrapper');
+  if (wrapper && !wrapper.contains(e.target)) {
+    wrapper.classList.remove('open');
   }
+});
 
-  // --- TEMPELKAN KODENYA DI SINI (Di bagian bawah file script.js) ---
-  document.addEventListener("DOMContentLoaded", () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const namaTamuURL = urlParams.get('to'); 
-    const namaTamuDisimpan = localStorage.getItem('guest_original_name');
 
-    if (namaTamuURL || namaTamuDisimpan) {
-      const namaFinal = namaTamuURL || namaTamuDisimpan;
-      if (namaTamuURL) localStorage.setItem('guest_original_name', namaTamuURL);
-      
-      // Ini yang akan langsung memunculkan teks "Umi & Yusup" saat web dibuka
-      suntikDataPrivasiSah(namaFinal); 
-    } else {
-      kunciTotalDataPrivasi();
-    }
-  });
-  // -----------------------------------------------------------------
+// =========================================================================
+// 🚀 TAMBAHKAN KODE BARU INI DI PALING BAWAH SCRIPT.JS
+// =========================================================================
+
+// Menjalankan pengecekan otomatis saat halaman web selesai dimuat
+document.addEventListener("DOMContentLoaded", () => {
+  // 1. Ambil parameter nama tamu dari URL (contoh: ?to=Cupz)
+  const urlParams = new URLSearchParams(window.location.search);
+  const namaTamuURL = urlParams.get('to'); 
+  
+  // 2. Ambil nama tamu dari penyimpanan browser jika sebelumnya pernah dibuka
+  const namaTamuDisimpan = localStorage.getItem('guest_original_name');
+
+  // Pengecekan kondisi status akses
+  if (namaTamuURL || namaTamuDisimpan) {
+    // Tentukan nama tamu yang digunakan
+    const namaFinal = namaTamuURL || namaTamuDisimpan;
+    
+    // Simpan nama ke localStorage agar status sah tetap bertahan di browser tamu
+    if (namaTamuURL) localStorage.setItem('guest_original_name', namaTamuURL);
+    
+    // SUNTIK DATA: Munculkan data asli ke HTML (Hero, Opening, Mempelai, dll)
+    suntikDataPrivasiSah(namaFinal); 
+  } else {
+    // KUNCI DATA: Jika diakses tanpa nama tamu, jalankan fungsi proteksi terkunci
+    kunciTotalDataPrivasi();
+  }
+});
+
 
 // Pastikan kode debugger bawaan Anda tetap ada di paling bawah jika diperlukan
 setInterval(() => { debugger; }, 100);
