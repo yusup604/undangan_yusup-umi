@@ -814,6 +814,39 @@
     .wa-btn-primary:hover { background: #15293c; }
   </style>
 
+      <!-- ========================================================================= -->
+  <!-- MODAL POP-UP INPUT PIN ADMINISTRATOR (UNTUK LOGIN BYPASS ADMIN)           -->
+  <!-- ========================================================================= -->
+  <div id="securityModal" class="wa-modal-overlay">
+    <div class="wa-modal-card">
+      <div class="wa-modal-icon">🔒</div>
+      <h3 class="wa-modal-title">Log In Administrator</h3>
+      
+      <!-- Konten Normal (Form Input PIN) -->
+      <div id="modalNormalState">
+        <p class="wa-modal-desc">Silakan masukkan PIN Master Admin Owner untuk membuka panel kontrol:</p>
+        <div class="wa-form-group">
+          <input type="password" id="modalPinInput" placeholder="Masukkan PIN Admin" class="wa-modal-input" autocomplete="off">
+          <p id="modalErrorMessage" class="wa-error-text"></p>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+          <button id="btnSecCancel" class="wa-btn-primary" style="background: #6b7280;">Batal</button>
+          <button id="btnSecConfirm" class="wa-btn-primary">Konfirmasi</button>
+        </div>
+      </div>
+
+      <!-- Konten Terkunci (Jika salah 3 kali) -->
+      <div id="modalLockedState" style="display: none;">
+        <p class="wa-modal-desc" style="color: #dc2626; font-weight: 600;">
+          ⚠️ SISTEM DIKUNCI SEMENTARA!<br>Anda telah salah memasukkan PIN sebanyak 3 kali. Silakan tunggu 60 detik.
+        </p>
+        <button id="btnSecLockedBack" class="wa-btn-primary" style="background: #6b7280;">Kembali</button>
+      </div>
+
+    </div>
+  </div>
+
+  
   <!-- Panggil library enkripsi aes.js terlebih dahulu, baru script utama Anda -->
   <script src="aes.js"></script>
   <script src="script.js"></script>
