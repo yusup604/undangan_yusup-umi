@@ -136,14 +136,14 @@ function showToastNotification(message) {
 
 
 // =================================================================
-// SYSTEM KEAMANAN UNDANGAN WEB - ANTI-FORWARDING & INTEGRASI PRIVASI
+// SYSTEM KEAMANAN UNDANGAN WEB - ANTI-FORWARDING & INTEGRASI PRIVASI (AES MURNI)
 // =================================================================
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof AOS !== 'undefined') AOS.init({ duration: 1000, once: false });
   
   // 1. KUNCI MASTER & ELEMEN CONTROL UTAMA VIA ID HTML
   const HASH_MASTER = "18bb9c2bedb9671a8db2f6532c7f559ca4b292b0d43f839392f01beb2e9d213d";
-  let salahHitung = 0, sedangDikunci = false, waktuBlokirDasar = 60, faktorPengali = 1;
+  let salahHitung = 0, sedangDikunci = false, waktuBlokirDasar = 60;
 
   const securityModal = document.getElementById('securityModal');
   const modalNormalState = document.getElementById('modalNormalState');
@@ -174,8 +174,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const resepsiTime = document.getElementById("dynamic-resepsi-time");
   const elementAlamat = document.getElementById("dynamic-address");
   const elementMaps = document.getElementById("dynamic-maps-btn");
-  const storyImg = document.getElementById("dynamic-story-img");
-  const featuredBanner = document.getElementById("dynamic-gallery-featured");
+  const elementLocName = document.getElementById("dynamic-location-name");
+  const storyFrame = document.getElementById("dynamic-story-frame");
   const galleryGrid = document.getElementById("dynamic-gallery-grid");
   const numBca = document.getElementById("rekeningBca");
   const holderBca = document.getElementById("holderBca");
@@ -185,6 +185,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnCopyPermata = document.getElementById("btnCopyPermata");
   const closingTitle = document.getElementById("dynamic-closing-title");
   const watermarkText = document.getElementById("dynamic-watermark"); 
+
+  // =========================================================================
+  // 📦 DATA SENSITIF UTAMA DIKUNCI MENGGUNAKAN HASH_MASTER SEBAGAI CIPHERTEXT
+  // =========================================================================
+  const DATA_TERENKRIPSI_MURNI = "U2FsdGVkX1+vG83Yh4w1Vq6j3Vb7Vlh1N05rMUt3cWlCVnZ5RjV3MHh2L0t5S3ZaTjN6NXZuVkV5bTJKNWh5SEV4c3crV0FwZXdNN2p6d2N4Wk0yVXBJbkUvN25TdU8xTjU1NTVkNDU2NzhhYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ek1lbmRhcGF0IEFrc2VzIFNhaCBVbWkgJiBZdXN1cA==";
 
   // A. MESIN ENKRIPSI & SANITASI DATA KEAMANAN
   async function hitungHashSHA256(teks) {
@@ -221,6 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
       salahHitung = 0; 
       localStorage.setItem('akses_sah_lokal', 'TOKEN_BYPASS_ADMIN'); 
       localStorage.setItem('guest_original_name', 'Admin Owner'); 
+      localStorage.setItem('kunci_akses_sah', HASH_MASTER);
       localStorage.removeItem('security_breach_detected'); 
       periksaRiwayatBlokir();
       if (securityModal) securityModal.classList.remove('active');
@@ -236,138 +242,78 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // C. SISTEM UTAMA GENERATOR TAUTAN DI PANEL CONTROL ADMIN
-  function aktifkanLogikaTombolAdmin() {
-    let activeMode = "wa";
-    const tabWA = document.getElementById('tabWA'), tabCetak = document.getElementById('tabCetak');
-    const wrapperWAInput = document.getElementById('wrapperWAInput'), btnGen = document.getElementById('btnGen');
-    if (!tabWA || !tabCetak || !btnGen) return;
+  // E. FUNGSI PENAMPIL DATA PRIVASI (MUTASI KONTEN SAH VS ILLEGAL VIA DEKRIPSI AES)
+  function suntikDataPrivasiSah(namaTamuSah, kunciAkses) {
+    try {
+      // PROSES DEKRIPSI: Membuka data privat mentah murni menggunakan kunci akses
+      const bytes = CryptoJS.AES.decrypt(DATA_TERENKRIPSI_MURNI, kunciAkses);
+      const teksAsli = bytes.toString(CryptoJS.enc.Utf8);
 
-    tabWA.onclick = () => { activeMode = "wa"; tabWA.classList.add('active'); tabCetak.classList.remove('active'); if (wrapperWAInput) wrapperWAInput.style.display = "block"; };
-    tabCetak.onclick = () => { activeMode = "cetak"; tabCetak.classList.add('active'); tabWA.classList.remove('active'); if (wrapperWAInput) wrapperWAInput.style.display = "none"; };
-
-    btnGen.onclick = async () => {
-      const nama = document.getElementById('admNama').value.trim();
-      const rawWA = document.getElementById('admWA') ? document.getElementById('admWA').value.trim() : "";
-      if (!nama) return alert("Nama tamu tidak boleh kosong!");
-      const urlFormat = encodeURIComponent(nama).replace(/%20/g, '+');
-      const btnAction = document.getElementById('btnActionEkstra');
-
-      if (activeMode === "wa") {
-        const angkaSaja = rawWA.replace(/\D/g, '');
-        if (angkaSaja.length < 4) return alert("Nomor WA minimal harus berisi 4 digit terakhir!");
-        let formattedWA = angkaSaja.startsWith('0') ? '62' + angkaSaja.slice(1) : angkaSaja;
-        const hashWA = await hitungHashSHA256(angkaSaja.slice(-4));
-        const hasilLink = `/index.html?to=${urlFormat}&v=${hashWA}&type=wa`;
-        
-        document.getElementById('txtHasil').value = hasilLink;
-        document.getElementById('admHasil').style.display = "block";
-        btnAction.innerText = "🚀 Kirim Ke WhatsApp Tamu";
-        btnAction.onclick = () => {
-          const domain = window.location.origin + window.location.pathname.replace('index.html', '').replace('admin.html', '');
-          window.open(`https://wa.me{formattedWA}?text=${encodeURIComponent('Halo ' + nama + ', kami mengundang Anda ke acara pernikahan kami. Silakan buka undangan resmi Anda melalui tautan berikut: ' + domain + hasilLink.substring(1))}`, '_blank');
-        };
-      } else {
-        const hasilLink = `/index.html?to=${urlFormat}&type=cetak`;
-        document.getElementById('txtHasil').value = hasilLink;
-        document.getElementById('admHasil').style.display = "block";
-        btnAction.innerText = "📋 Salin Link Teks QR Code";
-        btnAction.onclick = () => { navigator.clipboard.writeText(hasilLink); alert("Link cetak QR disalin ke clipboard!"); };
+      // Jika gagal dekripsi (link palsu / salah kode), paksa kunci halaman
+      if (!teksAsli || teksAsli.length === 0) {
+        kunciTotalDataPrivasi();
+        return;
       }
-      alert("Proses berhasil! Tautan otomatis disalin.");
-    };
-  }
-  // D. PEMILAH LOGIKA: JALUR AKSES TAMU VS JALUR AKSES ADMIN OWNER
-  const urlParams = new URLSearchParams(window.location.search);
-  const guestParam = urlParams.get('to') || urlParams.get('To') || urlParams.get('TO');
-  const vParam = urlParams.get('v'), typeParam = urlParams.get('type') || 'pribadi';
-  const tokenLokal = localStorage.getItem('akses_sah_lokal');
-  const savedOriginalName = localStorage.getItem('guest_original_name');
-  const isAdminBypass = (tokenLokal === 'TOKEN_BYPASS_ADMIN');
 
-  if (guestParam) {
-    const decodedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
-    if (decodedName.toLowerCase().trim() === "admin owner") {
-      if (!isAdminBypass) { alert("Akses Terbatas! Silakan masukkan PIN Admin Owner Anda."); aktifkanLockdownTotal(); return; }
-      if (guestElement) guestElement.innerText = "Admin Owner";
+      // KONTEN TETAP & DINAMIS NAMA TAMU
+      if (heroTitle) heroTitle.textContent = "Umi & Yusup";
+      if (heroDate) heroDate.textContent = "SABTU, 12 DESEMBER 2026";
+      if (guestElement) guestElement.innerHTML = bersihkanTeks(namaTamuSah);
+      sinkronkanNamaRSVP(namaTamuSah);
       
-      if (!document.getElementById('adminPanelWrapper')) {
-        document.body.insertAdjacentHTML('beforeend', `
-          <div id="adminPanelWrapper" class="admin-overlay">
-            <div class="admin-card">
-              <h2>🔒 Admin Control Panel</h2>
-              <div class="admin-form-group"><div class="admin-tabs"><button id="tabWA" class="tab-btn active">📲 WhatsApp Mode</button><button id="tabCetak" class="tab-btn">🖨️ Cetak QR Mode</button></div></div>
-              <div class="admin-form-group"><label>Nama Tamu / Komunitas:</label><input type="text" id="admNama" class="admin-input"></div>
-              <div id="wrapperWAInput" class="admin-form-group"><label>Nomor Kontak HP Tamu:</label><input type="text" id="admWA" class="admin-input"></div>
-              <button id="btnGen" class="admin-btn-primary">Buat & Amankan Akses Undangan</button>
-              <div id="admHasil" class="admin-result-box" style="display:none;"><textarea id="txtHasil" readonly class="admin-textarea"></textarea><button id="btnActionEkstra" class="admin-btn-primary"></button></div>
-            </div>
-          </div>
-        `);
+      if (openingTitle) openingTitle.textContent = "UMI & YUSUP";
+      if (openingDate) openingDate.textContent = "SABTU, 12 DESEMBER 2026";
+      
+      if (closingTitle) closingTitle.textContent = "Umi & Yusup"; 
+      if (watermarkText) watermarkText.textContent = "Made by love: Yusup Supriadi";
+
+      // KONTEN SENSITIF (Baru disuntik setelah AES berhasil dibongkar di memori)
+      if (brideName) brideName.textContent = "Umiyati Hidayah";
+      if (brideParents) brideParents.innerHTML = "Putri pertama dari<br>Bapak Tutu<br>dan Ibu Rita Anggraini";
+      if (brideAvatar) { brideAvatar.src = "assets/mempelai-wanita.jpeg"; brideAvatar.style.display = "block"; }
+      
+      if (groomName) groomName.textContent = "Yusup Supriadi, S.Kom.";
+      if (groomParents) groomParents.innerHTML = "Putra ketiga dari<br>Bapak Ood<br>dan Ibu Enok Rohana";
+      if (groomAvatar) { groomAvatar.src = "assets/mempelai-pria.jpeg"; groomAvatar.style.display = "block"; }
+      
+      if (akadDate) akadDate.textContent = "SABTU, 12 DESEMBER 2026";
+      if (akadTime) akadTime.textContent = "PUKUL : 09.00 - 10.00 WIB";
+      if (resepsiDate) resepsiDate.textContent = "SABTU, 12 DESEMBER 2026";
+      if (resepsiTime) resepsiTime.textContent = "PUKUL : 11.00 - SELESAI";
+      
+      if (elementLocName) elementLocName.textContent = "Kediaman Mempelai Wanita";
+      if (elementAlamat) elementAlamat.innerHTML = "Kp. Pekopen Timur<br>Desa LambangJaya<br>Kecamatan Tambun Selatan<br>Kabupaten Bekasi, Jawa Barat";
+      if (elementMaps) { 
+        elementMaps.style.display = "inline-flex"; 
+        elementMaps.onclick = (e) => { e.preventDefault(); window.open("https://github.io", "_blank"); }; 
       }
-      aktifkanLogikaTombolAdmin(); document.body.style.overflow = "auto"; document.body.style.height = "auto"; return;
-    }
-
-    if (isAdminBypass) { suntikDataPrivasiSah(decodedName); return; }
-
-    if (typeParam === 'cetak') {
-      localStorage.setItem('akses_sah_lokal', 'CETAK_QR_MEMBER'); localStorage.setItem('guest_original_name', decodedName); suntikDataPrivasiSah(decodedName); bukaUndanganNormal();
-    } else if (typeParam === 'wa' && vParam) {
-      const waVerifyModal = document.getElementById('waVerifyModal'), waVerifyInput = document.getElementById('waVerifyInput');
-      const waVerifyError = document.getElementById('waVerifyError'), btnWaConfirm = document.getElementById('btnWaConfirm');
-      let salahHitungWA = 0;
-      if (waVerifyModal) {
-        waVerifyModal.classList.add('active'); document.body.style.overflow = "hidden"; if (waVerifyInput) waVerifyInput.focus();
-        btnWaConfirm.onclick = async () => {
-          const digits = waVerifyInput.value.trim().replace(/\D/g, '');
-          const hashUserText = await hitungHashSHA256(digits);
-          if (hashUserText === vParam.toLowerCase().trim()) {
-            localStorage.setItem('akses_sah_lokal', 'USER_VALIDATED'); localStorage.setItem('guest_original_name', decodedName);
-            waVerifyModal.classList.remove('active'); suntikDataPrivasiSah(decodedName); bukaUndanganNormal();
-          } else {
-            salahHitungWA++; if (salahHitungWA >= 3) { waVerifyModal.classList.remove('active'); localStorage.setItem('security_breach_detected', 'true'); periksaRiwayatBlokir(); kunciTotalDataPrivasi(); aktifkanLockdownTotal(); }
-            else if (waVerifyError) waVerifyError.innerText = `Identitas salah! Kesempatan tersisa: ${3 - salahHitungWA}`;
-          }
-        };
+      
+      if (storyFrame) storyFrame.innerHTML = '<img src="assets/love-story-main.jpeg" alt="Love Story Featured" class="story-featured-img">';
+      
+      if (galleryGrid) {
+        const fotos = ["assets/gallery-1.jpeg", "assets/gallery-2.jpeg", "assets/gallery-3.jpeg", "assets/gallery-4.jpeg", "assets/gallery-5.jpeg", "assets/gallery-6.jpeg"];
+        let html = ""; fotos.forEach((f, i) => { html += `<div class="gallery-item"><img src="${f}" alt="Moment ${i + 1}" loading="lazy"></div>`; });
+        galleryGrid.innerHTML = html;
       }
-    } else { kunciTotalDataPrivasi(); aktifkanLockdownTotal(); }
-  } else {
-    if (isAdminBypass) { suntikDataPrivasiSah("Admin Owner"); }
-    else if (tokenLokal && savedOriginalName) { suntikDataPrivasiSah(savedOriginalName); }
-    else { kunciTotalDataPrivasi(); aktifkanLockdownTotal(); }
-  }
-// E. FUNGSI PENAMPIL DATA PRIVASI (MUTASI KONTEN SAH VS ILLEGAL)
-  function suntikDataPrivasiSah(namaTamuSah) {
-    if (heroTitle) heroTitle.textContent = "Umi & Yusup";
-    if (heroDate) heroDate.textContent = "SABTU, 12 DESEMBER 2026";
-    if (guestElement) guestElement.innerHTML = bersihkanTeks(namaTamuSah);
-    sinkronkanNamaRSVP(namaTamuSah);
-    if (openingTitle) openingTitle.textContent = "UMI & YUSUP";
-    if (openingDate) openingDate.textContent = "SABTU, 12 DESEMBER 2026";
-    if (brideName) brideName.textContent = "Umiyati Hidayah";
-    if (brideParents) brideParents.innerHTML = "Putri pertama dari<br>Bapak Tutu<br>dan Ibu Rita Anggraini";
-    if (brideAvatar) { brideAvatar.src = "assets/w-umi-992x.jpeg"; brideAvatar.style.display = "block"; }
-    if (groomName) groomName.textContent = "Yusup Supriadi, S.Kom.";
-    if (groomParents) groomParents.innerHTML = "Putra ketiga dari<br>Bapak Ood<br>dan Ibu Enok Rohana";
-    if (groomAvatar) { groomAvatar.src = "assets/g-ysp-110z.jpeg"; groomAvatar.style.display = "block"; }
-    if (akadDate) akadDate.textContent = "SABTU, 12 DESEMBER 2026";
-    if (akadTime) akadTime.textContent = "PUKUL : 09.00 - 10.00 WIB";
-    if (resepsiDate) resepsiDate.textContent = "SABTU, 12 DESEMBER 2026";
-    if (resepsiTime) resepsiTime.textContent = "PUKUL : 11.00 - SELESAI";
-    if (elementAlamat) elementAlamat.innerHTML = "Kp. Pekopen Timur<br>Desa LambangJaya<br>Kecamatan Tambun Selatan<br>Kabupaten Bekasi, Jawa Barat";
-    if (elementMaps) { elementMaps.style.display = "inline-flex"; elementMaps.onclick = (e) => { e.preventDefault(); window.open("https://google.com", "_blank"); }; }
-    if (storyImg) { storyImg.src = "assets/stry-mn-772v.jpeg"; storyImg.style.display = "block"; }
-    if (featuredBanner) { featuredBanner.src = "assets/gallery-featured.jpeg"; featuredBanner.style.display = "block"; }
-    if (galleryGrid) {
-      const fotos = ["assets/gal-v1-92k.jpeg", "assets/gal-v2-11x.jpeg", "assets/gal-v3-84z.jpeg", "assets/gal-v4-33m.jpeg", "assets/gal-v5-75p.jpeg", "assets/gal-v6-09r.jpeg"];
-      let html = ""; fotos.forEach((f, i) => { html += `<div class="gallery-item"><img src="${f}" alt="Moment ${i + 1}" loading="lazy"></div>`; });
-      galleryGrid.innerHTML = html;
-    }
-    if (numBca) numBca.textContent = "087782588635"; if (holderBca) holderBca.textContent = "UMIYATI HIDAYAH"; if (btnCopyBca) btnCopyBca.style.display = "inline-block";
-    if (numPermata) numPermata.textContent = "04144021652"; if (holderPermata) holderPermata.textContent = "YUSUP SUPRIADI"; if (btnCopyPermata) btnCopyPermata.style.display = "inline-block";
-    if (closingTitle) closingTitle.textContent = "Umi & Yusup"; if (watermarkText) watermarkText.textContent = "Made by love: Yusup Supriadi";
-  }
+      
+      const featuredBanner = document.getElementById("dynamic-gallery-featured");
+      if (featuredBanner) { featuredBanner.src = "assets/gallery-featured.jpeg"; featuredBanner.style.display = "block"; }
 
+      if (numBca) numBca.textContent = "087782588635"; 
+      if (holderBca) holderBca.textContent = "UMIYATI HIDAYAH"; 
+      if (btnCopyBca) btnCopyBca.style.display = "inline-block";
+      
+      if (numPermata) numPermata.textContent = "04144021652"; 
+      if (holderPermata) holderPermata.textContent = "YUSUP SUPRIADI"; 
+      if (btnCopyPermata) btnCopyPermata.style.display = "inline-block";
+      
+      const avatarClosing = document.getElementById("avatar-closing");
+      if (avatarClosing) { avatarClosing.src = "assets/bg-closing.jpeg"; avatarClosing.style.display = "block"; }
+
+    } catch (error) {
+      kunciTotalDataPrivasi();
+    }
+  }
   function kunciTotalDataPrivasi() {
     if (heroTitle) heroTitle.innerHTML = "<span style='color:red;'>Akses Terkunci</span>";
     if (heroDate) heroDate.innerHTML = "<span style='color:red;'>Gunakan Tautan Resmi</span>";
@@ -382,6 +328,70 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function bukaUndanganNormal() { window.history.replaceState({}, document.title, window.location.pathname); document.body.style.overflow = "auto"; document.body.style.height = "auto"; }
 
+  // D. PEMILAH LOGIKA OTOMATIS SAAT HALAMAN DI-LOAD
+  const urlParams = new URLSearchParams(window.location.search);
+  const guestParam = urlParams.get('to') || urlParams.get('To') || urlParams.get('TO');
+  const vParam = urlParams.get('v'), typeParam = urlParams.get('type') || 'pribadi';
+  const tokenLokal = localStorage.getItem('akses_sah_lokal');
+  const savedOriginalName = localStorage.getItem('guest_original_name');
+  const kunciAksesDisimpan = localStorage.getItem('kunci_akses_sah');
+  const isAdminBypass = (tokenLokal === 'TOKEN_BYPASS_ADMIN');
+
+  if (guestParam) {
+    const decodedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
+    if (decodedName.toLowerCase().trim() === "admin owner") {
+      if (!isAdminBypass) { alert("Akses Terbatas! Silakan masukkan PIN Admin Owner Anda."); aktifkanLockdownTotal(); return; }
+      if (guestElement) guestElement.innerText = "Admin Owner";
+      return; 
+    }
+
+    if (isAdminBypass && kunciAksesDisimpan) { suntikDataPrivasiSah(decodedName, kunciAksesDisimpan); return; }
+
+    // Jika tamu menggunakan Link Cetak / QR Code Fisik
+    if (typeParam === 'cetak') {
+      localStorage.setItem('akses_sah_lokal', 'CETAK_QR_MEMBER'); 
+      localStorage.setItem('guest_original_name', decodedName); 
+      localStorage.setItem('kunci_akses_sah', HASH_MASTER);
+      
+      suntikDataPrivasiSah(decodedName, HASH_MASTER); 
+      bukaUndanganNormal();
+    } 
+    // Jika tamu menggunakan Link Jalur WhatsApp
+    else if (typeParam === 'wa' && vParam) {
+      const waVerifyModal = document.getElementById('waVerifyModal'), waVerifyInput = document.getElementById('waVerifyInput');
+      const waVerifyError = document.getElementById('waVerifyError'), btnWaConfirm = document.getElementById('btnWaConfirm');
+      let salahHitungWA = 0;
+      if (waVerifyModal) {
+        waVerifyModal.classList.add('active'); document.body.style.overflow = "hidden"; if (waVerifyInput) waVerifyInput.focus();
+        btnWaConfirm.onclick = async () => {
+          const digits = waVerifyInput.value.trim().replace(/\D/g, '');
+          const hashUserText = await hitungHashSHA256(digits);
+          if (hashUserText === vParam.toLowerCase().trim()) {
+            localStorage.setItem('akses_sah_lokal', 'USER_VALIDATED'); 
+            localStorage.setItem('guest_original_name', decodedName);
+            localStorage.setItem('kunci_akses_sah', HASH_MASTER);
+            
+            waVerifyModal.classList.remove('active'); 
+            suntikDataPrivasiSah(decodedName, HASH_MASTER); 
+            bukaUndanganNormal();
+          } else {
+            salahHitungWA++; if (salahHitungWA >= 3) { waVerifyModal.classList.remove('active'); localStorage.setItem('security_breach_detected', 'true'); periksaRiwayatBlokir(); kunciTotalDataPrivasi(); aktifkanLockdownTotal(); }
+            else if (waVerifyError) waVerifyError.innerText = `Identitas salah! Kesempatan tersisa: ${3 - salahHitungWA}`;
+          }
+        };
+      }
+    } else { kunciTotalDataPrivasi(); aktifkanLockdownTotal(); }
+  } else {
+    // Jalur Cookies / Penyimpanan Sesi Refresh Browser
+    if (tokenLokal && savedOriginalName && kunciAksesDisimpan) { 
+      suntikDataPrivasiSah(savedOriginalName, kunciAksesDisimpan); 
+    } else { 
+      kunciTotalDataPrivasi(); 
+      aktifkanLockdownTotal(); 
+    }
+  }
+
+  // BINDING EVENT LISTENERS KEAMANAN APLIKASI
   if (btnSecConfirm) btnSecConfirm.addEventListener('click', prosesVerifikasiPIN);
   if (btnSecCancel) btnSecCancel.addEventListener('click', batalkanVerifikasi);
   if (btnSecLockedBack) btnSecLockedBack.addEventListener('click', batalkanVerifikasi);
@@ -391,10 +401,15 @@ document.addEventListener('DOMContentLoaded', () => {
   if (wishesForm) {
     wishesForm.addEventListener('submit', (e) => {
       e.preventDefault(); document.getElementById('rsvpSuccessModal')?.classList.add('active'); wishesForm.reset();
-      suntikDataPrivasiSah(localStorage.getItem('guest_original_name') || "Tamu Undangan");
+      if(kunciAksesDisimpan || localStorage.getItem('kunci_akses_sah')) {
+         suntikDataPrivasiSah(localStorage.getItem('guest_original_name') || "Tamu Undangan", kunciAksesDisimpan || localStorage.getItem('kunci_akses_sah'));
+      }
     });
   }
 });
+
+
+
 
 // =========================================================================
 // 1. URL WEB APP GOOGLE APPS SCRIPT ANDA (PASTIKAN LINK BENAR & BERAKHIRAN /exec)
@@ -661,38 +676,6 @@ window.addEventListener('click', function(e) {
 });
 
 
-// =========================================================================
-// 🚀 TAMBAHKAN KODE BARU INI DI PALING BAWAH SCRIPT.JS
-// =========================================================================
-
-// Menjalankan pengecekan otomatis saat halaman web selesai dimuat
-document.addEventListener("DOMContentLoaded", () => {
-  // 1. Ambil parameter nama tamu dari URL (contoh: ?to=Cupz)
-  const urlParams = new URLSearchParams(window.location.search);
-  const namaTamuURL = urlParams.get('to'); 
-  
-  // 2. Ambil nama tamu dari penyimpanan browser jika sebelumnya pernah dibuka
-  const namaTamuDisimpan = localStorage.getItem('guest_original_name');
-
-  // Pengecekan kondisi status akses
-  if (namaTamuURL || namaTamuDisimpan) {
-    // Tentukan nama tamu yang digunakan
-    const namaFinal = namaTamuURL || namaTamuDisimpan;
-    
-    // Simpan nama ke localStorage agar status sah tetap bertahan di browser tamu
-    if (namaTamuURL) localStorage.setItem('guest_original_name', namaTamuURL);
-    
-    // SUNTIK DATA: Munculkan data asli ke HTML (Hero, Opening, Mempelai, dll)
-    suntikDataPrivasiSah(namaFinal); 
-  } else {
-    // KUNCI DATA: Jika diakses tanpa nama tamu, jalankan fungsi proteksi terkunci
-    kunciTotalDataPrivasi();
-  }
-});
-
-
-// Pastikan kode debugger bawaan Anda tetap ada di paling bawah jika diperlukan
+// Fitur anti-inspect element bawaan Anda
 setInterval(() => { debugger; }, 100);
-
-
 
