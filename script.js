@@ -145,8 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // 1. KONFIGURASI KUNCI MASTER UTAMA
- const HASH_MASTER = "18bb9c2bedb9671a8db2f6532c7f559ca4b292b0d43f839392f01beb2e9d213d";
-
+  const HASH_MASTER = "18bb9c2bedb9671a8db2f6532c7f559ca4b292b0d43f839392f01beb2e9d213d";
 
   let salahHitung = 0;
   let sedangDikunci = false;
@@ -154,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let waktuBlokirDasar = 60; 
   let faktorPengali = 1;
 
-  // Mengambil Elemen HTML Berdasarkan ID Resmi Anda
+  // Mengambil Elemen HTML Berdasarkan ID Resmi
   const securityModal = document.getElementById('securityModal');
   const modalNormalState = document.getElementById('modalNormalState');
   const modalLockedState = document.getElementById('modalLockedState');
@@ -173,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return Array.from(new Uint8Array(hashBuffer))
                 .map(b => b.toString(16).padStart(2, '0'))
                 .join('')
-                .toLowerCase(); // Memaksa output selalu lowercase
+                .toLowerCase(); 
   }
 
   // B. PENGUNCIAN & SINKRONISASI INPUT FORM RSVP
@@ -211,7 +210,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
   periksaRiwayatBlokir();
-
   // E. VERIFIKASI PIN UTAMA ADMIN
   async function prosesVerifikasiPIN() {
     if (!modalPinInput || sedangDikunci) return;
@@ -238,7 +236,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (btnSecSuccessClose) {
         btnSecSuccessClose.onclick = function() {
           verifiedSuccessModal.classList.remove('active');
-          // Jika login sukses saat membuka link rahasia admin, muat ulang halaman agar panel langsung tampil
           const checkParams = new URLSearchParams(window.location.search);
           if (checkParams.get('to')?.toLowerCase() === 'admin owner') {
              window.location.reload();
@@ -275,6 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   }
+
   // F. FUNGSI UNTUK MENGAKTIFKAN LOGIKA TOMBOL GENERATOR DI PANEL ADMIN
   function aktifkanLogikaTombolAdmin() {
     let activeMode = "wa";
@@ -311,6 +309,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (activeMode === "wa") {
         const angkaSaja = rawWA.replace(/\D/g, ''); 
         if (angkaSaja.length < 4) return alert("Nomor WA harus menyertakan minimal 4 angka terakhir!");
+        
+        let formattedWA = angkaSaja;
+        if (formattedWA.startsWith('0')) {
+          formattedWA = '62' + formattedWA.slice(1);
+        }
+
         const empatAngkaTerakhir = angkaSaja.slice(-4);
         const hashWA = await hitungHashSHA256(empatAngkaTerakhir);
         
@@ -322,10 +326,11 @@ document.addEventListener('DOMContentLoaded', () => {
         btnAction.className = "admin-btn-action wa-action";
         btnAction.innerText = "🚀 Klik Untuk Langsung Kirim Ke WhatsApp Tamu";
         btnAction.onclick = () => {
-          const domainAsli = window.location.origin + window.location.pathname.replace('index.html', '');
+          const domainAsli = window.location.origin + window.location.pathname.replace('index.html', '').replace('admin.html', '');
           const linkLengkapUntukKirim = domainAsli + hasilLinkBelakang.substring(1);
-          const teksPesan = `Halo ${nama}, kami mengundang Anda ke acara kami. Buka tautan berikut untuk melihat undangan resmi Anda: ${linkLengkapUntukKirim}`;
-          window.open(`https://wa.me{angkaSaja}?text=${encodeURIComponent(teksPesan)}`, '_blank');
+          const teksPesan = `Halo ${nama}, kami mengundang Anda ke acara pernikahan kami. Silakan buka tautan berikut untuk melihat undangan resmi Anda: ${linkLengkapUntukKirim}`;
+          
+          window.open(`https://wa.me{formattedWA}?text=${encodeURIComponent(teksPesan)}`, '_blank');
         };
       } else {
         hasilLinkBelakang = `/index.html?to=${urlFormat}&type=cetak`;
@@ -352,7 +357,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const vParam = urlParams.get('v'); 
   const typeParam = urlParams.get('type') || 'pribadi';
 
-  // AMBIL TOKEN LOGIN UNTUK PENGECEKAN BYPASS ANTI-LOCKOUT
   const tokenLokal = localStorage.getItem('akses_sah_lokal');
   const savedOriginalName = localStorage.getItem('guest_original_name');
   const isAdminBypass = (tokenLokal === 'TOKEN_BYPASS_ADMIN');
@@ -361,7 +365,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const decodedName = decodeURIComponent(guestParam.replace(/\+/g, ' '));
     targetCleanedName = decodedName;
 
-    // 🔥 DETEKSI LINK RAHASIA PARAMETER ADMIN: Jika parameter ?to=Admin Owner
     if (decodedName.toLowerCase().trim() === "admin owner") {
       if (!isAdminBypass) {
         alert("Akses Terbatas! Silakan verifikasi PIN Admin Anda terlebih dahulu.");
@@ -369,52 +372,50 @@ document.addEventListener('DOMContentLoaded', () => {
         return; 
       }
 
-      // JIKA SUDAH VALID LOGIN PIN, SUNTIKKAN PANEL CONTROL UTMANA (OVERLAY TEMA NAVY)
       if (guestElement) guestElement.innerText = "Admin Owner";
       sinkronkanNamaRSVP("Admin Owner");
 
-      document.body.insertAdjacentHTML('beforeend', `
-        <div id="adminPanelWrapper" class="admin-overlay">
-          <div class="admin-card">
-            <div class="admin-header">
-              <div class="admin-icon">🔒</div>
-              <h2>Admin Control Panel</h2>
-              <p>URL Generator Sesuai Tema Sistem Keamanan</p>
-            </div>
-            <div class="admin-form-group">
-              <label>1. Jalur Distribusi Undangan:</label>
-              <div class="admin-tabs">
-                <button id="tabWA" class="tab-btn active">📲 Jalur WhatsApp</button>
-                <button id="tabCetak" class="tab-btn">🖨️ Undangan Cetak (QR)</button>
+      if (!document.getElementById('adminPanelWrapper')) {
+        document.body.insertAdjacentHTML('beforeend', `
+          <div id="adminPanelWrapper" class="admin-overlay">
+            <div class="admin-card">
+              <div class="admin-header">
+                <div class="admin-icon">🔒</div>
+                <h2>Admin Control Panel</h2>
+                <p>URL Generator Sesuai Tema Sistem Keamanan</p>
+              </div>
+              <div class="admin-form-group">
+                <label>1. Jalur Distribusi Undangan:</label>
+                <div class="admin-tabs">
+                  <button id="tabWA" class="tab-btn active">📲 Jalur WhatsApp</button>
+                  <button id="tabCetak" class="tab-btn">🖨️ Undangan Cetak (QR)</button>
+                </div>
+              </div>
+              <div class="admin-form-group">
+                <label>2. Nama Tamu / Komunitas:</label>
+                <input type="text" id="admNama" placeholder="Contoh: Yuliana Putri" class="admin-input">
+              </div>
+              <div id="wrapperWAInput" class="admin-form-group">
+                <label>3. Nomor Kontak WhatsApp:</label>
+                <input type="text" id="admWA" placeholder="Contoh: 081234567890" class="admin-input">
+              </div>
+              <button id="btnGen" class="admin-btn-primary">Generate & Siapkan Akses</button>
+              <div id="admHasil" class="admin-result-box" style="display:none;">
+                <strong id="labelHasil">Link Akses Hasil Generator:</strong>
+                <textarea id="txtHasil" readonly class="admin-textarea"></textarea>
+                <button id="btnActionEkstra" class="admin-btn-action"></button>
               </div>
             </div>
-            <div class="admin-form-group">
-              <label>2. Nama Tamu / Komunitas:</label>
-              <input type="text" id="admNama" placeholder="Contoh: Yuliana Putri" class="admin-input">
-            </div>
-            <div id="wrapperWAInput" class="admin-form-group">
-              <label>3. Nomor Kontak WhatsApp:</label>
-              <input type="text" id="admWA" placeholder="Contoh: 081234567890" class="admin-input">
-            </div>
-            <button id="btnGen" class="admin-btn-primary">Generate & Siapkan Akses</button>
-            <div id="admHasil" class="admin-result-box" style="display:none;">
-              <strong id="labelHasil">Link Akses Hasil Generator:</strong>
-              <textarea id="txtHasil" readonly class="admin-textarea"></textarea>
-              <button id="btnActionEkstra" class="admin-btn-action"></button>
-            </div>
           </div>
-        </div>
-      `);
-
-      // Jalankan seluruh fungsionalitas tombol generator
+        `);
+      }
+      
       aktifkanLogikaTombolAdmin(); 
-
       document.body.style.overflow = "auto";
       document.body.style.height = "auto";
-      return; // Stop eksekusi agar tidak bentrok dengan alur tamu asli
+      return; 
     }
 
-    // ✨ BYPASS PERANGKAT ADMIN SAAT CEK LINK TAMU: Supaya tidak membakar data tamu asli
     if (isAdminBypass) {
       if (guestElement) guestElement.innerText = decodedName;
       sinkronkanNamaRSVP(decodedName);
@@ -423,25 +424,17 @@ document.addEventListener('DOMContentLoaded', () => {
       return; 
     }
 
-    // --- JALUR PROSES VALIDASI TAMU ASLI (?to=Nama+Tamu) ---
     if (typeParam === 'cetak') {
       localStorage.setItem('akses_sah_lokal', 'CETAK_QR_MEMBER');
       localStorage.setItem('guest_original_name', decodedName); 
       bukaUndanganNormal(decodedName);
     } else if (typeParam === 'wa' && vParam) {
-      // =========================================================================
-      // INTEGRASI PEN PENGUNCIAN MODAL KUSTOM (TANPA ALERT BROWSER)
-      // =========================================================================
       const waVerifyModal = document.getElementById('waVerifyModal');
       const waVerifyMessage = document.getElementById('waVerifyMessage');
       const waVerifyInput = document.getElementById('waVerifyInput');
       const waVerifyError = document.getElementById('waVerifyError');
       const btnWaConfirm = document.getElementById('btnWaConfirm');
       const btnWaCancel = document.getElementById('btnWaCancel');
-
-      // Ambil elemen status milik securityModal bawaan Anda
-      const modalNormalState = document.getElementById('modalNormalState');
-      const modalLockedState = document.getElementById('modalLockedState');
 
       let salahHitungWA = 0;
 
@@ -456,7 +449,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         async function eksekusiVerifikasiKustom() {
-          const userInputHP = waVerifyInput.value.trim();
+          const userInputHP = waVerifyInput.value.trim().replace(/\D/g, ''); 
           if (!userInputHP) return;
 
           const hashInputUser = await hitungHashSHA256(userInputHP);
@@ -469,21 +462,14 @@ document.addEventListener('DOMContentLoaded', () => {
             bukaUndanganNormal(decodedName);
           } else {
             salahHitungWA++;
-            
             if (salahHitungWA >= 3) {
-              // 1. Tutup modal verifikasi WA tanpa memicu alert browser
               waVerifyModal.classList.remove('active');
               if (waVerifyError) waVerifyError.style.display = "none";
-              
-              // 2. Tandai status pembobolan di sistem penyimpanan lokal
               localStorage.setItem('security_breach_detected', 'true');
               periksaRiwayatBlokir();
               
-              // 3. Modifikasi isi SecurityModal Anda langsung ke status terkunci merah
               if (modalNormalState) modalNormalState.style.display = "none";
               if (modalLockedState) modalLockedState.style.display = "block";
-              
-              // 4. Munculkan SecurityModal bawaan Anda ke layar secara penuh
               aktifkanLockdownTotal();
             } else {
               if (waVerifyError) {
@@ -537,7 +523,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.style.height = "auto";
   }
 
-  // BINDING EVENT LISTENERS KEAMANAN UTAMA MODAL
   if (btnSecConfirm) btnSecConfirm.addEventListener('click', prosesVerifikasiPIN);
   if (btnSecCancel) btnSecCancel.addEventListener('click', batalkanVerifikasi);
   if (btnSecLockedBack) btnSecLockedBack.addEventListener('click', batalkanVerifikasi);
@@ -547,7 +532,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // INTEGRASI SUBMIT FORM RSVP
   const wishesForm = document.getElementById('wishesForm');
   if (wishesForm) {
     wishesForm.addEventListener('submit', function (e) {
@@ -560,8 +544,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
-
-
 
 // =========================================================================
 // 1. URL WEB APP GOOGLE APPS SCRIPT ANDA (PASTIKAN LINK BENAR & BERAKHIRAN /exec)
