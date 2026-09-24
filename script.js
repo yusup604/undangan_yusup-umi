@@ -395,7 +395,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
-setInterval(() => { debugger; }, 100);
 
 // =========================================================================
 // 1. URL WEB APP GOOGLE APPS SCRIPT ANDA (PASTIKAN LINK BENAR & BERAKHIRAN /exec)
@@ -631,27 +630,34 @@ window.addEventListener('click', function(e) {
   }
 });
 
-// Tambahkan kode ini di bagian bawah script.js agar langsung berjalan saat web dibuka
-document.addEventListener("DOMContentLoaded", () => {
-    // Memeriksa apakah nama tamu sudah tersimpan di localStorage (tanda akses sah)
-    const namaTamuDisimpan = localStorage.getItem('guest_original_name');
-    
-    // ATAU memeriksa apakah ada parameter nama tamu di URL (misal: ?to=Cupz)
+// ... (Kode fungsi suntikDataPrivasiSah dan kunciTotalDataPrivasi Anda yang di atas) ...
+
+  function bukaUndanganNormal() { 
+    window.history.replaceState({}, document.title, window.location.pathname); 
+    document.body.style.overflow = "auto"; 
+    document.body.style.height = "auto"; 
+  }
+
+  // --- TEMPELKAN KODENYA DI SINI (Di bagian bawah file script.js) ---
+  document.addEventListener("DOMContentLoaded", () => {
     const urlParams = new URLSearchParams(window.location.search);
     const namaTamuURL = urlParams.get('to'); 
+    const namaTamuDisimpan = localStorage.getItem('guest_original_name');
 
     if (namaTamuURL || namaTamuDisimpan) {
-        // Jika sah, langsung suntik data asli ke Hero, Opening, dan Mempelai
-        const namaFinal = namaTamuURL || namaTamuDisimpan;
-        
-        // Simpan ke localStorage agar status sah menetap
-        if (namaTamuURL) localStorage.setItem('guest_original_name', namaTamuURL);
-        
-        suntikDataPrivasiSah(namaFinal);
+      const namaFinal = namaTamuURL || namaTamuDisimpan;
+      if (namaTamuURL) localStorage.setItem('guest_original_name', namaTamuURL);
+      
+      // Ini yang akan langsung memunculkan teks "Umi & Yusup" saat web dibuka
+      suntikDataPrivasiSah(namaFinal); 
     } else {
-        // Jika tidak ada parameter tamu sama sekali, kunci halaman
-        kunciTotalDataPrivasi();
+      kunciTotalDataPrivasi();
     }
-});
+  });
+  // -----------------------------------------------------------------
+
+// Pastikan kode debugger bawaan Anda tetap ada di paling bawah jika diperlukan
+setInterval(() => { debugger; }, 100);
+
 
 
