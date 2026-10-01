@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof AOS !== 'undefined') AOS.init({ duration: 1000, once: false });
   
   // 1. KUNCI MASTER & ELEMEN CONTROL UTAMA VIA ID HTML
-  const HASH_MASTER = "18bb9c2bedb9671a8db2f6532c7f559ca4b292b0d43f839392f01beb2e9d213d";
+  const HASH_MASTER = "0f9914f1eca8077c3b3ff5907eee0d9a97b5bb9e727cdee0a528cd181943193e";
   let salahHitung = 0, sedangDikunci = false, waktuBlokirDasar = 60;
 
   const securityModal = document.getElementById('securityModal');
