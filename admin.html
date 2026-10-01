@@ -378,15 +378,28 @@
       };
     }
 
-    // 🛡️ SECURITY CHECK: Validasi token akses lokal
+       // 🛡️ SECURITY CHECK: Validasi token akses lokal
     const tokenLokal = localStorage.getItem('akses_sah_lokal');
+    
     if (tokenLokal !== 'TOKEN_BYPASS_ADMIN') {
+      // 1. Sembunyikan elemen admin-card agar tidak bisa diintip sekilas
+      const adminCard = document.querySelector('.admin-card');
+      if (adminCard) adminCard.style.display = 'none';
+      
+      // 2. Tampilkan notifikasi peringatan akses terbatas
       tampilkanNotifikasi(
         "Akses Terbatas", 
         "Silakan buka halaman utama dan lakukan verifikasi PIN Admin Anda terlebih dahulu.", 
         "🔒", 
-        () => { window.location.href = "index.html"; }
+        () => { 
+          // 3. Tendang balik ke index.html dengan menghapus riwayat history browser
+          window.location.replace("index.html"); 
+        }
       );
+    } else {
+      // ✅ LOGIKA TAMBAHAN: Jika token valid, tampilkan panel adminnya!
+      const adminCard = document.querySelector('.admin-card');
+      if (adminCard) adminCard.style.display = 'block'; 
     }
 
     // Fungsi enkripsi SHA-256 untuk 4 angka nomor kontak terakhir
