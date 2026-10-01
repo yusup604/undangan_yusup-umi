@@ -224,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const hashInputUser = await hitungHashSHA256(modalPinInput.value);
     if (hashInputUser === HASH_MASTER) {
       salahHitung = 0; 
-      localStorage.setItem('akses_sah_lokal', 'TOKEN_BYPASS_ADMIN'); 
+      localStorage.setItem('akses_sah_lokal', HASH_MASTER);  
       localStorage.setItem('guest_original_name', 'Admin Owner'); 
       localStorage.setItem('kunci_akses_sah', HASH_MASTER);
       localStorage.removeItem('security_breach_detected'); 
