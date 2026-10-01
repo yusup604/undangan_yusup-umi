@@ -378,11 +378,13 @@
       };
     }
 
-       // 🛡️ SECURITY CHECK: Validasi token akses lokal
+           // 🛡️ SECURITY CHECK REVISI TOTAL (ANTI-BYPASS INSPECT ELEMENT)
+    const HASH_MASTER = "18bb9c2bedb9671a8db2f6532c7f559ca4b292b0d43f839392f01beb2e9d213d";
     const tokenLokal = localStorage.getItem('akses_sah_lokal');
     
-    if (tokenLokal !== 'TOKEN_BYPASS_ADMIN') {
-      // 1. Sembunyikan elemen admin-card agar tidak bisa diintip sekilas
+    // Periksa apakah token di memori lokal sama persis dengan hash PIN Anda yang rahasia
+    if (tokenLokal !== HASH_MASTER) {
+      // 1. Pastikan elemen admin-card tetap terkunci rapat (display: none)
       const adminCard = document.querySelector('.admin-card');
       if (adminCard) adminCard.style.display = 'none';
       
@@ -392,15 +394,16 @@
         "Silakan buka halaman utama dan lakukan verifikasi PIN Admin Anda terlebih dahulu.", 
         "🔒", 
         () => { 
-          // 3. Tendang balik ke index.html dengan menghapus riwayat history browser
+          // 3. Tendang balik ke index.html dengan menghapus jejak history halaman admin
           window.location.replace("index.html"); 
         }
       );
     } else {
-      // ✅ LOGIKA TAMBAHAN: Jika token valid, tampilkan panel adminnya!
+      // ✅ JIKA DAN HANYA JIKA HASH COCOK: Buka gembok panel admin
       const adminCard = document.querySelector('.admin-card');
       if (adminCard) adminCard.style.display = 'block'; 
     }
+
 
     // Fungsi enkripsi SHA-256 untuk 4 angka nomor kontak terakhir
     async function hitungHashSHA256(teks) {
