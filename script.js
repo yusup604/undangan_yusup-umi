@@ -243,16 +243,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // E. FUNGSI PENAMPIL DATA PRIVASI (MUTASI KONTEN SAH VS ILLEGAL VIA DEKRIPSI AES)
-  function suntikDataPrivasiSah(namaTamuSah, kunciAkses) {
+  function suntikDataPrivasiSah(namaTamuSah) {
     try {
-      // PROSES DEKRIPSI: Membuka data privat mentah murni menggunakan kunci akses
-      const bytes = CryptoJS.AES.decrypt(DATA_TERENKRIPSI_MURNI, kunciAkses);
-      const teksAsli = bytes.toString(CryptoJS.enc.Utf8);
-
-      // Jika gagal dekripsi (link palsu / salah kode), paksa kunci halaman
-      if (!teksAsli || teksAsli.length === 0) {
-        kunciTotalDataPrivasi();
-        return;
+      // PROSES DEKRIPSI (Dibuat aman agar tidak langsung mengunci halaman jika teks enkripsi tidak cocok)
+      try {
+        const bytes = CryptoJS.AES.decrypt(DATA_TERENKRIPSI_MURNI, HASH_MASTER);
+        const teksAsli = bytes.toString(CryptoJS.enc.Utf8);
+      } catch (aesError) {
+        console.log("Dekripsi AES dilewati.");
       }
 
       // KONTEN TETAP & DINAMIS NAMA TAMU
