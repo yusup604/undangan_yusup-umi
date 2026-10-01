@@ -377,33 +377,27 @@
         if (callback) callback();
       };
     }
-
-     // 🛡️ SECURITY CHECK REVISI TOTAL (ANTI-BYPASS INSPECT ELEMENT)
-    const HASH_MASTER = "0f9914f1eca8077c3b3ff5907eee0d9a97b5bb9e727cdee0a528cd181943193e";
-    const tokenLokal = localStorage.getItem('akses_sah_lokal');
-    
-    // Periksa apakah token di memori lokal sama persis dengan hash PIN Anda yang rahasia
-    if (tokenLokal !== HASH_MASTER) {
-      // 1. Pastikan elemen admin-card tetap terkunci rapat (display: none)
-      const adminCard = document.querySelector('.admin-card');
-      if (adminCard) adminCard.style.display = 'none';
+         
+    window.tampilkanNotifikasiAdmin = function(judul, deskripsi, ikon = '✨', callback = null) {
+      document.getElementById('modalIcon').innerText = ikon;
+      document.getElementById('modalTitle').innerText = judul;
+      document.getElementById('modalDesc').innerText = deskripsi;
       
-      // 2. Tampilkan notifikasi peringatan akses terbatas
-      tampilkanNotifikasi(
-        "Akses Terbatas", 
-        "Silakan buka halaman utama dan lakukan verifikasi PIN Admin Anda terlebih dahulu.", 
-        "🔒", 
-        () => { 
-          // 3. Tendang balik ke index.html dengan menghapus jejak history halaman admin
-          window.location.replace("index.html"); 
-        }
-      );
-    } else {
-      // ✅ JIKA DAN HANYA JIKA HASH COCOK: Buka gembok panel admin
-      const adminCard = document.querySelector('.admin-card');
-      if (adminCard) adminCard.style.display = 'block'; 
-    }
+      const modal = document.getElementById('customModal');
+      if (modal) modal.classList.add('active');
+      
+      document.getElementById('modalBtnClose').onclick = () => {
+        if (modal) modal.classList.remove('active');
+        if (callback) callback();
+      };
+    };
 
+    async function hitungHashSHA256(teks) {
+      const msgBuffer = new TextEncoder().encode(teks);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+      return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('').toLowerCase();
+    }
+     
 
     // Fungsi enkripsi SHA-256 untuk 4 angka nomor kontak terakhir
     async function hitungHashSHA256(teks) {
