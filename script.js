@@ -36,7 +36,7 @@ function openInvitation() {
   }
 }
 
-// Tanggal Acara: 12 Desember 2026 (Bulan di JS menggunakan indeks 0-11, jadi Desember = 11)
+
 const targetDate = new Date(2026, 11, 12, 12, 0, 0).getTime();
 
 function updateCountdown() {
