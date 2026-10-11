@@ -442,8 +442,9 @@
         if (angkaSaja.length < 4) return tampilkanNotifikasi("Nomor Tidak Valid", "Nomor WA harus menyertakan minimal 4 angka terakhir!", "📱");
         const empatAngkaTerakhir = angkaSaja.slice(-4);
         
-        // 🔒 PERBAIKAN CORE: Gabungkan Nama (Huruf Kecil) + 4 Angka terakhir WA agar nama tidak bisa dimanipulasi di URL
-        const teksKombinasi = nama.toLowerCase().trim() + empatAngkaTerakhir;
+        // 🔒 PERBAIKAN: Tambahkan .trim() pada nama agar spasi tidak sengaja ikut terhitung menjadi hash
+        const namaBersihAdmin = nama.toLowerCase().trim();
+        const teksKombinasi = namaBersihAdmin + empatAngkaTerakhir;
         const hashWA = await hitungHashSHA256(teksKombinasi);
         
         const linkLengkap = domainAsli + "index.html?to=" + urlFormat + "&v=" + hashWA + "&type=wa";
