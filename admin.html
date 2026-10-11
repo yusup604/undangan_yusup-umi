@@ -440,7 +440,7 @@
     };
 
 
-    // Fungsi Utama Pembuatan Tautan Undangan
+     // Fungsi Utama Pembuatan Tautan Undangan
     btnGen.onclick = async () => {
       const nama = document.getElementById('admNama').value.trim();
       const rawWA = document.getElementById('admWA').value.trim();
@@ -492,7 +492,44 @@
         btnAction.href = "https://wa.me/" + nomorValid + "?text=" + encodeURIComponent(teksPesan);
         btnAction.target = "_blank";
         btnAction.onclick = null;
-        } else {
+        
+      } else if (activeMode === "ig") {
+        // 🔒 JALUR INSTAGRAM: Sistem Token Keamanan & Parameter Sama Seperti Cetak (Tanpa Nomor HP)
+        const hashNamaIG = await hitungHashSHA256(nama.toLowerCase().trim() + "weddingumi&yusup");
+        const linkLengkapIG = domainAsli + "index.html?to=" + urlFormat + "&v=" + hashNamaIG + "&type=cetak";
+        document.getElementById('txtHasil').value = linkLengkapIG;
+        
+        // Mengatur Tampilan Tombol Aksi Untuk Instagram
+        btnAction.style.display = "flex";
+        btnAction.className = "admin-btn-action ig-action";
+        btnAction.innerText = "📸 Salin Link & Ucapan Instagram";
+        btnAction.href = "javascript:void(0);";
+        btnAction.removeAttribute("target");
+        
+        // Ucapan Undangan Formal Khusus Jalur Instagram DM
+        const teksPesanIG = "Assalamu'alaikum Warahmatullahi Wabarakatuh\n\n" +
+                            "Yth. Bapak/Ibu/Saudara/i\n" +
+                            "*" + nama + "*\n" +
+                            "Di Tempat\n\n" +
+                            "Dengan segala kerendahan hati, kami mengundang Bapak/Ibu/Saudara/i dan teman-teman dalam acara pernikahan kami :\n\n" +
+                            "Pada Hari : Sabtu\n" +
+                            "🗓️ Tanggal : 12 Desember 2026\n" +
+                            "⏰ Pukul : 09:00 - Selesai\n" +
+                            "📍 Lokasi : Kp. Pekopen Timur. Desa LambangJaya. Tambun Selatan, Bekasi. Jawa Barat.\n\n" +
+                            "Tanpa mengurangi rasa hormat, mohon akses undangan pada link berikut:\n" +
+                            linkLengkapIG + "\n\n" +
+                            "Kehadiran Bapak/Ibu/Saudara/i tentu akan menjadi kehormatan besar bagi kami dan keluarga. Terima kasih.\n\n" +
+                            "Yang berbahagia,\n\n" +
+                            "*Umi & Yusup*\n\n" +
+                            "Wassalamu'alaikum Warahmatullahi Wabarakatuh";
+        
+        // Aksi menyalin seluruh teks ucapan beserta tautannya ke papan klip ponsel/PC
+        btnAction.onclick = () => {
+          navigator.clipboard.writeText(teksPesanIG);
+          tampilkanNotifikasi("Teks Undangan Tersalin!", "Teks ucapan lengkap beserta tautan Instagram berhasil disalin ke clipboard.", "🎉");
+        };
+        
+      } else {
         // 1. Hitung hash dari nama tamu ditambah kata rahasia (salt) agar tidak bisa dimanipulasi
         const hashNamaCetak = await hitungHashSHA256(nama.toLowerCase().trim() + "weddingumi&yusup");
         
@@ -513,12 +550,12 @@
         };
       }
 
-      
       // Menampilkan kotak hasil dan menyalin tautan secara otomatis
       document.getElementById('admHasil').style.display = "block";
       navigator.clipboard.writeText(document.getElementById('txtHasil').value);
       tampilkanNotifikasi("Sukses!", "Proses berhasil! Tautan lengkap otomatis disalin ke clipboard Anda.", "🎉");
     };
+
   </script>
   
   <script src="script.js"></script>
