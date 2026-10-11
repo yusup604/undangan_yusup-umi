@@ -19,9 +19,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Fungsi saat tombol "Buka Undangan" diklik
+// Fungsi saat tombol "Buka Undangan" diklik (Mengambil HASH_MASTER dari variabel atas)
 function openInvitation() {
-  // 1. Putar Musik Latar
+  // 1. Ambil status akses dari penyimpanan lokal browser
+  const tokenLokal = localStorage.getItem('akses_sah_lokal');
+  
+  // 2. 🔒 PROTEKSI KETAT: Langsung memvalidasi token terhadap HASH_MASTER yang ada di atas
+  if (!tokenLokal || (tokenLokal !== 'USER_VALIDATED' && tokenLokal !== 'CETAK_QR_MEMBER' && tokenLokal !== HASH_MASTER)) {
+    alert("Akses Tidak Sah! Anda tidak memiliki izin untuk membuka undangan ini.");
+    return false; // Menghentikan fungsi secara paksa agar undangan tetap terkunci
+  }
+
+  // 3. Putar Musik Latar (Fungsi asli Anda)
   const music = document.getElementById('bgMusic');
   if (music) {
     music.play().catch(error => {
@@ -29,39 +38,13 @@ function openInvitation() {
     });
   }
 
-  // 2. Scroll Halus ke Cover Dalam / Opening (Page 2)
+  // 4. Scroll Halus ke Cover Dalam / Opening (Fungsi asli Anda)
   const nextSection = document.getElementById('opening');
   if (nextSection) {
     nextSection.scrollIntoView({ behavior: 'smooth' });
   }
 }
 
-
-const targetDate = new Date(2026, 11, 12, 12, 0, 0).getTime();
-
-function updateCountdown() {
-  const now = new Date().getTime();
-  const difference = targetDate - now;
-
-  if (difference > 0) {
-    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-    // KODE AMAN: Simpan elemen ke dalam variabel dahulu
-    const daysEl = document.getElementById('days');
-    const hoursEl = document.getElementById('hours');
-    const minutesEl = document.getElementById('minutes');
-    const secondsEl = document.getElementById('seconds');
-
-    // Cek satu per satu: Jika elemennya ditemukan di HTML, baru isi angkanya
-    if (daysEl) daysEl.innerText = days < 10 ? '0' + days : days;
-    if (hoursEl) hoursEl.innerText = hours < 10 ? '0' + hours : hours;
-    if (minutesEl) minutesEl.innerText = minutes < 10 ? '0' + minutes : minutes;
-    if (secondsEl) secondsEl.innerText = seconds < 10 ? '0' + seconds : seconds;
-  }
-}
 
 
 // KODE lihat rekening
