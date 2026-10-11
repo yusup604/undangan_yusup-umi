@@ -315,6 +315,29 @@
     .modal-btn:hover {
       background: #1a252f;
     }
+
+      /* 🔥 SOLUSI UTAMA: Memaksa semua gambar di dalam tombol tab berukuran kecil & proporsional */
+    .admin-tabs button img, 
+    .tab-btn img,
+    .tab-icon {
+      width: 20px !important;       /* Mengunci lebar ikon maksimal 20 piksel */
+      height: 20px !important;      /* Mengunci tinggi ikon maksimal 20 piksel */
+      object-fit: contain !important;/* Memastikan gambar tidak gepeng atau ketarik */
+      flex-shrink: 0 !important;    /* Mencegah gambar menyusut saat layar mengecil */
+      margin-right: 6px;            /* Memberi jarak horizontal antara ikon dan teks */
+      display: inline-block;
+      vertical-align: middle;
+    }
+    
+    /* Memastikan susunan teks dan gambar di dalam tombol sejajar di tengah */
+    .admin-tabs button, 
+    .tab-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      vertical-align: middle;
+    }
+
   </style>
 
 </head>
