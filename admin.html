@@ -409,6 +409,7 @@
 
     let activeMode = "wa";
     const tabWA = document.getElementById('tabWA');
+    const tabIG = document.getElementById('tabIG'); // <-- Variabel baru untuk IG
     const tabCetak = document.getElementById('tabCetak');
     const wrapperWAInput = document.getElementById('wrapperWAInput');
     const btnGen = document.getElementById('btnGen');
@@ -417,16 +418,27 @@
     tabWA.onclick = () => {
       activeMode = "wa";
       tabWA.classList.add('active');
+      tabIG.classList.remove('active');
       tabCetak.classList.remove('active');
-      wrapperWAInput.style.display = "block";
+      wrapperWAInput.style.display = "block"; // Munculkan input nomor untuk WA
+    };
+
+    tabIG.onclick = () => {
+      activeMode = "ig";
+      tabIG.classList.add('active');
+      tabWA.classList.remove('active');
+      tabCetak.classList.remove('active');
+      wrapperWAInput.style.display = "none"; // Sembunyikan input nomor seperti Cetak
     };
 
     tabCetak.onclick = () => {
       activeMode = "cetak";
       tabCetak.classList.add('active');
       tabWA.classList.remove('active');
-      wrapperWAInput.style.display = "none";
+      tabIG.classList.remove('active');
+      wrapperWAInput.style.display = "none"; // Sembunyikan input nomor
     };
+
 
     // Fungsi Utama Pembuatan Tautan Undangan
     btnGen.onclick = async () => {
