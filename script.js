@@ -271,59 +271,71 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   periksaRiwayatBlokir();
 
-  // B. PROSES VERIFIKASI PIN ADMINISTRATOR (VERSI FIXED ANTI-LOCKDOWN)
+    // B. PROSES VERIFIKASI PIN ADMINISTRATOR (FIXED VERSION - DOUBLE HASH VALIDATION)
   async function prosesVerifikasiPIN() {
     if (!modalPinInput || sedangDikunci) return;
     
-    const pinKunciUser = modalPinInput.value.trim();
-    const hashInputUser = await hitungHashSHA256(pinKunciUser);
+    // 1. Ambil teks PIN mentah untuk parameter pembuka kunci AES
+    const pinKunciMentah = modalPinInput.value.trim(); 
     
-    // Uji coba membongkar data menggunakan hash inputan
-    const dataHasilDekripsi = bongkarDataDenganKunciHash(hashInputUser);
+    // 2. Ubah menjadi SHA-256 untuk pembanding keamanan di browser
+    const hashInputUser = await hitungHashSHA256(pinKunciMentah);
     
-    if (dataHasilDekripsi !== null && hashInputUser === HASH_ADMIN_MASTER) {
-      salahHitung = 0; 
+    // 3. Validasi Hash: Jika COCOK dengan gembok HASH_ADMIN_MASTER resmi
+    if (hashInputUser === HASH_ADMIN_MASTER) {
       
-      // Mengunci sesi validasi agar tidak buyar saat validasi ulang
-      localStorage.setItem('akses_sah_lokal', HASH_ADMIN_MASTER); 
-      localStorage.setItem('guest_original_name', 'Admin Owner'); 
-      localStorage.removeItem('security_breach_detected'); 
-      
-      periksaRiwayatBlokir();
-      
-      if (securityModal) securityModal.classList.remove('active');
-      
-      // 🔥 FIX UTAMA: Pulihkan layar secara instan tanpa reload agar state memory tidak hilang
-      document.body.style.overflow = "auto"; 
-      document.body.style.height = "auto";
-      
-      // Langsung buka gembok visual komponen web secara paksa
-      bukaUndanganNormal();
-      suntikDataPrivasiSah(dataHasilDekripsi, 'Admin Owner');
-      
-    } else {
-      salahHitung++;
-      if (salahHitung >= 3) {
-        sedangDikunci = true; 
-        localStorage.setItem('security_breach_detected', 'true'); 
-        periksaRiwayatBlokir();
-        if (modalNormalState) modalNormalState.style.display = "none"; 
-        if (modalLockedState) modalLockedState.style.display = "block";
-        setTimeout(() => { 
-          sedangDikunci = false; 
+      // 4. Dekripsi data menggunakan teks PIN mentah asli yang valid
+      try {
+        const bytes = CryptoJS.AES.decrypt(DATA_TERENKRIPSI_MURNI, pinKunciMentah);
+        const teksAsli = bytes.toString(CryptoJS.enc.Utf8);
+        
+        if (teksAsli) {
+          const dataHasilDekripsi = JSON.parse(teksAsli);
+          
+          // ✅ PROSES OTENTIKASI BERHASIL TOTAL
           salahHitung = 0; 
-          if (modalNormalState) modalNormalState.style.display = "block"; 
-          if (modalLockedState) modalLockedState.style.display = "none"; 
-          modalPinInput.value = ""; 
-          modalPinInput.focus(); 
-        }, waktuBlokirDasar * 1000);
-      } else { 
-        if (modalErrorMessage) modalErrorMessage.innerText = `PIN Salah! (${salahHitung}/3)`; 
-        modalPinInput.value = ""; 
-        modalPinInput.focus(); 
+          localStorage.setItem('akses_sah_lokal', HASH_ADMIN_MASTER); 
+          localStorage.setItem('guest_original_name', 'Admin Owner'); 
+          localStorage.removeItem('security_breach_detected'); 
+          
+          periksaRiwayatBlokir();
+          if (securityModal) securityModal.classList.remove('active');
+          
+          document.body.style.overflow = "auto"; 
+          document.body.style.height = "auto";
+          
+          bukaUndanganNormal();
+          suntikDataPrivasiSah(dataHasilDekripsi, 'Admin Owner');
+          return; // Hentikan alur agar tidak menembus lockdown bawah
+        }
+      } catch (aesError) {
+        console.error("Gagal mengurai JSON:", aesError);
       }
     }
+    
+    // ❌ JIKA HASH SALAH / DEKRIPSI GAGAL: Picu sistem lockdown
+    salahHitung++;
+    if (salahHitung >= 3) {
+      sedangDikunci = true; 
+      localStorage.setItem('security_breach_detected', 'true'); 
+      periksaRiwayatBlokir();
+      if (modalNormalState) modalNormalState.style.display = "none"; 
+      if (modalLockedState) modalLockedState.style.display = "block";
+      setTimeout(() => { 
+        sedangDikunci = false; 
+        salahHitung = 0; 
+        if (modalNormalState) modalNormalState.style.display = "block"; 
+        if (modalLockedState) modalLockedState.style.display = "none"; 
+        modalPinInput.value = ""; 
+        modalPinInput.focus(); 
+      }, waktuBlokirDasar * 1000);
+    } else { 
+      if (modalErrorMessage) modalErrorMessage.innerText = `PIN Salah! (${salahHitung}/3)`; 
+      modalPinInput.value = ""; 
+      modalPinInput.focus(); 
+    }
   }
+
 
   // E. FUNGSI PENAMPIL DATA PRIVASI (DATA DIINJEKSI DARI OBJEK DEKRIPSI BUKAN TEKS POLOS)
   function suntikDataPrivasiSah(dataBongkar, namaTamuSah) {
